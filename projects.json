@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "title": "Merkaz Israel 76 Campaign",
+        "category": "graphics",
+        "tag": "Event Poster & Campaign Design",
+        "description": "Visual campaign materials for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.",
+        "image": "assets/project_merkaz.jpg"
+    },
+    {
+        "id": 2,
+        "title": "Bnei Akiva Campaign Materials",
+        "category": "graphics",
+        "tag": "Digital & Print Graphics",
+        "description": "Complete pack of flyers, online banners, and printed brochures for the annual youth campaign.",
+        "image": "assets/project_bnei.svg"
+    },
+    {
+        "id": 3,
+        "title": "Kosher Express Delivery",
+        "category": "branding",
+        "tag": "Brand Identity & Packaging",
+        "description": "Full visual brand identity, geometric logo, and eco-friendly packaging design for a premium food delivery service.",
+        "image": "assets/project_kosher.svg"
+    },
+    {
+        "id": 5,
+        "title": "Shabbat Shalom Campaign Kit",
+        "category": "graphics",
+        "tag": "Social Media Graphic Content",
+        "description": "Graphic template kit for social networks, featuring minimalist community greeting animations and layouts.",
+        "image": "assets/project_shabbat.svg"
+    },
+    {
+        "id": 6,
+        "title": "The Creative Bunch Identity",
+        "category": "branding",
+        "tag": "Visual Identity System",
+        "description": "Our own brand identity, centered around bold geometric shapes, unique typography, and vibrant color contrasts.",
+        "image": "assets/project_branding.svg"
+    },
+    {
+        "id": 4,
+        "title": "Jewish Museum Audio Guide",
+        "category": "web",
+        "tag": "UI/UX & Interactive Web App",
+        "description": "Clean and fluid interface for the museum's web app, featuring audio playback and interactive exhibits maps.",
+        "image": "assets/project_museum.svg"
+    }
+]
