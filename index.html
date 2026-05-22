@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Creative Bunch | Graphic Design & Branding Agency</title>
+    <meta name="description" content="We are a graphic design and branding agency creating wow experiences. We design visual campaigns, brand identities, websites, and digital products to the highest standards.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Unbounded:wght@400;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Custom Cursor Glow Background -->
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <!-- Navigation Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="#" class="logo-link">
+                <div class="logo-wrapper">
+                    <!-- SVG Bird Logo -->
+                    <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+                        <path class="logo-star" d="M125 35 l2.5 7.5 l7.5 2.5 l-7.5 2.5 l-2.5 7.5 l-2.5 -7.5 l-7.5 -2.5 l7.5 -2.5 z" fill="var(--color-lime)" />
+                        <path class="logo-bird" d="M35 100 C35 75, 55 52, 85 52 C97 52, 107 58, 113 64 L125 58 L121 73 C128 82, 130 95, 125 106 C119 118, 102 124, 90 126 L102 142 L90 142 L80 126 C62 126, 42 118, 35 100 Z" fill="var(--color-lime)" />
+                        <path class="logo-spiral" d="M78 85 C66 85, 60 93, 60 102 C60 111, 69 116, 78 116 C87 116, 94 109, 94 102 C94 95, 87 90, 78 90 C72 90, 70 93, 70 96" fill="none" stroke="var(--color-bg)" stroke-width="4.5" stroke-linecap="round" />
+                    </svg>
+                    <span class="logo-text">The Creative<br>Bunch</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#about" class="nav-link">About Us</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="#portfolio" class="nav-link">Work</a></li>
+                    <li><a href="#team" class="nav-link">Team</a></li>
+                </ul>
+            </nav>
+
+            <!-- CTA Button -->
+            <div class="nav-cta">
+                <a href="#book-call" class="btn btn-secondary btn-magnetic">Book strategy call</a>
+            </div>
+
+            <!-- Hamburger Mobile Menu -->
+            <button class="mobile-nav-toggle" aria-label="Toggle Navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay">
+        <nav class="mobile-nav">
+            <ul>
+                <li><a href="#about" class="mobile-link">About Us</a></li>
+                <li><a href="#services" class="mobile-link">Services</a></li>
+                <li><a href="#portfolio" class="mobile-link">Work</a></li>
+                <li><a href="#team" class="mobile-link">Team</a></li>
+                <li><a href="#book-call" class="mobile-link btn btn-primary">Book strategy call</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-bg-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+            </div>
+            <div class="container hero-container">
+                <div class="hero-badge fade-in">
+                    <span class="badge-dot"></span> Graphic Design & Branding Agency
+                </div>
+                <h1 class="hero-title fade-in">
+                    We turn <span class="text-gradient">creative ideas</span> into digital impact.
+                </h1>
+                <p class="hero-subtitle fade-in">
+                    We are The Creative Bunch. A team passionate about graphic design, branding, and digital strategy. We create impactful visual campaigns, memorable brand identities, and premium websites for visionary organizations.
+                </p>
+                <div class="hero-actions fade-in">
+                    <a href="#portfolio" class="btn btn-primary btn-magnetic">View Work</a>
+                    <a href="#book-call" class="btn btn-outline btn-magnetic">
+                        Book strategy call <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-scroll-indicator">
+                <span class="mouse-icon">
+                    <span class="wheel"></span>
+                </span>
+                <span class="scroll-text">Scroll to explore</span>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section scroll-reveal">
+            <div class="container">
+                <div class="section-grid">
+                    <div class="section-info">
+                        <span class="section-subtitle">Who We Are</span>
+                        <h2 class="section-title">A creative powerhouse dedicated to digital design.</h2>
+                    </div>
+                    <div class="section-desc">
+                        <p class="lead-text">
+                            Operating from Israel, with deep roots in collaborating with Jewish institutions and organizations, The Creative Bunch brings together four creative minds to deliver complete graphic design, branding, and website solutions.
+                        </p>
+                        <p>
+                            For us, design isn't just about aesthetics – it's about solving problems, efficient communication, and building lasting impact. From flyers, banners, and brand systems to custom-coded websites, we deliver visual excellence at 2026 standards.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section (Bento Grid) -->
+        <section id="services" class="services-section scroll-reveal">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-subtitle">What We Do</span>
+                    <h2 class="section-title">Our Services</h2>
+                </div>
+                
+                <!-- Bento Grid Layout -->
+                <div class="bento-grid">
+                    <!-- Bento Box 1: Digital Design -->
+                    <div class="bento-box box-large card-glow">
+                        <div class="bento-icon"><i class="fa-solid fa-bezier-curve"></i></div>
+                        <div class="bento-content">
+                            <h3>Digital & Graphic Design</h3>
+                            <p>We create spectacular graphic content, flyers, banners, and premium advertising materials. Every pixel is strategically placed to capture attention and clearly communicate your brand message.</p>
+                            <span class="bento-tag">Flyers • Banners • Social Media</span>
+                        </div>
+                    </div>
+
+                    <!-- Bento Box 2: Web Dev -->
+                    <div class="bento-box box-medium card-glow">
+                        <div class="bento-icon"><i class="fa-solid fa-code"></i></div>
+                        <div class="bento-content">
+                            <h3>Full-Code Websites</h3>
+                            <p>We build fast, interactive, and SEO-optimized websites, written directly in code for raw performance and ultimate flexibility.</p>
+                            <span class="bento-tag">HTML5 • CSS3 • JavaScript</span>
+                        </div>
+                    </div>
+
+                    <!-- Bento Box 3: Branding -->
+                    <div class="bento-box box-small card-glow">
+                        <div class="bento-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+                        <div class="bento-content">
+                            <h3>Brand Identity</h3>
+                            <p>Memorable logos, unique color palettes, and a brand guideline that will instantly differentiate you in the market.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bento Box 4: Collaborations -->
+                    <div class="bento-box box-small card-glow">
+                        <div class="bento-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                        <div class="bento-content">
+                            <h3>Institutional Collaborations</h3>
+                            <p>We have rich experience working with Jewish organizations and communities, providing graphics tailored to cultural values.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bento Box 5: Digital Products -->
+                    <div class="bento-box box-medium card-glow">
+                        <div class="bento-icon"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="bento-content">
+                            <h3>Digital Products</h3>
+                            <p>From interactive UX/UI prototypes to complete application interfaces that deliver a simple, intuitive, and "wow" user experience.</p>
+                            <span class="bento-tag">UX/UI • Wireframing • Prototypes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="portfolio-section scroll-reveal">
+            <div class="container">
+                <div class="portfolio-header">
+                    <div>
+                        <span class="section-subtitle">Portfolio</span>
+                        <h2 class="section-title">Selected Projects</h2>
+                    </div>
+                    <!-- Portfolio Filters -->
+                    <div class="portfolio-filters">
+                        <button class="filter-btn" data-filter="all">All</button>
+                        <button class="filter-btn active" data-filter="graphics">Graphics</button>
+                        <button class="filter-btn" data-filter="branding">Branding</button>
+                        <button class="filter-btn" data-filter="web">Websites</button>
+                    </div>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="projects-grid" id="projects-container">
+                    <!-- Dynamically populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team" class="team-section scroll-reveal">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-subtitle">Who We Are</span>
+                    <h2 class="section-title">Our Team</h2>
+                    <p class="section-desc-center">Four creative minds, one vision focused on visual and digital excellence.</p>
+                </div>
+
+                <div class="team-grid">
+                    <!-- Member 1 -->
+                    <div class="team-card card-glow">
+                        <div class="team-img-wrapper">
+                            <img src="assets/team_member1.svg" alt="Team Member 1" class="team-img">
+                            <div class="team-overlay">
+                                <div class="team-socials">
+                                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-info">
+                            <h3>Avi</h3>
+                            <p class="team-role">Creative Director & Branding</p>
+                            <p class="team-bio">The creative coordinator of the team, passionate about clean branding and impactful creative concepts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Member 2 -->
+                    <div class="team-card card-glow">
+                        <div class="team-img-wrapper">
+                            <img src="assets/team_member2.svg" alt="Team Member 2" class="team-img">
+                            <div class="team-overlay">
+                                <div class="team-socials">
+                                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-info">
+                            <h3>David</h3>
+                            <p class="team-role">Lead Graphic Designer</p>
+                            <p class="team-bio">Expert in print and digital design, transforming complex ideas into memorable flyers and banners.</p>
+                        </div>
+                    </div>
+
+                    <!-- Member 3 -->
+                    <div class="team-card card-glow">
+                        <div class="team-img-wrapper">
+                            <img src="assets/team_member3.svg" alt="Team Member 3" class="team-img">
+                            <div class="team-overlay">
+                                <div class="team-socials">
+                                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-info">
+                            <h3>Sarah</h3>
+                            <p class="team-role">UI/UX Designer</p>
+                            <p class="team-bio">Fascinated by intuitive interfaces and user flows that combine utility with premium aesthetics.</p>
+                        </div>
+                    </div>
+
+                    <!-- Member 4 -->
+                    <div class="team-card card-glow">
+                        <div class="team-img-wrapper">
+                            <img src="assets/team_member4.svg" alt="Team Member 4" class="team-img">
+                            <div class="team-overlay">
+                                <div class="team-socials">
+                                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-info">
+                            <h3>Noam</h3>
+                            <p class="team-role">Full-Stack Developer</p>
+                            <p class="team-bio">Translates our pixel-perfect designs into clean, fast, and future-proof code.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Book Strategy Call (Calendly Section) -->
+        <section id="book-call" class="book-call-section scroll-reveal">
+            <div class="container">
+                <div class="call-card card-glow">
+                    <div class="call-header">
+                        <span class="section-subtitle">Book strategy call</span>
+                        <h2 class="section-title">Let's Talk About Your Project</h2>
+                        <p>Choose a convenient time slot from the calendar below and let's establish how we can grow your brand impact together.</p>
+                    </div>
+
+                    <!-- Calendly Inline Widget Container -->
+                    <div class="calendly-widget-wrapper">
+                        <!-- Standard Calendly inline widget, customized styles -->
+                        <div class="calendly-inline-widget" data-url="https://calendly.com/creativebunch-israel/30min?background_color=200b20&text_color=e5e2ff&primary_color=e2ff9d" style="min-width:320px;height:700px;"></div>
+                        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <div class="logo-wrapper">
+                    <!-- SVG Secondary Logo Spiral -->
+                    <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="var(--color-lime)" stroke-width="8" stroke-linecap="round">
+                        <path d="M70 30 C50 15, 30 25, 30 50 C30 75, 50 85, 70 70 C80 60, 75 45, 65 45 C55 45, 50 55, 60 60 C65 62, 70 60, 70 55" />
+                    </svg>
+                    <span class="logo-text">The Creative<br>Bunch</span>
+                </div>
+                <p class="footer-desc">Graphic Design & Branding Agency based in Israel. We make pixel-perfect visuals, brand systems, and clean digital experiences reality.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#portfolio">Work</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#book-call">Book strategy call</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h4>Contact</h4>
+                <p><i class="fa-regular fa-envelope"></i> hello@thecreativebunch.com</p>
+                <p><i class="fa-solid fa-location-dot"></i> Tel Aviv, Israel</p>
+                <div class="footer-social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Behance"><i class="fa-brands fa-behance"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>&copy; 2026 The Creative Bunch. All rights reserved.</p>
+                <p>Designed with <i class="fa-solid fa-heart text-gradient"></i> by The Creative Bunch</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="main.js"></script>
+</body>
+</html>
