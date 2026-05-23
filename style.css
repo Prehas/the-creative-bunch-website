@@ -300,12 +300,19 @@ p {
 /* Hero Section */
 .hero-section {
     min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding-top: 100px;
+    padding: 100px 0 96px;
     z-index: 1;
+}
+
+@supports (min-height: 100dvh) {
+    .hero-section {
+        min-height: 100dvh;
+    }
 }
 
 .hero-bg-shapes {
@@ -419,7 +426,7 @@ p {
 
 .hero-scroll-indicator {
     position: absolute;
-    bottom: 30px;
+    bottom: clamp(18px, 4svh, 30px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1080,8 +1087,9 @@ p {
 
     /* Hero */
     .hero-section {
-        padding-top: 80px;
-        min-height: calc(100vh - 60px);
+        min-height: 100vh;
+        min-height: 100svh;
+        padding: 80px 0 86px;
     }
     .hero-bird-stage {
         inset: 74px 0 70px;
@@ -1259,7 +1267,7 @@ p {
         padding: 0 1rem;
     }
     .hero-section {
-        padding-top: 70px;
+        padding: 70px 0 78px;
     }
     .hero-title {
         font-size: 1.85rem;
@@ -1317,7 +1325,7 @@ p {
         margin-bottom: 1.5rem;
     }
     .hero-scroll-indicator {
-        bottom: 15px;
+        bottom: max(12px, env(safe-area-inset-bottom));
     }
     .scroll-text {
         font-size: 0.65rem;
