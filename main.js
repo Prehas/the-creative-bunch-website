@@ -9,6 +9,38 @@ const fallbackProjects = [
         "image": "assets/project_merkaz.jpg"
     },
     {
+        "id": 7,
+        "title": "Infinik Logo",
+        "category": "branding",
+        "tag": "Logo Design & Brand Mark",
+        "description": "Futuristic identity mark for Infinik, pairing a geometric infinity symbol with a sharp, digital wordmark system.",
+        "image": "assets/project_infinik_logo.jpg"
+    },
+    {
+        "id": 10,
+        "title": "Every Idea Has a Form",
+        "category": "branding",
+        "tag": "Print & Object Branding",
+        "description": "Every idea deserves a form. We transform it into print - on paper, fabric, or objects. The format does not matter. What matters is your vision.",
+        "image": "assets/project_every_idea_form.png"
+    },
+    {
+        "id": 9,
+        "title": "JCC Brochure",
+        "category": "graphics",
+        "tag": "Brochure & Community Campaign",
+        "description": "High-energy brochure cover for JCC Bucharest, combining cultural photography, bold typography, and event-led visual storytelling.",
+        "image": "assets/project_jcc_brochure_exact.png"
+    },
+    {
+        "id": 8,
+        "title": "Creative Alex Website",
+        "category": "web",
+        "tag": "Portfolio Website Design",
+        "description": "Website direction and visual presentation for creativealex.eu, built around bold portfolio thumbnails and a clean creator-first experience.",
+        "image": "assets/project_creativealex_website_exact.png"
+    },
+    {
         "id": 2,
         "title": "Bnei Akiva Campaign Materials",
         "category": "graphics",
@@ -51,12 +83,16 @@ const fallbackProjects = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+
     initCursorGlow();
     initHeaderScroll();
     initScrollReveal();
     initMobileMenu();
-    initMagneticButtons();
-    initBentoCardTracking();
+    initHeroRotatingHeadline({ prefersReducedMotion });
+    initMagneticButtons({ prefersReducedMotion, hasFinePointer });
+    initBentoCardTracking({ prefersReducedMotion, hasFinePointer });
     loadProjects();
 });
 
@@ -64,6 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function initCursorGlow() {
     const glow = document.getElementById('cursor-glow');
     if (!glow) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce), (pointer: coarse)').matches) {
+        glow.style.display = 'none';
+        return;
+    }
 
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
@@ -96,6 +136,63 @@ function initHeaderScroll() {
             header.classList.remove('scrolled');
         }
     });
+}
+
+/* 2b. Hero Rotating Headline */
+function initHeroRotatingHeadline({ prefersReducedMotion }) {
+    const wordElement = document.querySelector('.hero-title-word');
+    if (!wordElement) return;
+
+    const words = (wordElement.dataset.words || '')
+        .split('|')
+        .map(word => word.trim())
+        .filter(Boolean);
+
+    if (!words.length) return;
+
+    if (prefersReducedMotion) {
+        wordElement.textContent = words[0];
+        return;
+    }
+
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    const typeDelay = 74;
+    const deleteDelay = 38;
+    const holdDelay = 1320;
+    const switchDelay = 180;
+
+    function tick() {
+        const currentWord = words[wordIndex];
+
+        if (isDeleting) {
+            charIndex = Math.max(0, charIndex - 1);
+        } else {
+            charIndex = Math.min(currentWord.length, charIndex + 1);
+        }
+
+        wordElement.textContent = currentWord.slice(0, charIndex);
+
+        if (!isDeleting && charIndex === currentWord.length) {
+            isDeleting = true;
+            window.setTimeout(tick, holdDelay);
+            return;
+        }
+
+        if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            window.setTimeout(tick, switchDelay);
+            return;
+        }
+
+        window.setTimeout(tick, isDeleting ? deleteDelay : typeDelay);
+    }
+
+    wordElement.textContent = '';
+    window.setTimeout(tick, 280);
 }
 
 /* 3. Scroll Reveal Animations */
@@ -143,7 +240,9 @@ function initMobileMenu() {
 }
 
 /* 5. Premium Magnetic Buttons */
-function initMagneticButtons() {
+function initMagneticButtons({ prefersReducedMotion = false, hasFinePointer = true } = {}) {
+    if (prefersReducedMotion || !hasFinePointer) return;
+
     const magneticBtns = document.querySelectorAll('.btn-magnetic');
     
     magneticBtns.forEach(btn => {
@@ -165,7 +264,9 @@ function initMagneticButtons() {
 }
 
 /* 6. Mouse Tracking for Bento Cards (Custom lighting path) */
-function initBentoCardTracking() {
+function initBentoCardTracking({ prefersReducedMotion = false, hasFinePointer = true } = {}) {
+    if (prefersReducedMotion || !hasFinePointer) return;
+
     const cards = document.querySelectorAll('.card-glow');
     
     cards.forEach(card => {
@@ -188,7 +289,7 @@ function loadProjects() {
     if (!container) return;
 
     // Load function using JSON fetch with fallback
-    fetch('projects.json')
+    fetch('projects.json?v=20260524-every-idea-form')
         .then(response => {
             if (!response.ok) throw new Error('Network error loading JSON');
             return response.json();
@@ -203,8 +304,12 @@ function loadProjects() {
         // Filter Click Handlers
         filterButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
-                filterButtons.forEach(b => b.classList.remove('active'));
+                filterButtons.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
                 btn.classList.add('active');
+                btn.setAttribute('aria-pressed', 'true');
                 
                 const filterValue = btn.getAttribute('data-filter');
                 filterItems(filterValue);
@@ -216,13 +321,12 @@ function loadProjects() {
             projectCards.forEach(card => {
                 const itemCategory = card.getAttribute('data-category');
                 
-                // Add fade out
                 card.style.opacity = '0';
                 card.style.transform = 'scale(0.95) translateY(10px)';
                 
                 setTimeout(() => {
                     if (category === 'all' || itemCategory === category) {
-                        card.style.display = 'flex';
+                        card.style.display = '';
                         setTimeout(() => {
                             card.style.opacity = '1';
                             card.style.transform = 'scale(1) translateY(0)';
@@ -238,7 +342,7 @@ function loadProjects() {
         container.innerHTML = '';
         projects.forEach(project => {
             const article = document.createElement('article');
-            article.className = 'project-card card-glow';
+            article.className = `project-card card-glow${project.id === 1 ? ' project-featured' : ''}`;
             article.setAttribute('data-category', project.category);
             
             article.innerHTML = `
@@ -256,9 +360,12 @@ function loadProjects() {
             container.appendChild(article);
         });
 
-        filterItems('graphics');
+        filterItems('all');
         
         // Re-run cursor tracking on the newly created project cards
-        initBentoCardTracking();
+        initBentoCardTracking({
+            prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+            hasFinePointer: window.matchMedia('(pointer: fine)').matches
+        });
     }
 }

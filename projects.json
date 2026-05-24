@@ -8,6 +8,38 @@
         "image": "assets/project_merkaz.jpg"
     },
     {
+        "id": 7,
+        "title": "Infinik Logo",
+        "category": "branding",
+        "tag": "Logo Design & Brand Mark",
+        "description": "Futuristic identity mark for Infinik, pairing a geometric infinity symbol with a sharp, digital wordmark system.",
+        "image": "assets/project_infinik_logo.jpg"
+    },
+    {
+        "id": 10,
+        "title": "Every Idea Has a Form",
+        "category": "branding",
+        "tag": "Print & Object Branding",
+        "description": "Every idea deserves a form. We transform it into print - on paper, fabric, or objects. The format does not matter. What matters is your vision.",
+        "image": "assets/project_every_idea_form.png"
+    },
+    {
+        "id": 9,
+        "title": "JCC Brochure",
+        "category": "graphics",
+        "tag": "Brochure & Community Campaign",
+        "description": "High-energy brochure cover for JCC Bucharest, combining cultural photography, bold typography, and event-led visual storytelling.",
+        "image": "assets/project_jcc_brochure_exact.png"
+    },
+    {
+        "id": 8,
+        "title": "Creative Alex Website",
+        "category": "web",
+        "tag": "Portfolio Website Design",
+        "description": "Website direction and visual presentation for creativealex.eu, built around bold portfolio thumbnails and a clean creator-first experience.",
+        "image": "assets/project_creativealex_website_exact.png"
+    },
+    {
         "id": 2,
         "title": "Bnei Akiva Campaign Materials",
         "category": "graphics",

@@ -12,7 +12,7 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=20260523-hero-rhythm-responsive">
+    <link rel="stylesheet" href="style.css?v=20260524-team-portraits">
 </head>
 <body>
     <!-- Custom Cursor Glow Background -->
@@ -78,9 +78,11 @@
                 <div class="hero-badge fade-in">
                     <span class="badge-dot"></span> Graphic Design & Branding Agency
                 </div>
-                <h1 class="hero-title fade-in">
-                    We turn <span class="text-gradient">creative ideas</span> into digital impact.
+                <h1 class="hero-title hero-title-rotator fade-in" aria-label="Let's Create: Branding, Website, Graphics, Social media content">
+                    <span class="hero-title-static" aria-hidden="true">Let&rsquo;s Create:</span>
+                    <span class="hero-title-word text-gradient" data-words="Branding|Website|Graphics|Social media content" aria-hidden="true">Branding</span>
                 </h1>
+                <span class="sr-only">Let's Create: Branding, Website, Graphics, Social media content</span>
                 <p class="hero-subtitle fade-in">
                     We are The Creative Bunch. A team passionate about graphic design, branding, and digital strategy. We create impactful visual campaigns, memorable brand identities, and premium websites for visionary organizations.
                 </p>
@@ -196,8 +198,8 @@
                     </div>
                     <!-- Portfolio Filters -->
                     <div class="portfolio-filters">
-                        <button class="filter-btn" data-filter="all" aria-pressed="false">All</button>
-                        <button class="filter-btn active" data-filter="graphics" aria-pressed="true">Graphics</button>
+                        <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+                        <button class="filter-btn" data-filter="graphics" aria-pressed="false">Graphics</button>
                         <button class="filter-btn" data-filter="branding" aria-pressed="false">Branding</button>
                         <button class="filter-btn" data-filter="web" aria-pressed="false">Websites</button>
                     </div>
@@ -220,55 +222,51 @@
                 </div>
 
                 <div class="team-grid">
-                    <!-- Member 1 -->
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_member1.svg" alt="Team Member 1" class="team-img">
+                            <img src="assets/team_ilya.png" alt="Ilya portrait" class="team-img">
                         </div>
                         <div class="team-info">
-                            <h3>Avi</h3>
+                            <h3>Ilya</h3>
                             <p class="team-role">Creative Director &amp; Branding</p>
-                            <p class="team-bio">Shapes the creative direction and keeps each identity clear, distinctive, and usable.</p>
-                            <p class="team-principle">Principle: make the idea visible first.</p>
+                            <p class="team-bio">I chase those sparks until they become campaigns, visuals, or experiences that bring people together. My world blends communication, creative direction, and social impact work.</p>
+                            <p class="team-principle">Principle: Every project starts with a spark, a question, a story, a feeling.</p>
                         </div>
                     </div>
 
-                    <!-- Member 2 -->
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_member2.svg" alt="Team Member 2" class="team-img">
+                            <img src="assets/team_anna.png" alt="Anna portrait" class="team-img">
                         </div>
                         <div class="team-info">
-                            <h3>David</h3>
-                            <p class="team-role">Lead Graphic Designer</p>
-                            <p class="team-bio">Turns campaign messages into posters, layouts, and graphics with strong visual order.</p>
-                            <p class="team-principle">Principle: every layout needs a reason.</p>
+                            <h3>Anna</h3>
+                            <p class="team-role">Ilustrator</p>
+                            <p class="team-bio">An illustrator who loves turning textures, colors, and small stories into images.</p>
+                            <p class="team-principle">Principle: always excited to meet people who enjoy experimenting.</p>
                         </div>
                     </div>
 
-                    <!-- Member 3 -->
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_member3.svg" alt="Team Member 3" class="team-img">
+                            <img src="assets/team_nava.png" alt="Nava portrait" class="team-img">
                         </div>
                         <div class="team-info">
-                            <h3>Sarah</h3>
-                            <p class="team-role">UI/UX Designer</p>
-                            <p class="team-bio">Connects visual identity with user flows so digital products feel direct and elegant.</p>
-                            <p class="team-principle">Principle: reduce the work for the user.</p>
+                            <h3>Nava</h3>
+                            <p class="team-role">Industrial Designer</p>
+                            <p class="team-bio">My work spans products, graphics, and systems, grounded in user research and a deep understanding of user experience.</p>
+                            <p class="team-principle">Principle: Every project begins with curiosity.</p>
                         </div>
                     </div>
 
-                    <!-- Member 4 -->
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_member4.svg" alt="Team Member 4" class="team-img">
+                            <img src="assets/team_radu.png" alt="Radu portrait" class="team-img">
                         </div>
                         <div class="team-info">
-                            <h3>Noam</h3>
-                            <p class="team-role">Full-Stack Developer</p>
-                            <p class="team-bio">Translates the visual system into fast, responsive, custom-coded digital experiences.</p>
-                            <p class="team-principle">Principle: performance is part of design.</p>
+                            <h3>Radu</h3>
+                            <p class="team-role">Digital Media Designer</p>
+                            <p class="team-bio">Digital Media Development graduate (BSc Hons, UK), working across websites, posters, booklets, and digital visuals that combine structure with creativity.</p>
+                            <p class="team-principle">Principle: My approach is grounded in clarity, consistency, and thoughtful execution.</p>
                         </div>
                     </div>
                 </div>
@@ -345,6 +343,6 @@
     </footer>
 
     <!-- Custom JS -->
-    <script src="main.js?v=20260523-hero-rhythm-responsive"></script>
+    <script src="main.js?v=20260524-every-idea-form"></script>
 </body>
 </html>
