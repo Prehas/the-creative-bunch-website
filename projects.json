@@ -5,7 +5,7 @@
         "category": "graphics",
         "tag": "Event Poster & Campaign Design",
         "description": "Visual campaign materials for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.",
-        "image": "assets/project_merkaz.jpg"
+        "image": "assets/project_merkaz_thumb.webp"
     },
     {
         "id": 7,
@@ -13,7 +13,7 @@
         "category": "branding",
         "tag": "Logo Design & Brand Mark",
         "description": "Futuristic identity mark for Infinik, pairing a geometric infinity symbol with a sharp, digital wordmark system.",
-        "image": "assets/project_infinik_logo.jpg"
+        "image": "assets/project_infinik_logo_thumb.webp"
     },
     {
         "id": 10,
@@ -21,7 +21,7 @@
         "category": "branding",
         "tag": "Print & Object Branding",
         "description": "Every idea deserves a form. We transform it into print - on paper, fabric, or objects. The format does not matter. What matters is your vision.",
-        "image": "assets/project_every_idea_form.png"
+        "image": "assets/project_every_idea_form_thumb.webp"
     },
     {
         "id": 9,
@@ -29,7 +29,7 @@
         "category": "graphics",
         "tag": "Brochure & Community Campaign",
         "description": "High-energy brochure cover for JCC Bucharest, combining cultural photography, bold typography, and event-led visual storytelling.",
-        "image": "assets/project_jcc_brochure_exact.png"
+        "image": "assets/project_jcc_brochure_thumb.webp"
     },
     {
         "id": 8,
@@ -37,7 +37,7 @@
         "category": "web",
         "tag": "Portfolio Website Design",
         "description": "Website direction and visual presentation for creativealex.eu, built around bold portfolio thumbnails and a clean creator-first experience.",
-        "image": "assets/project_creativealex_website_exact.png"
+        "image": "assets/project_creativealex_website_thumb.webp"
     },
     {
         "id": 2,

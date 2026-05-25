@@ -12,7 +12,7 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=20260524-team-portraits">
+    <link rel="stylesheet" href="style.css?v=20260526-merkaz-case-study-mobile-fit">
 </head>
 <body>
     <!-- Custom Cursor Glow Background -->
@@ -39,7 +39,17 @@
 
             <!-- CTA Button -->
             <div class="nav-cta">
-                <a href="#book-call" class="btn btn-secondary btn-magnetic">Create project</a>
+                <a href="#book-call" class="btn btn-secondary btn-magnetic project-cta-btn" aria-label="Create project">
+                    <span class="project-cta-icon" aria-hidden="true">
+                        <span class="project-cta-video-icon">
+                            <svg viewBox="0 0 32 22" focusable="false">
+                                <path d="M2 6.6C2 3.5 4.5 1 7.6 1h10.8C21.5 1 24 3.5 24 6.6v8.8c0 3.1-2.5 5.6-5.6 5.6H7.6C4.5 21 2 18.5 2 15.4V6.6Z"></path>
+                                <path d="M25.6 7.1 31 3.9v14.2l-5.4-3.2V7.1Z"></path>
+                            </svg>
+                        </span>
+                    </span>
+                    <span class="project-cta-label">Create project</span>
+                </a>
             </div>
 
             <!-- Hamburger Mobile Menu -->
@@ -67,6 +77,11 @@
     <main>
         <!-- Hero Section -->
         <section id="hero" class="hero-section">
+            <div class="hero-video-stage" aria-hidden="true">
+                <video class="hero-video-loop" autoplay muted loop playsinline preload="none">
+                    <source data-src="assets/hero_birds_loop.webm" type="video/webm">
+                </video>
+            </div>
             <div class="hero-bg-shapes">
                 <div class="shape shape-1"></div>
                 <div class="shape shape-2"></div>
@@ -88,8 +103,15 @@
                 </p>
                 <div class="hero-actions fade-in">
                     <a href="#portfolio" class="btn btn-primary btn-magnetic">View Work</a>
-                    <a href="#book-call" class="btn btn-outline btn-magnetic">
-                        Create project <i class="fa-solid fa-arrow-right"></i>
+                    <a href="#book-call" class="btn btn-outline btn-magnetic hero-project-cta">
+                        <span class="hero-project-cta-icon" aria-hidden="true">
+                            <svg viewBox="0 0 32 22" focusable="false">
+                                <path d="M2 6.6C2 3.5 4.5 1 7.6 1h10.8C21.5 1 24 3.5 24 6.6v8.8c0 3.1-2.5 5.6-5.6 5.6H7.6C4.5 21 2 18.5 2 15.4V6.6Z"></path>
+                                <path d="M25.6 7.1 31 3.9v14.2l-5.4-3.2V7.1Z"></path>
+                            </svg>
+                        </span>
+                        <span class="hero-project-cta-label">Create project</span>
+                        <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
@@ -224,7 +246,7 @@
                 <div class="team-grid">
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_ilya.png" alt="Ilya portrait" class="team-img">
+                            <img src="assets/team_ilya_thumb.webp" alt="Ilya portrait" class="team-img" loading="lazy" decoding="async">
                         </div>
                         <div class="team-info">
                             <h3>Ilya</h3>
@@ -236,7 +258,7 @@
 
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_anna.png" alt="Anna portrait" class="team-img">
+                            <img src="assets/team_anna_thumb.webp" alt="Anna portrait" class="team-img" loading="lazy" decoding="async">
                         </div>
                         <div class="team-info">
                             <h3>Anna</h3>
@@ -248,7 +270,7 @@
 
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_nava.png" alt="Nava portrait" class="team-img">
+                            <img src="assets/team_nava_thumb.webp" alt="Nava portrait" class="team-img" loading="lazy" decoding="async">
                         </div>
                         <div class="team-info">
                             <h3>Nava</h3>
@@ -260,7 +282,7 @@
 
                     <div class="team-card card-glow">
                         <div class="team-img-wrapper">
-                            <img src="assets/team_radu.png" alt="Radu portrait" class="team-img">
+                            <img src="assets/team_radu_thumb.webp" alt="Radu portrait" class="team-img" loading="lazy" decoding="async">
                         </div>
                         <div class="team-info">
                             <h3>Radu</h3>
@@ -343,6 +365,6 @@
     </footer>
 
     <!-- Custom JS -->
-    <script src="main.js?v=20260524-every-idea-form"></script>
+    <script src="main.js?v=20260526-merkaz-case-study-mobile-fit"></script>
 </body>
 </html>

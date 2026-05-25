@@ -6,7 +6,7 @@ const fallbackProjects = [
         "category": "graphics",
         "tag": "Event Poster & Campaign Design",
         "description": "Visual campaign materials for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.",
-        "image": "assets/project_merkaz.jpg"
+        "image": "assets/project_merkaz_thumb.webp"
     },
     {
         "id": 7,
@@ -14,7 +14,7 @@ const fallbackProjects = [
         "category": "branding",
         "tag": "Logo Design & Brand Mark",
         "description": "Futuristic identity mark for Infinik, pairing a geometric infinity symbol with a sharp, digital wordmark system.",
-        "image": "assets/project_infinik_logo.jpg"
+        "image": "assets/project_infinik_logo_thumb.webp"
     },
     {
         "id": 10,
@@ -22,7 +22,7 @@ const fallbackProjects = [
         "category": "branding",
         "tag": "Print & Object Branding",
         "description": "Every idea deserves a form. We transform it into print - on paper, fabric, or objects. The format does not matter. What matters is your vision.",
-        "image": "assets/project_every_idea_form.png"
+        "image": "assets/project_every_idea_form_thumb.webp"
     },
     {
         "id": 9,
@@ -30,7 +30,7 @@ const fallbackProjects = [
         "category": "graphics",
         "tag": "Brochure & Community Campaign",
         "description": "High-energy brochure cover for JCC Bucharest, combining cultural photography, bold typography, and event-led visual storytelling.",
-        "image": "assets/project_jcc_brochure_exact.png"
+        "image": "assets/project_jcc_brochure_thumb.webp"
     },
     {
         "id": 8,
@@ -38,7 +38,7 @@ const fallbackProjects = [
         "category": "web",
         "tag": "Portfolio Website Design",
         "description": "Website direction and visual presentation for creativealex.eu, built around bold portfolio thumbnails and a clean creator-first experience.",
-        "image": "assets/project_creativealex_website_exact.png"
+        "image": "assets/project_creativealex_website_thumb.webp"
     },
     {
         "id": 2,
@@ -82,6 +82,32 @@ const fallbackProjects = [
     }
 ];
 
+const MERKAZ_CASE_STUDY = {
+    id: 1,
+    title: "Merkaz Israel 76 Campaign",
+    category: "Event Poster & Campaign Design",
+    year: "2024",
+    image: "assets/project_merkaz_thumb.webp",
+    statement: "A visual campaign made for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.",
+    tags: ["Graphic Design", "Print", "Branding"],
+    overview: [
+        {
+            title: "The Challenge",
+            text: "Create a visual identity that celebrates Israel 76 in a modern, approachable way, while staying clear enough for fast event communication."
+        },
+        {
+            title: "The Solution",
+            text: "Bold typography, national symbols, and a poster-first system that could move from print into social and community channels."
+        },
+        {
+            title: "The Impact",
+            text: "A campaign language that feels proud, legible, and memorable across event posters, digital previews, and public-facing assets."
+        }
+    ],
+    process: ["Research", "Concept", "Sketches", "Design", "Refinement", "Final"],
+    palette: ["#F5F7FB", "#0E65D8", "#0642A4", "#061A3C", "#DEFF87"]
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
@@ -91,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
     initMobileMenu();
     initHeroRotatingHeadline({ prefersReducedMotion });
+    initHeroVideoBudget({ prefersReducedMotion });
     initMagneticButtons({ prefersReducedMotion, hasFinePointer });
     initBentoCardTracking({ prefersReducedMotion, hasFinePointer });
     loadProjects();
@@ -195,23 +222,72 @@ function initHeroRotatingHeadline({ prefersReducedMotion }) {
     window.setTimeout(tick, 280);
 }
 
+/* 2c. Hero Video Performance Budget */
+function initHeroVideoBudget({ prefersReducedMotion }) {
+    const video = document.querySelector('.hero-video-loop');
+    const hero = document.querySelector('.hero-section');
+    if (!video || !hero) return;
+
+    const source = video.querySelector('source');
+    const saveData = navigator.connection && navigator.connection.saveData;
+    const lowPowerViewport = window.matchMedia('(max-width: 768px), (max-height: 620px)').matches;
+
+    if (prefersReducedMotion || saveData || lowPowerViewport) {
+        video.removeAttribute('autoplay');
+        video.pause();
+        video.closest('.hero-video-stage')?.classList.add('is-disabled');
+        return;
+    }
+
+    if (source && !source.src && source.dataset.src) {
+        source.src = source.dataset.src;
+        video.load();
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+            video.play().catch(() => {});
+        } else {
+            video.pause();
+        }
+    }, { threshold: 0.18 });
+
+    observer.observe(hero);
+}
+
 /* 3. Scroll Reveal Animations */
 function initScrollReveal() {
-    const revealElements = document.querySelectorAll('.scroll-reveal, .fade-in');
-    
-    const observer = new IntersectionObserver((entries) => {
+    const revealElements = Array.from(document.querySelectorAll('.scroll-reveal, .fade-in'));
+    const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
+    const fastMobileReveal = isMobileViewport ? document.querySelector('#portfolio.scroll-reveal') : null;
+    const defaultRevealElements = fastMobileReveal
+        ? revealElements.filter(el => el !== fastMobileReveal)
+        : revealElements;
+
+    const revealOnce = (entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('appear');
                 observer.unobserve(entry.target); // Trigger only once
             }
         });
-    }, {
+    };
+
+    const observer = new IntersectionObserver(revealOnce, {
         threshold: 0.15,
         rootMargin: '0px 0px -50px 0px'
     });
 
-    revealElements.forEach(el => observer.observe(el));
+    defaultRevealElements.forEach(el => observer.observe(el));
+
+    if (fastMobileReveal) {
+        const fastObserver = new IntersectionObserver(revealOnce, {
+            threshold: 0.01,
+            rootMargin: '220px 0px 120px 0px'
+        });
+
+        fastObserver.observe(fastMobileReveal);
+    }
 }
 
 /* 4. Mobile Menu Overlay Toggle */
@@ -289,7 +365,7 @@ function loadProjects() {
     if (!container) return;
 
     // Load function using JSON fetch with fallback
-    fetch('projects.json?v=20260524-every-idea-form')
+    fetch('projects.json?v=20260526-merkaz-case-study-mobile-fit')
         .then(response => {
             if (!response.ok) throw new Error('Network error loading JSON');
             return response.json();
@@ -344,10 +420,18 @@ function loadProjects() {
             const article = document.createElement('article');
             article.className = `project-card card-glow${project.id === 1 ? ' project-featured' : ''}`;
             article.setAttribute('data-category', project.category);
+            article.setAttribute('data-project-id', project.id);
+
+            if (project.id === MERKAZ_CASE_STUDY.id) {
+                article.classList.add('project-card-clickable');
+                article.setAttribute('role', 'button');
+                article.setAttribute('tabindex', '0');
+                article.setAttribute('aria-label', `Open case study for ${project.title}`);
+            }
             
             article.innerHTML = `
                 <div class="project-img-wrapper">
-                    <img src="${project.image}" alt="${project.title}" class="project-img" loading="lazy">
+                    <img src="${project.image}" alt="${project.title}" class="project-img" loading="lazy" decoding="async" fetchpriority="low">
                 </div>
                 <div class="project-details">
                     <div>
@@ -355,12 +439,14 @@ function loadProjects() {
                         <h3>${project.title}</h3>
                         <p>${project.description}</p>
                     </div>
+                    ${project.id === MERKAZ_CASE_STUDY.id ? '<span class="project-open-cue">Open case study <i class="fa-solid fa-arrow-right"></i></span>' : ''}
                 </div>
             `;
             container.appendChild(article);
         });
 
         filterItems('all');
+        initMerkazCaseStudy(container);
         
         // Re-run cursor tracking on the newly created project cards
         initBentoCardTracking({
@@ -368,4 +454,195 @@ function loadProjects() {
             hasFinePointer: window.matchMedia('(pointer: fine)').matches
         });
     }
+}
+
+function initMerkazCaseStudy(container) {
+    if (container.dataset.caseStudyBound === 'true') return;
+    container.dataset.caseStudyBound = 'true';
+
+    container.addEventListener('click', (event) => {
+        const card = event.target.closest('[data-project-id="1"]');
+        if (!card) return;
+        openMerkazCaseStudy(card);
+    });
+
+    container.addEventListener('keydown', (event) => {
+        const card = event.target.closest('[data-project-id="1"]');
+        if (!card || (event.key !== 'Enter' && event.key !== ' ')) return;
+        event.preventDefault();
+        openMerkazCaseStudy(card);
+    });
+}
+
+function openMerkazCaseStudy(sourceCard) {
+    const overlay = getOrCreateMerkazOverlay();
+    const closeButton = overlay.querySelector('.case-study-close');
+
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    overlay.scrollTop = 0;
+    document.body.classList.add('case-study-open');
+    sourceCard.classList.add('project-card-expanding');
+
+    window.setTimeout(() => {
+        sourceCard.classList.remove('project-card-expanding');
+        closeButton?.focus({ preventScroll: true });
+    }, 420);
+}
+
+function closeMerkazCaseStudy() {
+    const overlay = document.getElementById('merkaz-case-study');
+    if (!overlay) return;
+
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('case-study-open');
+
+    const sourceCard = document.querySelector('[data-project-id="1"]');
+    sourceCard?.focus({ preventScroll: true });
+}
+
+function getOrCreateMerkazOverlay() {
+    let overlay = document.getElementById('merkaz-case-study');
+    if (overlay) return overlay;
+
+    overlay = document.createElement('aside');
+    overlay.id = 'merkaz-case-study';
+    overlay.className = 'case-study-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-labelledby', 'merkaz-case-study-title');
+
+    overlay.innerHTML = `
+        <div class="case-study-shell">
+            <header class="case-study-topbar">
+                <div class="case-study-brand">
+                    <span class="case-study-mark" aria-hidden="true"></span>
+                    <span>The Creative Bunch</span>
+                </div>
+                <div class="case-study-progress">01 / 06</div>
+                <button class="case-study-close" type="button" aria-label="Close Merkaz case study">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </button>
+            </header>
+
+            <section class="case-study-hero">
+                <div class="case-study-copy">
+                    <p class="case-study-eyebrow">${MERKAZ_CASE_STUDY.category}</p>
+                    <h2 id="merkaz-case-study-title">${MERKAZ_CASE_STUDY.title}</h2>
+                    <p>${MERKAZ_CASE_STUDY.statement}</p>
+                    <div class="case-study-tags">
+                        ${MERKAZ_CASE_STUDY.tags.map(tag => `<span>${tag}</span>`).join('')}
+                    </div>
+                </div>
+                <figure class="case-study-hero-visual">
+                    <img src="${MERKAZ_CASE_STUDY.image}" alt="Merkaz Israel 76 campaign poster preview" loading="eager" decoding="async">
+                </figure>
+            </section>
+
+            <section class="case-study-overview" aria-label="Project overview">
+                ${MERKAZ_CASE_STUDY.overview.map(item => `
+                    <article>
+                        <span aria-hidden="true"></span>
+                        <h3>${item.title}</h3>
+                        <p>${item.text}</p>
+                    </article>
+                `).join('')}
+            </section>
+
+            <section class="case-study-split">
+                <div class="case-study-sticky">
+                    <p class="case-study-section-count">02 / 06</p>
+                    <h3>Visual Direction</h3>
+                    <p>We combined event clarity with symbolic movement: large type, confident blue, air, flags, and clean hierarchy that could read from a poster wall or a phone screen.</p>
+                </div>
+                <div class="case-study-image-stack">
+                    <figure><img src="${MERKAZ_CASE_STUDY.image}" alt="Merkaz campaign layout on a dark showcase surface" loading="lazy" decoding="async"></figure>
+                    <figure><img src="${MERKAZ_CASE_STUDY.image}" alt="Merkaz campaign detail crop with bold blue typography" loading="lazy" decoding="async"></figure>
+                </div>
+            </section>
+
+            <section class="case-study-process">
+                <div class="case-study-section-heading">
+                    <p>03 / 06</p>
+                    <h3>Design Process</h3>
+                </div>
+                <div class="case-study-timeline">
+                    ${MERKAZ_CASE_STUDY.process.map((step, index) => `
+                        <article>
+                            <span>${String(index + 1).padStart(2, '0')}</span>
+                            <strong>${step}</strong>
+                        </article>
+                    `).join('')}
+                </div>
+            </section>
+
+            <section class="case-study-brand-system">
+                <div class="case-study-section-heading">
+                    <p>04 / 06</p>
+                    <h3>Assets & Brand System</h3>
+                </div>
+                <div class="case-study-system-grid">
+                    <article>
+                        <span>Typography</span>
+                        <strong>Bold, condensed, readable from distance.</strong>
+                    </article>
+                    <article>
+                        <span>Color</span>
+                        <div class="case-study-palette">
+                            ${MERKAZ_CASE_STUDY.palette.map(color => `<i style="background:${color}"></i>`).join('')}
+                        </div>
+                    </article>
+                    <article>
+                        <span>Graphic Language</span>
+                        <strong>Flag motion, clear blocks, campaign-first hierarchy.</strong>
+                    </article>
+                    <article>
+                        <span>Use Cases</span>
+                        <strong>Poster, social preview, community announcement, event visual.</strong>
+                    </article>
+                </div>
+            </section>
+
+            <section class="case-study-gallery">
+                <div class="case-study-section-heading">
+                    <p>05 / 06</p>
+                    <h3>Gallery Strip</h3>
+                </div>
+                <div class="case-study-gallery-track" aria-label="Merkaz gallery preview">
+                    ${Array.from({ length: 5 }, (_, index) => `
+                        <figure>
+                            <img src="${MERKAZ_CASE_STUDY.image}" alt="Merkaz campaign gallery preview ${index + 1}" loading="lazy" decoding="async">
+                        </figure>
+                    `).join('')}
+                </div>
+            </section>
+
+            <section class="case-study-final">
+                <div>
+                    <p class="case-study-section-count">06 / 06</p>
+                    <h3>Final Result</h3>
+                    <p>A focused campaign system for a cultural event: direct, vivid, and built to feel recognizable across every touchpoint.</p>
+                </div>
+                <figure>
+                    <img src="${MERKAZ_CASE_STUDY.image}" alt="Final Merkaz campaign preview" loading="lazy" decoding="async">
+                </figure>
+            </section>
+        </div>
+    `;
+
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay || event.target.closest('.case-study-close')) {
+            closeMerkazCaseStudy();
+        }
+    });
+
+    overlay.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeMerkazCaseStudy();
+    });
+
+    document.body.appendChild(overlay);
+    return overlay;
 }
