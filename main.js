@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
 
+    initPerformanceFallback({ prefersReducedMotion });
     initCursorGlow();
     initHeaderScroll();
     initScrollReveal();
@@ -122,6 +123,22 @@ document.addEventListener('DOMContentLoaded', () => {
     initBentoCardTracking({ prefersReducedMotion, hasFinePointer });
     loadProjects();
 });
+
+function initPerformanceFallback({ prefersReducedMotion }) {
+    const ua = navigator.userAgent || '';
+    const isChrome = /Chrome|CriOS/.test(ua) && !/Edg|OPR|Opera/.test(ua);
+    const saveData = navigator.connection && navigator.connection.saveData;
+    const mobileViewport = window.matchMedia('(max-width: 768px), (max-height: 620px)').matches;
+    const lowCoreDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+
+    if (isChrome) {
+        document.body.classList.add('chrome-engine');
+    }
+
+    if (prefersReducedMotion || saveData || mobileViewport || (isChrome && lowCoreDevice)) {
+        document.body.classList.add('performance-fallback');
+    }
+}
 
 /* 1. Custom Background Cursor Glow */
 function initCursorGlow() {
@@ -365,7 +382,7 @@ function loadProjects() {
     if (!container) return;
 
     // Load function using JSON fetch with fallback
-    fetch('projects.json?v=20260526-merkaz-case-study-mobile-fit')
+    fetch('projects.json?v=20260526-performance-fallback')
         .then(response => {
             if (!response.ok) throw new Error('Network error loading JSON');
             return response.json();

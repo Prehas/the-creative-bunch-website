@@ -3790,6 +3790,71 @@ body.lock-scroll {
     }
 }
 
+/* Performance fallback for Chrome and low-power devices. */
+body.chrome-engine .main-header,
+body.chrome-engine .mobile-menu-overlay,
+body.chrome-engine .case-study-overlay,
+body.performance-fallback .main-header,
+body.performance-fallback .mobile-menu-overlay,
+body.performance-fallback .case-study-overlay {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+
+body.chrome-engine .case-study-overlay,
+body.performance-fallback .case-study-overlay {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(92, 49, 88, 0.18), transparent 34%),
+        rgba(10, 0, 13, 0.94) !important;
+}
+
+body.chrome-engine .case-study-shell,
+body.performance-fallback .case-study-shell {
+    box-shadow:
+        0 22px 58px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+
+body.chrome-engine .case-study-hero-visual,
+body.chrome-engine .case-study-image-stack figure,
+body.chrome-engine .case-study-gallery figure,
+body.chrome-engine .case-study-final figure,
+body.performance-fallback .case-study-hero-visual,
+body.performance-fallback .case-study-image-stack figure,
+body.performance-fallback .case-study-gallery figure,
+body.performance-fallback .case-study-final figure {
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.26) !important;
+}
+
+body.performance-fallback .cursor-glow,
+body.performance-fallback .hero-video-stage,
+body.performance-fallback .case-study-shell::before,
+body.performance-fallback .case-study-hero-visual::before,
+body.performance-fallback .case-study-final figure::before {
+    display: none !important;
+}
+
+body.performance-fallback .case-study-overlay,
+body.performance-fallback .project-card,
+body.performance-fallback .team-card,
+body.performance-fallback .bento-box {
+    transition-duration: 0.18s !important;
+}
+
+body.performance-fallback .project-card:hover,
+body.performance-fallback .team-card:hover,
+body.performance-fallback .bento-box:hover {
+    transform: none !important;
+}
+
+body.performance-fallback .services-section .bento-box::before,
+body.performance-fallback .nav-cta .project-cta-btn::before,
+body.performance-fallback .hero-actions .hero-project-cta::before {
+    animation: none !important;
+    opacity: 0.28 !important;
+    transform: none !important;
+}
+
 /* Mobile-only hero CTA mirrors the desktop navbar CTA. */
 .hero-project-cta-icon {
     display: none;
