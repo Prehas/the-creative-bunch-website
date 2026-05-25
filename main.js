@@ -382,7 +382,7 @@ function loadProjects() {
     if (!container) return;
 
     // Load function using JSON fetch with fallback
-    fetch('projects.json?v=20260526-performance-fallback')
+    fetch('projects.json?v=20260526-performance-fallback-r2')
         .then(response => {
             if (!response.ok) throw new Error('Network error loading JSON');
             return response.json();
