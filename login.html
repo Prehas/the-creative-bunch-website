@@ -24,8 +24,8 @@
             </div>
             <div class="auth-copy">
                 <span class="admin-kicker">Private studio cockpit</span>
-                <h1>Login to the creative control room.</h1>
-                <p>Manage portfolio projects, review meetings, and keep the agency dashboard ready for the real Supabase backend.</p>
+                <h1>Login to the agency dashboard.</h1>
+                <p>Manage portfolio projects, pricing, case studies, and studio operations from one protected control panel.</p>
             </div>
         </section>
 
@@ -34,15 +34,15 @@
             <div class="auth-card-header">
                 <span class="admin-kicker">Admin access</span>
                 <h2>Welcome back</h2>
-                <p>Use the admin email and the private local access password.</p>
+                <p>Use an approved admin account to access the dashboard.</p>
             </div>
 
             <form class="auth-form" id="login-form">
                 <label for="admin-email">Email</label>
-                <input id="admin-email" name="email" type="email" value="raduniculescu22@gmail.com" autocomplete="email" required>
+                <input id="admin-email" name="email" type="email" placeholder="admin@studio.com" autocomplete="email" required>
 
                 <label for="admin-password">Password</label>
-                <input id="admin-password" name="password" type="password" placeholder="Local demo password" autocomplete="current-password" required minlength="6">
+                <input id="admin-password" name="password" type="password" placeholder="Enter password" autocomplete="current-password" required minlength="6">
 
                 <button type="submit" class="admin-primary-btn">Login <i class="fa-solid fa-arrow-right"></i></button>
                 <p class="auth-status" id="auth-status" role="status"></p>
@@ -50,13 +50,11 @@
 
             <div class="auth-note">
                 <i class="fa-solid fa-shield-halved"></i>
-                <p>This is local preview mode until Supabase URL and anon key are added in <code>supabase-config.js</code>.</p>
+                <p>Access is protected through the Vercel Content API. Only approved studio accounts can enter.</p>
             </div>
         </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js?v=20260603-vercel-content-api"></script>
     <script src="content-api-config.js?v=20260603-vercel-content-api"></script>
     <script src="admin.js?v=20260603-vercel-content-api"></script>
 </body>

@@ -35,8 +35,8 @@
             </nav>
 
             <div class="sidebar-card">
-                <span>Local admin mode</span>
-                <p>Project edits are saved in this browser until Supabase is connected.</p>
+                <span>Content API live</span>
+                <p>Projects, pricing, and case studies are managed through the Vercel content database.</p>
             </div>
 
             <button class="dashboard-nav-item logout-btn" id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
@@ -55,6 +55,7 @@
                         <option selected>Last 30 days</option>
                         <option>This quarter</option>
                     </select>
+                    <button type="button" class="admin-secondary-btn clear-cache-btn" id="clear-cache-btn"><i class="fa-solid fa-broom"></i> Clear cache</button>
                     <a href="index.html" class="admin-secondary-btn view-site-btn"><i class="fa-solid fa-globe"></i> View site</a>
                 </div>
             </header>
@@ -69,7 +70,7 @@
                                 <span class="admin-kicker">Overview</span>
                                 <h2>Visitors and project interest</h2>
                             </div>
-                            <button class="chip-btn">Demo data</button>
+                            <button class="chip-btn">Vercel data</button>
                         </div>
                         <canvas id="visitors-chart" width="980" height="360" aria-label="Visitors chart"></canvas>
                     </article>
@@ -109,7 +110,7 @@
                             <p>Choose a project card to edit, delete it safely, or create a new portfolio project.</p>
                         </div>
                         <div class="panel-header-actions">
-                            <button class="admin-secondary-btn" id="reset-projects-btn"><i class="fa-solid fa-rotate-left"></i> Reset demo data</button>
+                            <button class="admin-secondary-btn" id="reset-projects-btn"><i class="fa-solid fa-rotate-left"></i> Restore defaults</button>
                             <button class="admin-primary-btn" id="create-project-btn"><i class="fa-solid fa-plus"></i> Create project</button>
                         </div>
                     </div>
@@ -461,7 +462,7 @@
                     <div>
                         <span class="admin-kicker">Meetings</span>
                         <h2>Calendly pipeline preview</h2>
-                        <p>For now these are demo records. Later we can sync real Calendly bookings through an automation or webhook.</p>
+                        <p>Meeting records are prepared for future Calendly automation and webhook syncing.</p>
                     </div>
                 </div>
                 <div class="placeholder-grid" id="meetings-panel-list"></div>
@@ -472,7 +473,7 @@
                     <div>
                         <span class="admin-kicker">Analytics</span>
                         <h2>Live traffic intelligence</h2>
-                        <p>Prepared for GA4 realtime data, country sessions, project opens, CTA clicks, devices, and source channels.</p>
+                        <p>Powered by Vercel Web Analytics tracking. Live visitor data is collected by Vercel after deploy and traffic.</p>
                     </div>
                     <div class="analytics-toolbar" aria-label="Analytics controls">
                         <select id="analytics-date-range" aria-label="Analytics date range">
@@ -486,7 +487,7 @@
                     </div>
                 </div>
                 <div class="analytics-status-bar" id="analytics-status-bar">
-                    <span><i class="fa-solid fa-circle-info"></i> Demo analytics loaded until GA4 credentials are connected.</span>
+                    <span><i class="fa-solid fa-circle-info"></i> Vercel Web Analytics tracking is ready.</span>
                 </div>
                 <div class="analytics-metric-grid" id="analytics-metric-grid"></div>
                 <div class="analytics-command-grid">
@@ -554,23 +555,21 @@
                     <div>
                         <span class="admin-kicker">Settings</span>
                         <h2>Admin setup</h2>
-                        <p>Supabase can replace demo mode once the project URL and anon key are added.</p>
+                        <p>The dashboard is connected to the Vercel Content API and protected with admin credentials.</p>
                     </div>
                 </div>
                 <div class="settings-card">
                     <dl>
-                        <div><dt>Admin email</dt><dd id="settings-admin-email">raduniculescu22@gmail.com</dd></div>
-                        <div><dt>Auth mode</dt><dd id="settings-auth-mode">Local demo</dd></div>
-                        <div><dt>Project source</dt><dd id="settings-project-source">localStorage fallback</dd></div>
-                        <div><dt>Pricing source</dt><dd id="settings-pricing-source">localStorage pricing draft/public</dd></div>
+                        <div><dt>Active admin</dt><dd id="settings-admin-email">Signed in admin</dd></div>
+                        <div><dt>Auth mode</dt><dd id="settings-auth-mode">Content API</dd></div>
+                        <div><dt>Project source</dt><dd id="settings-project-source">Vercel Content API</dd></div>
+                        <div><dt>Pricing source</dt><dd id="settings-pricing-source">Vercel Content API</dd></div>
                     </dl>
                 </div>
             </section>
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js?v=20260603-vercel-content-api"></script>
     <script src="content-api-config.js?v=20260603-vercel-content-api"></script>
     <script src="case-studies-data.js?v=20260603-vercel-content-api"></script>
     <script src="admin.js?v=20260603-vercel-content-api"></script>

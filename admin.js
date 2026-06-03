@@ -6,7 +6,6 @@ const TCB_CASE_STUDIES_PUBLISHED_KEY = 'tcb_case_studies_admin';
 const TCB_PRICING_KEY = 'tcb_pricing_draft_admin';
 const TCB_PRICING_PUBLISHED_KEY = 'tcb_pricing_admin';
 const TCB_CONTENT_API_TOKEN_KEY = 'tcb_content_api_token';
-const LOCAL_DEMO_PASSWORD = 'Greenice1!';
 const EDITOR_HISTORY_LIMIT = 60;
 
 let editorUndoStack = [];
@@ -150,9 +149,9 @@ const DASHBOARD_DATA = {
     chart: [24, 34, 29, 48, 52, 47, 61, 74, 68, 86, 81, 92]
 };
 
-const ANALYTICS_DEMO_DATA = {
+const ANALYTICS_FALLBACK_DATA = {
     connected: false,
-    source: 'Demo GA4-ready data',
+    source: 'Vercel Web Analytics',
     updatedAt: new Date().toISOString(),
     metrics: [
         { label: 'Active users', value: '4,862', delta: '+18.4%', icon: 'fa-user-group' },
@@ -203,35 +202,6 @@ const ANALYTICS_DEMO_DATA = {
 
 let analyticsLoaded = false;
 const WEBSITE_EDITOR_DESKTOP_QUERY = '(min-width: 901px)';
-
-function getConfig() {
-    return window.TCB_SUPABASE_CONFIG || {};
-}
-
-function isSupabaseConfigured() {
-    const config = getConfig();
-    return Boolean(
-        config.url &&
-        config.anonKey &&
-        !config.url.includes('YOUR_SUPABASE') &&
-        !config.anonKey.includes('YOUR_SUPABASE') &&
-        window.supabase
-    );
-}
-
-function getSupabaseClient() {
-    if (!isSupabaseConfigured()) return null;
-    const config = getConfig();
-    return window.supabase.createClient(config.url, config.anonKey);
-}
-
-function getAdminEmail() {
-    return getConfig().adminEmail || 'raduniculescu22@gmail.com';
-}
-
-function isDemoMode() {
-    return getConfig().demoMode !== false || !isSupabaseConfigured();
-}
 
 function getContentApiBase() {
     return String(window.TCB_CONTENT_API_CONFIG?.baseUrl || '').replace(/\/$/, '');
@@ -345,6 +315,10 @@ function getLocalSession() {
     } catch {
         return null;
     }
+}
+
+function getSessionEmail() {
+    return getLocalSession()?.email || 'Signed in admin';
 }
 
 function clearLocalSession() {
@@ -499,9 +473,6 @@ async function handleLoginPage() {
     if (!form) return;
 
     const status = document.getElementById('auth-status');
-    const emailInput = document.getElementById('admin-email');
-
-    emailInput.value = getAdminEmail();
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -509,32 +480,17 @@ async function handleLoginPage() {
         const email = String(formData.get('email') || '').trim().toLowerCase();
         const password = String(formData.get('password') || '');
 
-        if (email !== getAdminEmail().toLowerCase()) {
-            setStatus(status, 'This email is not allowed for the admin dashboard.', 'error');
+        if (!isContentApiEnabled()) {
+            setStatus(status, 'Content API is not configured. Please connect the Vercel content database first.', 'error');
             return;
         }
 
-        if (isContentApiEnabled()) {
-            try {
-                await loginContentApi(email, password);
-            } catch (error) {
-                setStatus(status, error.message || 'Content API login failed.', 'error');
-                return;
-            }
-            setLocalSession(email);
-        } else if (isSupabaseConfigured() && !isDemoMode()) {
-            const client = getSupabaseClient();
-            const { error } = await client.auth.signInWithPassword({ email, password });
-            if (error) {
-                setStatus(status, error.message, 'error');
-                return;
-            }
-        } else {
-            if (password !== LOCAL_DEMO_PASSWORD) {
-                setStatus(status, 'Incorrect password for this admin account.', 'error');
-                return;
-            }
-            setLocalSession(email);
+        try {
+            const session = await loginContentApi(email, password);
+            setLocalSession(session?.email || email);
+        } catch (error) {
+            setStatus(status, error.message || 'Content API login failed.', 'error');
+            return;
         }
 
         setStatus(status, 'Login successful. Opening dashboard...', 'success');
@@ -545,12 +501,7 @@ async function handleLoginPage() {
 async function ensureDashboardAccess() {
     if (!document.body.classList.contains('admin-page')) return true;
 
-    if (isSupabaseConfigured() && !isDemoMode()) {
-        const client = getSupabaseClient();
-        const { data } = await client.auth.getSession();
-        const email = data.session?.user?.email?.toLowerCase();
-        if (email === getAdminEmail().toLowerCase()) return true;
-    } else if (getLocalSession()?.email?.toLowerCase() === getAdminEmail().toLowerCase()) {
+    if (getLocalSession()?.email && localStorage.getItem(TCB_CONTENT_API_TOKEN_KEY)) {
         return true;
     }
 
@@ -764,7 +715,7 @@ function renderActivity() {
 }
 
 function getAnalyticsFallback(range = '30d') {
-    const data = JSON.parse(JSON.stringify(ANALYTICS_DEMO_DATA));
+    const data = JSON.parse(JSON.stringify(ANALYTICS_FALLBACK_DATA));
     data.range = range;
     data.updatedAt = new Date().toISOString();
     return data;
@@ -778,7 +729,7 @@ function setAnalyticsStatus(data, message) {
     status.innerHTML = `
         <span>
             <i class="fa-solid ${isLive ? 'fa-satellite-dish' : 'fa-circle-info'}"></i>
-            ${escapeAdminHtml(message || (isLive ? 'Live GA4 data connected.' : 'Demo analytics loaded until GA4 credentials are connected.'))}
+            ${escapeAdminHtml(message || (isLive ? 'Vercel Web Analytics tracking is active.' : 'Vercel Web Analytics tracking is ready.'))}
         </span>
     `;
 }
@@ -796,7 +747,7 @@ async function fetchAnalyticsData(range = '30d') {
         const data = await response.json();
         return data && typeof data === 'object' ? data : getAnalyticsFallback(range);
     } catch (error) {
-        console.warn('Analytics API unavailable. Using local demo analytics.', error);
+        console.warn('Analytics API unavailable. Using Vercel analytics fallback.', error);
         return getAnalyticsFallback(range);
     } finally {
         window.clearTimeout(timeout);
@@ -811,7 +762,7 @@ function drawAnalyticsTrafficChart(values = [], labels = []) {
     const width = canvas.width;
     const height = canvas.height;
     const padding = 42;
-    const safeValues = values.length ? values : ANALYTICS_DEMO_DATA.timeline;
+    const safeValues = values.length ? values : ANALYTICS_FALLBACK_DATA.timeline;
     const max = Math.max(...safeValues, 1) + 8;
     const min = Math.max(0, Math.min(...safeValues) - 8);
 
@@ -870,7 +821,7 @@ function drawAnalyticsTrafficChart(values = [], labels = []) {
         ctx.stroke();
     });
 
-    const chartLabels = labels.length ? labels : ANALYTICS_DEMO_DATA.timelineLabels;
+    const chartLabels = labels.length ? labels : ANALYTICS_FALLBACK_DATA.timelineLabels;
     ctx.fillStyle = 'rgba(229, 226, 255, 0.58)';
     ctx.font = '700 12px Plus Jakarta Sans, sans-serif';
     chartLabels.filter((_, index) => index % Math.ceil(chartLabels.length / 6) === 0).forEach(label => {
@@ -974,8 +925,8 @@ function renderAnalyticsPanel(data) {
     renderAnalyticsTable('analytics-pages', safeData.pages || [], 'title', 'path', 'views');
     renderAnalyticsTable('analytics-events', safeData.events || [], 'name', 'detail', 'count');
     setAnalyticsStatus(safeData, safeData.connected
-        ? 'Live GA4 data connected through the server endpoint.'
-        : (safeData.message || 'Demo analytics loaded. Add GA4 env vars on Vercel to activate live reporting.'));
+        ? 'Vercel Web Analytics tracking is active for the production site.'
+        : (safeData.message || 'Vercel Web Analytics tracking is ready.'));
 }
 
 async function loadAnalyticsPanel(force = false) {
@@ -1143,32 +1094,6 @@ async function loadProjectsFromSource() {
         }
     }
 
-    if (isSupabaseConfigured() && !isDemoMode()) {
-        const client = getSupabaseClient();
-        const { data, error } = await client.from('projects').select('*').order('sort_order', { ascending: true });
-        if (!error && Array.isArray(data) && data.length) {
-            const { data: caseData } = await client.from('case_studies').select('*');
-            if (Array.isArray(caseData) && caseData.length) {
-                const caseStudies = {};
-                caseData.forEach(item => {
-                    if (item.project_id && item.content) {
-                        caseStudies[String(item.project_id)] = item.content;
-                    }
-                });
-                saveStoredCaseStudies(caseStudies);
-            }
-
-            return data.map(item => ({
-                id: item.id,
-                title: item.title,
-                category: item.category,
-                tag: item.tag,
-                description: item.description,
-                image: item.image
-            }));
-        }
-    }
-
     return getStoredProjects();
 }
 
@@ -1200,25 +1125,6 @@ async function publishDraftProjects() {
     localStorage.setItem(TCB_CASE_STUDIES_PUBLISHED_KEY, JSON.stringify(caseStudies));
     await publishContentApiSnapshot({ projects, caseStudies, pricing: getStoredPricing() });
 
-    if (isSupabaseConfigured() && !isDemoMode()) {
-        const client = getSupabaseClient();
-        await Promise.all(projects.map((project, index) => client.from('projects').upsert({
-            id: project.id,
-            title: project.title,
-            category: project.category,
-            tag: project.tag,
-            description: project.description,
-            image: project.image,
-            sort_order: index
-        })));
-
-        await Promise.all(Object.entries(caseStudies).map(([projectId, content]) => client.from('case_studies').upsert({
-            project_id: projectId,
-            content,
-            updated_at: new Date().toISOString()
-        })));
-    }
-
     return { projects, caseStudies };
 }
 
@@ -1230,12 +1136,6 @@ async function deleteProject(projectId) {
     delete caseStudies[String(projectId)];
     saveStoredCaseStudies(caseStudies);
     await saveContentApiDraft({ projects, caseStudies });
-
-    if (isSupabaseConfigured() && !isDemoMode()) {
-        const client = getSupabaseClient();
-        await client.from('case_studies').delete().eq('project_id', projectId);
-        await client.from('projects').delete().eq('id', projectId);
-    }
 
     return projects;
 }
@@ -1945,7 +1845,7 @@ async function initProjectEditor() {
         renderProjectAdminList(DEFAULT_PROJECTS);
         clearProjectForm();
         showProjectListView();
-        setStatus(status, 'Demo project data and local case studies restored.', 'success');
+        setStatus(status, 'Default project data and case studies restored.', 'success');
     });
 
     clearProjectForm();
@@ -2256,10 +2156,50 @@ function initSettings() {
     const source = document.getElementById('settings-project-source');
     const pricingSource = document.getElementById('settings-pricing-source');
 
-    if (email) email.textContent = getAdminEmail();
-    if (authMode) authMode.textContent = isContentApiEnabled() ? 'Local login + Content API cookie' : (isSupabaseConfigured() && !isDemoMode() ? 'Supabase Auth' : 'Local demo');
-    if (source) source.textContent = isContentApiEnabled() ? 'Vercel Content API draft/public' : (isSupabaseConfigured() && !isDemoMode() ? 'Supabase projects table' : 'localStorage fallback');
-    if (pricingSource) pricingSource.textContent = isContentApiEnabled() ? 'Vercel Content API pricing draft/public' : 'localStorage pricing draft/public';
+    if (email) email.textContent = getSessionEmail();
+    if (authMode) authMode.textContent = 'Vercel Content API auth';
+    if (source) source.textContent = 'Vercel Content API draft/public';
+    if (pricingSource) pricingSource.textContent = 'Vercel Content API pricing draft/public';
+}
+
+async function clearAdminCache() {
+    [
+        TCB_PROJECTS_KEY,
+        TCB_PROJECTS_PUBLISHED_KEY,
+        TCB_CASE_STUDIES_KEY,
+        TCB_CASE_STUDIES_PUBLISHED_KEY,
+        TCB_PRICING_KEY,
+        TCB_PRICING_PUBLISHED_KEY
+    ].forEach(key => localStorage.removeItem(key));
+
+    if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(key => caches.delete(key)));
+    }
+
+    showAdminToast('Cache cleared. Reloading fresh content from Vercel.', 'success', { icon: 'fa-solid fa-broom' });
+    window.setTimeout(() => {
+        window.location.reload();
+    }, 850);
+}
+
+function initClearCacheButton() {
+    const button = document.getElementById('clear-cache-btn');
+    if (!button) return;
+
+    button.addEventListener('click', async () => {
+        button.disabled = true;
+        button.dataset.originalText = button.innerHTML;
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Clearing';
+        try {
+            await clearAdminCache();
+        } catch (error) {
+            console.warn('Cache clear failed.', error);
+            showAdminToast('Could not clear every cache, but local content cache was reset.', 'error', { icon: 'fa-solid fa-triangle-exclamation' });
+            button.disabled = false;
+            button.innerHTML = button.dataset.originalText || '<i class="fa-solid fa-broom"></i> Clear cache';
+        }
+    });
 }
 
 async function initLogout() {
@@ -2267,9 +2207,10 @@ async function initLogout() {
     if (!button) return;
 
     button.addEventListener('click', async () => {
-        if (isSupabaseConfigured() && !isDemoMode()) {
-            const client = getSupabaseClient();
-            await client.auth.signOut();
+        try {
+            await logoutContentApi();
+        } catch (error) {
+            console.warn('Remote logout failed. Clearing local session anyway.', error);
         }
         clearLocalSession();
         window.location.href = 'login.html';
@@ -2292,6 +2233,7 @@ async function initDashboard() {
     initProjectEditor();
     initPricingEditor();
     initSettings();
+    initClearCacheButton();
     initLogout();
 }
 

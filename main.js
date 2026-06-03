@@ -275,30 +275,22 @@ function escapeHtml(value) {
     return div.innerHTML;
 }
 
-function initGoogleAnalytics() {
-    const measurementId = window.TCB_ANALYTICS_CONFIG?.measurementId;
-    if (!measurementId || measurementId.includes('G-XXXX')) return;
-
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function gtag() {
-        window.dataLayer.push(arguments);
+function initVercelAnalytics() {
+    if (window.__tcbVercelAnalyticsLoaded) return;
+    window.__tcbVercelAnalyticsLoaded = true;
+    window.va = window.va || function va() {
+        (window.vaq = window.vaq || []).push(arguments);
     };
 
     const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+    script.defer = true;
+    script.src = '/_vercel/insights/script.js';
     document.head.appendChild(script);
-
-    window.gtag('js', new Date());
-    window.gtag('config', measurementId);
 }
 
 function trackTcbEvent(name, params = {}) {
-    if (typeof window.gtag !== 'function') return;
-    window.gtag('event', name, {
-        event_category: 'The Creative Bunch',
-        ...params
-    });
+    if (typeof window.va !== 'function') return;
+    window.va('event', name, params);
 }
 
 let contentApiCaseStudies = {};
@@ -390,7 +382,7 @@ function renderProjectThumbnail(project) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initGoogleAnalytics();
+    initVercelAnalytics();
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
 
