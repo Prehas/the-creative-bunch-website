@@ -1,0 +1,12 @@
+{
+  "name": "the-creative-bunch-content-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check api/bootstrap.js && node --check api/publish.js && node --check api/upload.js && node --check api/auth/login.js && node --check api/auth/logout.js && node --check api/health.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "latest"
+  }
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | The Creative Bunch Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Unbounded:wght@400;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css?v=20260603-vercel-content-api">
+</head>
+<body class="auth-page">
+    <main class="auth-shell">
+        <section class="auth-brand-panel" aria-label="The Creative Bunch admin login">
+            <a href="index.html" class="auth-logo-link" aria-label="Back to website">
+                <img src="assets/Logo_Site-transparent.png" alt="The Creative Bunch" class="auth-logo">
+            </a>
+            <div class="auth-orbit" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="auth-copy">
+                <span class="admin-kicker">Private studio cockpit</span>
+                <h1>Login to the creative control room.</h1>
+                <p>Manage portfolio projects, review meetings, and keep the agency dashboard ready for the real Supabase backend.</p>
+            </div>
+        </section>
+
+        <section class="auth-card" aria-label="Login form">
+            <a href="index.html" class="auth-back-link"><i class="fa-solid fa-arrow-left"></i> Back to site</a>
+            <div class="auth-card-header">
+                <span class="admin-kicker">Admin access</span>
+                <h2>Welcome back</h2>
+                <p>Use the admin email and the private local access password.</p>
+            </div>
+
+            <form class="auth-form" id="login-form">
+                <label for="admin-email">Email</label>
+                <input id="admin-email" name="email" type="email" value="raduniculescu22@gmail.com" autocomplete="email" required>
+
+                <label for="admin-password">Password</label>
+                <input id="admin-password" name="password" type="password" placeholder="Local demo password" autocomplete="current-password" required minlength="6">
+
+                <button type="submit" class="admin-primary-btn">Login <i class="fa-solid fa-arrow-right"></i></button>
+                <p class="auth-status" id="auth-status" role="status"></p>
+            </form>
+
+            <div class="auth-note">
+                <i class="fa-solid fa-shield-halved"></i>
+                <p>This is local preview mode until Supabase URL and anon key are added in <code>supabase-config.js</code>.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js?v=20260603-vercel-content-api"></script>
+    <script src="content-api-config.js?v=20260603-vercel-content-api"></script>
+    <script src="admin.js?v=20260603-vercel-content-api"></script>
+</body>
+</html>
+
+
+

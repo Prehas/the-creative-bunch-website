@@ -12,7 +12,7 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=20260526-pricing-section">
+    <link rel="stylesheet" href="style.css?v=20260603-vercel-content-api">
 </head>
 <body>
     <!-- Custom Cursor Glow Background -->
@@ -40,6 +40,9 @@
 
             <!-- CTA Button -->
             <div class="nav-cta">
+                <div class="site-auth-menu" data-site-auth>
+                    <a href="login.html" class="btn nav-login-btn" data-auth-login aria-label="Login to admin dashboard">Login</a>
+                </div>
                 <a href="#book-call" class="btn btn-secondary btn-magnetic project-cta-btn" aria-label="Create project">
                     <span class="project-cta-icon" aria-hidden="true">
                         <span class="project-cta-video-icon">
@@ -71,6 +74,7 @@
                 <li><a href="#portfolio" class="mobile-link">Work</a></li>
                 <li><a href="#pricing" class="mobile-link">Pricing</a></li>
                 <li><a href="#team" class="mobile-link">Team</a></li>
+                <li class="mobile-auth-item" data-mobile-auth><a href="login.html" class="mobile-link" data-mobile-auth-login>Login</a></li>
                 <li><a href="#book-call" class="mobile-link btn btn-primary">Create project</a></li>
             </ul>
         </nav>
@@ -233,6 +237,7 @@
                 <div class="projects-grid" id="projects-container">
                     <!-- Dynamically populated via JS -->
                 </div>
+                <nav class="portfolio-pagination" id="projects-pagination" aria-label="Selected work pages"></nav>
             </div>
         </section>
 
@@ -434,6 +439,11 @@
     </footer>
 
     <!-- Custom JS -->
-    <script src="main.js?v=20260526-pricing-section"></script>
+    <script src="analytics-config.js?v=20260603-vercel-content-api"></script>
+    <script src="content-api-config.js?v=20260603-vercel-content-api"></script>
+    <script src="main.js?v=20260603-vercel-content-api"></script>
 </body>
 </html>
+
+
+

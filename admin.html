@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | The Creative Bunch</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Unbounded:wght@400;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css?v=20260603-vercel-content-api">
+</head>
+<body class="admin-page">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar" aria-label="Admin navigation">
+            <a href="index.html" class="dashboard-brand" aria-label="Back to website">
+                <img src="assets/Logo_Site-transparent.png" alt="The Creative Bunch">
+                <span>The Creative Bunch</span>
+            </a>
+
+            <nav class="dashboard-nav" aria-label="Dashboard sections">
+                <button class="dashboard-nav-item is-active" data-admin-panel="overview"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <details class="dashboard-nav-group" data-website-editor-nav>
+                    <summary aria-expanded="false"><i class="fa-solid fa-pen-ruler"></i> Website Editor</summary>
+                    <div class="dashboard-nav-submenu">
+                        <button class="dashboard-nav-item" data-admin-panel="projects"><i class="fa-solid fa-layer-group"></i> Projects</button>
+                        <button class="dashboard-nav-item" data-admin-panel="pricing"><i class="fa-solid fa-tags"></i> Pricing</button>
+                    </div>
+                </details>
+                <button class="dashboard-nav-item" data-admin-panel="meetings"><i class="fa-solid fa-calendar-check"></i> Meetings</button>
+                <button class="dashboard-nav-item" data-admin-panel="analytics"><i class="fa-solid fa-chart-line"></i> Analytics</button>
+                <button class="dashboard-nav-item" data-admin-panel="sales"><i class="fa-solid fa-receipt"></i> Sales</button>
+                <button class="dashboard-nav-item" data-admin-panel="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+            </nav>
+
+            <div class="sidebar-card">
+                <span>Local admin mode</span>
+                <p>Project edits are saved in this browser until Supabase is connected.</p>
+            </div>
+
+            <button class="dashboard-nav-item logout-btn" id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+        </aside>
+
+        <main class="dashboard-main">
+            <header class="dashboard-topbar">
+                <div>
+                    <span class="admin-kicker">Agency OS</span>
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="topbar-actions">
+                    <label class="date-filter" for="date-range"><i class="fa-regular fa-calendar"></i></label>
+                    <select id="date-range" aria-label="Date range">
+                        <option>Last 7 days</option>
+                        <option selected>Last 30 days</option>
+                        <option>This quarter</option>
+                    </select>
+                    <a href="index.html" class="admin-secondary-btn view-site-btn"><i class="fa-solid fa-globe"></i> View site</a>
+                </div>
+            </header>
+
+            <section class="admin-panel is-active" id="panel-overview" data-admin-panel-content="overview">
+                <div class="metric-grid" id="metric-grid"></div>
+
+                <div class="dashboard-grid">
+                    <article class="analytics-card wide-card">
+                        <div class="card-heading-row">
+                            <div>
+                                <span class="admin-kicker">Overview</span>
+                                <h2>Visitors and project interest</h2>
+                            </div>
+                            <button class="chip-btn">Demo data</button>
+                        </div>
+                        <canvas id="visitors-chart" width="980" height="360" aria-label="Visitors chart"></canvas>
+                    </article>
+
+                    <article class="analytics-card country-card">
+                        <div class="card-heading-row compact">
+                            <h2>Sessions by country</h2>
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div class="country-list" id="country-list"></div>
+                    </article>
+
+                    <article class="analytics-card meetings-card">
+                        <div class="card-heading-row compact">
+                            <h2>Upcoming meetings</h2>
+                            <span class="soft-pill">Calendly ready</span>
+                        </div>
+                        <div class="meeting-list" id="meeting-list"></div>
+                    </article>
+
+                    <article class="analytics-card transactions-card">
+                        <div class="card-heading-row compact">
+                            <h2>Recent activity</h2>
+                            <button class="chip-btn">Export</button>
+                        </div>
+                        <div class="activity-table" id="activity-table"></div>
+                    </article>
+                </div>
+            </section>
+
+                        <section class="admin-panel" id="panel-projects" data-admin-panel-content="projects">
+                <div class="project-list-view" id="project-list-view">
+                    <div class="panel-header-row">
+                        <div>
+                            <span class="admin-kicker">Selected Work CMS</span>
+                            <h2>Manage portfolio projects</h2>
+                            <p>Choose a project card to edit, delete it safely, or create a new portfolio project.</p>
+                        </div>
+                        <div class="panel-header-actions">
+                            <button class="admin-secondary-btn" id="reset-projects-btn"><i class="fa-solid fa-rotate-left"></i> Reset demo data</button>
+                            <button class="admin-primary-btn" id="create-project-btn"><i class="fa-solid fa-plus"></i> Create project</button>
+                        </div>
+                    </div>
+
+                    <div class="project-admin-list" id="project-admin-list" aria-live="polite"></div>
+                </div>
+
+                <div class="project-editor-view" id="project-editor-view" hidden>
+                    <div class="editor-topbar">
+                        <button type="button" class="admin-secondary-btn" id="back-to-projects-btn"><i class="fa-solid fa-arrow-left"></i> Back to projects</button>
+                        <div>
+                            <span class="admin-kicker">Project editor</span>
+                            <h2 id="project-editor-title">Edit project</h2>
+                        </div>
+                    </div>
+
+                    <div class="project-editor-shell">
+                    <form class="project-editor-card project-editor-card-expanded" id="project-form">
+                        <input type="hidden" id="project-id">
+                        <div class="editor-section-heading">
+                            <span>01</span>
+                            <div>
+                                <h3>Project card</h3>
+                                <p>Controls the Selected Work thumbnail card.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-grid-2">
+                            <div>
+                                <label for="project-title">Project title</label>
+                                <input id="project-title" type="text" placeholder="Project name" required>
+                            </div>
+                            <div>
+                                <label for="project-category">Category</label>
+                                <select id="project-category" required>
+                                    <option value="graphics">Graphics</option>
+                                    <option value="branding">Branding</option>
+                                    <option value="web">Website</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label for="project-tag">Tag</label>
+                        <input id="project-tag" type="text" placeholder="Auto-fills from category, but you can edit it." required>
+
+                        <label>Thumbnail image</label>
+                        <input id="project-image" type="hidden">
+                        <div class="image-picker" data-image-picker data-target="project-image" role="button" tabindex="0" aria-label="Upload thumbnail image">
+                            <figure><img alt="Thumbnail preview" data-image-preview><span data-image-empty>Choose thumbnail</span></figure>
+                            <button type="button" data-image-trigger>Upload / replace</button>
+                            <button type="button" class="image-remove-btn" data-image-remove aria-label="Remove thumbnail image"><i class="fa-solid fa-xmark"></i></button>
+                            <input type="file" accept="image/*" data-image-file hidden>
+                        </div>
+
+                        <label for="project-description">Short description</label>
+                        <textarea id="project-description" rows="4" placeholder="What should people understand from this project?" required></textarea>
+
+                        <div class="editor-section-heading">
+                            <span>02</span>
+                            <div>
+                                <h3>Case study hero</h3>
+                                <p>Controls the fullscreen popup intro.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-grid-2">
+                            <div>
+                                <label for="case-year">Year</label>
+                                <input id="case-year" type="text" placeholder="2026">
+                            </div>
+                            <div>
+                                <label for="case-tags">Popup tags</label>
+                                <input id="case-tags" type="text" placeholder="Graphic Design, Branding, Print">
+                            </div>
+                        </div>
+
+                        <label for="case-statement">Popup statement</label>
+                        <textarea id="case-statement" rows="3" placeholder="One strong paragraph for the case study hero."></textarea>
+
+                        <label>Popup hero image</label>
+                        <input id="case-hero-image" type="hidden">
+                        <div class="image-picker" data-image-picker data-target="case-hero-image" role="button" tabindex="0" aria-label="Upload popup hero image">
+                            <figure><img alt="Popup hero preview" data-image-preview><span data-image-empty>Choose hero image</span></figure>
+                            <button type="button" data-image-trigger>Upload / replace</button>
+                            <button type="button" class="image-remove-btn" data-image-remove aria-label="Remove popup hero image"><i class="fa-solid fa-xmark"></i></button>
+                            <input type="file" accept="image/*" data-image-file hidden>
+                        </div>
+
+                        <div class="editor-section-heading">
+                            <span>03</span>
+                            <div>
+                                <h3>Overview</h3>
+                                <p>Challenge, solution, impact cards.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-grid-3">
+                            <div>
+                                <label for="overview-challenge-title">Challenge title</label>
+                                <input id="overview-challenge-title" type="text">
+                                <label for="overview-challenge-text">Challenge text</label>
+                                <textarea id="overview-challenge-text" rows="4"></textarea>
+                            </div>
+                            <div>
+                                <label for="overview-solution-title">Solution title</label>
+                                <input id="overview-solution-title" type="text">
+                                <label for="overview-solution-text">Solution text</label>
+                                <textarea id="overview-solution-text" rows="4"></textarea>
+                            </div>
+                            <div>
+                                <label for="overview-impact-title">Impact title</label>
+                                <input id="overview-impact-title" type="text">
+                                <label for="overview-impact-text">Impact text</label>
+                                <textarea id="overview-impact-text" rows="4"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="editor-section-heading">
+                            <span>04</span>
+                            <div>
+                                <h3>Visual direction</h3>
+                                <p>Title, description, and visual image.</p>
+                            </div>
+                        </div>
+
+                        <label for="visual-title">Visual direction title</label>
+                        <input id="visual-title" type="text">
+
+                        <label for="visual-text">Visual direction description</label>
+                        <textarea id="visual-text" rows="4"></textarea>
+
+                        <label>Visual direction image</label>
+                        <input id="visual-image" type="hidden">
+                        <div class="image-picker" data-image-picker data-target="visual-image" role="button" tabindex="0" aria-label="Upload visual direction image">
+                            <figure><img alt="Visual direction preview" data-image-preview><span data-image-empty>Choose visual image</span></figure>
+                            <button type="button" data-image-trigger>Upload / replace</button>
+                            <button type="button" class="image-remove-btn" data-image-remove aria-label="Remove visual direction image"><i class="fa-solid fa-xmark"></i></button>
+                            <input type="file" accept="image/*" data-image-file hidden>
+                        </div>
+
+                        <div class="editor-section-heading">
+                            <span>05</span>
+                            <div>
+                                <h3>Design process</h3>
+                                <p>Process title, steps, and optional image.</p>
+                            </div>
+                        </div>
+
+                        <label for="process-title">Process section title</label>
+                        <input id="process-title" type="text" placeholder="Design Process">
+
+                        <label for="process-steps">Process steps</label>
+                        <input id="process-steps" type="text" placeholder="Research, Concept, Sketches, Design, Refinement, Final">
+
+                        <label>Process image</label>
+                        <input id="process-image" type="hidden">
+                        <div class="image-picker" data-image-picker data-target="process-image" role="button" tabindex="0" aria-label="Upload process image">
+                            <figure><img alt="Process preview" data-image-preview><span data-image-empty>Optional process image</span></figure>
+                            <button type="button" data-image-trigger>Upload / replace</button>
+                            <button type="button" class="image-remove-btn" data-image-remove aria-label="Remove process image"><i class="fa-solid fa-xmark"></i></button>
+                            <input type="file" accept="image/*" data-image-file hidden>
+                        </div>
+
+                        <div class="editor-section-heading">
+                            <span>06</span>
+                            <div>
+                                <h3>Assets & Brand System</h3>
+                                <p>Colors, core system, visual language, use cases.</p>
+                            </div>
+                        </div>
+
+                        <label for="brand-title">Brand system title</label>
+                        <input id="brand-title" type="text" placeholder="Assets & Brand System">
+
+                        <label for="brand-system-core">Core system</label>
+                        <textarea id="brand-system-core" rows="3"></textarea>
+
+                        <label for="brand-palette">Palette colors</label>
+                        <input id="brand-palette" type="text" placeholder="#E2FF9D, #200B20, #E5E2FF">
+                        <div class="palette-editor" id="palette-editor" aria-label="Palette color editor"></div>
+
+                        <label for="brand-system-language">Visual language</label>
+                        <textarea id="brand-system-language" rows="3"></textarea>
+
+                        <label for="brand-system-use">Use cases</label>
+                        <textarea id="brand-system-use" rows="3"></textarea>
+
+                        <label>Brand/assets image</label>
+                        <input id="brand-image" type="hidden">
+                        <div class="image-picker" data-image-picker data-target="brand-image" role="button" tabindex="0" aria-label="Upload brand assets image">
+                            <figure><img alt="Brand assets preview" data-image-preview><span data-image-empty>Optional brand image</span></figure>
+                            <button type="button" data-image-trigger>Upload / replace</button>
+                            <button type="button" class="image-remove-btn" data-image-remove aria-label="Remove brand assets image"><i class="fa-solid fa-xmark"></i></button>
+                            <input type="file" accept="image/*" data-image-file hidden>
+                        </div>
+
+                        <div class="editor-section-heading">
+                            <span>07</span>
+                            <div>
+                                <h3>Gallery & final result</h3>
+                                <p>Gallery strip plus final result description and image.</p>
+                            </div>
+                        </div>
+
+                        <label>Gallery strip images</label>
+                        <textarea id="gallery-images" hidden></textarea>
+                        <div class="gallery-picker" data-gallery-picker>
+                            <div class="gallery-preview-list" data-gallery-preview></div>
+                            <button type="button" class="admin-secondary-btn" data-gallery-trigger><i class="fa-solid fa-images"></i> Upload gallery images</button>
+                            <input type="file" accept="image/*" multiple data-gallery-file hidden>
+                        </div>
+
+                        <label for="final-text">Final result description</label>
+                        <textarea id="final-text" rows="4"></textarea>
+
+                        <label>Final result image</label>
+                        <input id="final-image" type="hidden">
+                        <div class="image-picker" data-image-picker data-target="final-image" role="button" tabindex="0" aria-label="Upload final result image">
+                            <figure><img alt="Final result preview" data-image-preview><span data-image-empty>Choose final image</span></figure>
+                            <button type="button" data-image-trigger>Upload / replace</button>
+                            <button type="button" class="image-remove-btn" data-image-remove aria-label="Remove final result image"><i class="fa-solid fa-xmark"></i></button>
+                            <input type="file" accept="image/*" data-image-file hidden>
+                        </div>
+
+                        <label for="case-pdf">PDF link</label>
+                        <input id="case-pdf" type="text" placeholder="Optional, example: assets/jcc_brochure.pdf">
+
+                        <div class="form-actions editor-sticky-actions">
+                            <button type="button" class="admin-secondary-btn" id="undo-project-edit"><i class="fa-solid fa-rotate-left"></i> Undo</button>
+                            <button type="button" class="admin-secondary-btn" id="redo-project-edit"><i class="fa-solid fa-rotate-right"></i> Redo</button>
+                            <button type="button" class="admin-secondary-btn" id="restore-project-default"><i class="fa-solid fa-clock-rotate-left"></i> Restore default</button>
+                            <button type="button" class="admin-primary-btn" id="save-project-btn">Save project</button>
+                            <button type="button" class="admin-secondary-btn" id="clear-project-form">Clear</button>
+                            <button type="button" class="admin-secondary-btn" id="cancel-project-edit">Cancel</button>
+                        </div>
+                        <p class="form-status" id="project-form-status" role="status"></p>
+                    </form>
+                    <aside class="project-live-preview" aria-label="Live site preview">
+                        <div class="preview-heading">
+                            <div>
+                                <span class="admin-kicker">Live preview</span>
+                                <h3>Selected Work</h3>
+                            </div>
+                            <div class="preview-actions">
+                                <button type="button" class="chip-btn" id="refresh-preview-btn"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                                <button type="button" class="admin-primary-btn preview-publish-btn" id="push-live-btn"><i class="fa-solid fa-rocket"></i> Push live</button>
+                            </div>
+                        </div>
+                        <div class="preview-browser-shell">
+                            <div class="preview-browser-bar">
+                                <span></span><span></span><span></span>
+                                <em>index.html#work</em>
+                            </div>
+                            <iframe id="project-live-preview-frame" src="index.html#work" title="Selected Work live preview"></iframe>
+                        </div>
+                        <p>Save updates only this preview. Push live when you want the public site to use the approved version.</p>
+                    </aside>
+                    </div>
+                </div>
+            </section>
+            <section class="admin-panel" id="panel-pricing" data-admin-panel-content="pricing">
+                <div class="panel-header-row">
+                    <div>
+                        <span class="admin-kicker">Pricing CMS</span>
+                        <h2>Manage pricing section</h2>
+                        <p>Edit the Pricing heading, tier cards, recommended plan, CTA labels, feature text, and feature icons.</p>
+                    </div>
+                    <div class="panel-header-actions">
+                        <button class="admin-secondary-btn" id="reset-pricing-btn"><i class="fa-solid fa-rotate-left"></i> Reset defaults</button>
+                        <button class="admin-primary-btn" id="save-pricing-btn"><i class="fa-solid fa-floppy-disk"></i> Save draft</button>
+                    </div>
+                </div>
+
+                <div class="pricing-editor-shell">
+                    <form class="project-editor-card project-editor-card-expanded pricing-editor-card" id="pricing-form">
+                        <div class="editor-section-heading">
+                            <span>01</span>
+                            <div>
+                                <h3>Section copy</h3>
+                                <p>Controls the title and intro above the pricing cards.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-grid-2">
+                            <div>
+                                <label for="pricing-eyebrow">Eyebrow</label>
+                                <input id="pricing-eyebrow" type="text" placeholder="Pricing">
+                            </div>
+                            <div>
+                                <label for="pricing-recommended">Recommended card</label>
+                                <select id="pricing-recommended">
+                                    <option value="basic">Basic</option>
+                                    <option value="plus">Plus</option>
+                                    <option value="pro">Pro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label for="pricing-title">Section title</label>
+                        <input id="pricing-title" type="text" placeholder="Choose the creative depth your project needs.">
+
+                        <label for="pricing-description">Section description</label>
+                        <textarea id="pricing-description" rows="3"></textarea>
+
+                        <div class="editor-section-heading">
+                            <span>02</span>
+                            <div>
+                                <h3>Pricing cards</h3>
+                                <p>Each tier is editable. Add feature rows with custom Font Awesome icon classes.</p>
+                            </div>
+                        </div>
+
+                        <div class="pricing-tier-editor-grid" id="pricing-tier-editor-grid"></div>
+
+                        <div class="form-actions editor-sticky-actions pricing-actions">
+                            <button type="button" class="admin-secondary-btn pricing-icon-action" id="undo-pricing-edit" aria-label="Undo pricing edit" title="Undo"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+                            <button type="button" class="admin-secondary-btn pricing-icon-action" id="redo-pricing-edit" aria-label="Redo pricing edit" title="Redo"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+                            <button type="button" class="admin-secondary-btn" id="refresh-pricing-preview-btn"><i class="fa-solid fa-rotate"></i> Refresh preview</button>
+                            <button type="button" class="admin-primary-btn" id="save-pricing-btn-bottom"><i class="fa-solid fa-floppy-disk"></i> Save draft</button>
+                            <button type="button" class="admin-primary-btn preview-publish-btn" id="push-pricing-live-btn"><i class="fa-solid fa-rocket"></i> Push live</button>
+                            <button type="button" class="admin-secondary-btn" id="clear-pricing-form"><i class="fa-solid fa-eraser"></i> Clear</button>
+                        </div>
+                        <p class="form-status" id="pricing-form-status" role="status"></p>
+                    </form>
+
+                    <aside class="project-live-preview pricing-live-preview" aria-label="Pricing live preview">
+                        <div class="preview-heading">
+                            <div>
+                                <span class="admin-kicker">Live preview</span>
+                                <h3>Pricing section</h3>
+                            </div>
+                            <div class="preview-actions">
+                                <button type="button" class="chip-btn" id="refresh-pricing-preview-btn-top"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                            </div>
+                        </div>
+                        <div class="preview-browser-shell">
+                            <div class="preview-browser-bar">
+                                <span></span><span></span><span></span>
+                                <em>index.html#pricing</em>
+                            </div>
+                            <iframe id="pricing-live-preview-frame" src="index.html?adminPreview=1&amp;pricingPreview=1#pricing" title="Pricing live preview"></iframe>
+                        </div>
+                        <p>Save updates only the draft preview. Push live when you want the public site to use the approved pricing version.</p>
+                    </aside>
+                </div>
+            </section>
+<section class="admin-panel" id="panel-meetings" data-admin-panel-content="meetings">
+                <div class="panel-header-row">
+                    <div>
+                        <span class="admin-kicker">Meetings</span>
+                        <h2>Calendly pipeline preview</h2>
+                        <p>For now these are demo records. Later we can sync real Calendly bookings through an automation or webhook.</p>
+                    </div>
+                </div>
+                <div class="placeholder-grid" id="meetings-panel-list"></div>
+            </section>
+
+            <section class="admin-panel" id="panel-analytics" data-admin-panel-content="analytics">
+                <div class="panel-header-row">
+                    <div>
+                        <span class="admin-kicker">Analytics</span>
+                        <h2>Live traffic intelligence</h2>
+                        <p>Prepared for GA4 realtime data, country sessions, project opens, CTA clicks, devices, and source channels.</p>
+                    </div>
+                    <div class="analytics-toolbar" aria-label="Analytics controls">
+                        <select id="analytics-date-range" aria-label="Analytics date range">
+                            <option value="7d">Last 7 days</option>
+                            <option value="30d" selected>Last 30 days</option>
+                            <option value="90d">Last 90 days</option>
+                        </select>
+                        <button type="button" class="admin-secondary-btn" id="refresh-analytics-btn">
+                            <i class="fa-solid fa-rotate"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="analytics-status-bar" id="analytics-status-bar">
+                    <span><i class="fa-solid fa-circle-info"></i> Demo analytics loaded until GA4 credentials are connected.</span>
+                </div>
+                <div class="analytics-metric-grid" id="analytics-metric-grid"></div>
+                <div class="analytics-command-grid">
+                    <article class="analytics-card analytics-main-card">
+                        <div class="card-heading-row">
+                            <div>
+                                <span class="soft-pill">Audience pulse</span>
+                                <h2>Visitors over time</h2>
+                            </div>
+                            <em id="analytics-updated-at">Updated just now</em>
+                        </div>
+                        <canvas id="analytics-traffic-chart" width="960" height="360" aria-label="Traffic chart"></canvas>
+                    </article>
+
+                    <article class="analytics-card realtime-card">
+                        <div class="card-heading-row compact">
+                            <div>
+                                <span class="soft-pill">Realtime</span>
+                                <h2>Right now</h2>
+                            </div>
+                        </div>
+                        <strong id="analytics-realtime-users">0</strong>
+                        <p>active users in the last 30 minutes</p>
+                        <div class="realtime-events" id="analytics-realtime-events"></div>
+                    </article>
+                </div>
+
+                <div class="analytics-detail-grid">
+                    <article class="analytics-card">
+                        <div class="card-heading-row compact"><h2>Sessions by country</h2></div>
+                        <div class="analytics-list" id="analytics-countries"></div>
+                    </article>
+                    <article class="analytics-card">
+                        <div class="card-heading-row compact"><h2>Traffic sources</h2></div>
+                        <div class="analytics-list" id="analytics-sources"></div>
+                    </article>
+                    <article class="analytics-card">
+                        <div class="card-heading-row compact"><h2>Devices</h2></div>
+                        <div class="analytics-list" id="analytics-devices"></div>
+                    </article>
+                    <article class="analytics-card analytics-table-card">
+                        <div class="card-heading-row compact"><h2>Top pages</h2></div>
+                        <div class="analytics-table" id="analytics-pages"></div>
+                    </article>
+                    <article class="analytics-card analytics-table-card">
+                        <div class="card-heading-row compact"><h2>Key events</h2></div>
+                        <div class="analytics-table" id="analytics-events"></div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="admin-panel" id="panel-sales" data-admin-panel-content="sales">
+                <div class="panel-header-row">
+                    <div>
+                        <span class="admin-kicker">Sales</span>
+                        <h2>Lead and project value tracker</h2>
+                        <p>A lightweight sales layer for future proposals, invoices, and project status.</p>
+                    </div>
+                </div>
+                <div class="sales-board" id="sales-board"></div>
+            </section>
+
+            <section class="admin-panel" id="panel-settings" data-admin-panel-content="settings">
+                <div class="panel-header-row">
+                    <div>
+                        <span class="admin-kicker">Settings</span>
+                        <h2>Admin setup</h2>
+                        <p>Supabase can replace demo mode once the project URL and anon key are added.</p>
+                    </div>
+                </div>
+                <div class="settings-card">
+                    <dl>
+                        <div><dt>Admin email</dt><dd id="settings-admin-email">raduniculescu22@gmail.com</dd></div>
+                        <div><dt>Auth mode</dt><dd id="settings-auth-mode">Local demo</dd></div>
+                        <div><dt>Project source</dt><dd id="settings-project-source">localStorage fallback</dd></div>
+                        <div><dt>Pricing source</dt><dd id="settings-pricing-source">localStorage pricing draft/public</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js?v=20260603-vercel-content-api"></script>
+    <script src="content-api-config.js?v=20260603-vercel-content-api"></script>
+    <script src="case-studies-data.js?v=20260603-vercel-content-api"></script>
+    <script src="admin.js?v=20260603-vercel-content-api"></script>
+</body>
+</html>
+
+
+
+

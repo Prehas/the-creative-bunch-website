@@ -178,6 +178,106 @@ p {
     transform: translateY(-2px);
 }
 
+.nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nav-login-btn {
+    min-height: 46px;
+    padding: 0.82rem 1.1rem;
+    border: 1px solid rgba(229, 226, 255, 0.16);
+    background: rgba(229, 226, 255, 0.06);
+    color: var(--color-text);
+    letter-spacing: 0.04em;
+}
+
+.nav-login-btn:hover {
+    border-color: rgba(226, 255, 157, 0.55);
+    background: rgba(226, 255, 157, 0.1);
+    color: var(--color-lime);
+    transform: translateY(-2px);
+}
+
+.site-auth-menu {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.site-user-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 46px;
+    padding: 0.45rem 0.85rem 0.45rem 0.45rem;
+    border: 1px solid rgba(226, 255, 157, 0.32);
+    border-radius: 999px;
+    background: rgba(226, 255, 157, 0.08);
+    color: var(--color-text);
+}
+
+.site-user-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--color-lime);
+    color: var(--color-bg);
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 900;
+}
+
+.site-user-meta {
+    display: grid;
+    gap: 0.05rem;
+    line-height: 1.1;
+}
+
+.site-user-meta strong {
+    max-width: 118px;
+    overflow: hidden;
+    color: var(--color-text);
+    font-family: var(--font-heading);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.site-user-meta em {
+    color: var(--color-lime);
+    font-size: 0.7rem;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.site-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(229, 226, 255, 0.14);
+    border-radius: 999px;
+    background: rgba(229, 226, 255, 0.06);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.site-logout-btn:hover {
+    border-color: rgba(226, 255, 157, 0.42);
+    color: var(--color-lime);
+    transform: translateY(-2px);
+}
+
 /* Header / Navigation */
 .main-header {
     position: fixed;
@@ -643,6 +743,21 @@ p {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
+    transform-origin: center center;
+}
+
+.projects-grid.portfolio-grid-leaving .project-card {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    transition:
+        opacity 0.22s cubic-bezier(0.7, 0, 0.2, 1),
+        transform 0.22s cubic-bezier(0.7, 0, 0.2, 1);
+    transition-delay: calc(var(--reveal-index, 0) * 24ms);
+}
+
+.projects-grid.portfolio-grid-entering .project-card {
+    animation: portfolioCardReveal 0.46s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--reveal-index, 0) * 48ms);
 }
 
 .project-card {
@@ -672,6 +787,37 @@ p {
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-img-placeholder,
+.case-study-image-placeholder {
+    display: grid;
+    place-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    border: 1px dashed rgba(226, 255, 157, 0.28);
+    background:
+        radial-gradient(circle at 50% 28%, rgba(226, 255, 157, 0.14), transparent 42%),
+        rgba(242, 238, 243, 0.035);
+    color: rgba(242, 238, 243, 0.68);
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.project-img-placeholder i,
+.case-study-image-placeholder i {
+    color: var(--color-lime);
+    font-size: 1.8rem;
+}
+
+.case-study-image-placeholder {
+    min-height: 100%;
+    border: 0;
 }
 
 .project-card:hover .project-img {
@@ -771,6 +917,77 @@ p {
     }
 }
 
+@keyframes portfolioCardReveal {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.portfolio-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-top: clamp(2rem, 4vw, 3.4rem);
+}
+
+.portfolio-pagination[hidden] {
+    display: none;
+}
+
+.portfolio-page-dots {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem;
+    border: 1px solid rgba(242, 238, 243, 0.1);
+    border-radius: 999px;
+    background: rgba(229, 226, 255, 0.04);
+}
+
+.portfolio-page-dot,
+.portfolio-page-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(242, 238, 243, 0.12);
+    border-radius: 999px;
+    background: rgba(242, 238, 243, 0.045);
+    color: var(--color-text-muted);
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.portfolio-page-dot:hover,
+.portfolio-page-arrow:hover:not(:disabled),
+.portfolio-page-dot.is-active {
+    transform: translateY(-2px);
+    border-color: rgba(226, 255, 157, 0.72);
+    background: var(--color-lime);
+    color: var(--color-bg);
+}
+
+.portfolio-page-arrow {
+    width: 48px;
+    height: 48px;
+    box-shadow: 0 0 24px rgba(226, 255, 157, 0.08);
+}
+
+.portfolio-page-arrow:disabled {
+    cursor: not-allowed;
+    opacity: 0.35;
+}
+
 .project-details {
     padding: 1.75rem;
     flex-grow: 1;
@@ -797,6 +1014,25 @@ p {
 /* Fullscreen Project Case Study */
 body.case-study-open {
     overflow: hidden;
+}
+
+body.case-study-preview-mode .main-header,
+body.case-study-preview-mode main,
+body.case-study-preview-mode footer,
+body.case-study-preview-mode .custom-cursor-glow,
+body.case-study-preview-mode .mobile-menu-overlay {
+    visibility: hidden;
+}
+
+body.case-study-preview-mode .case-study-overlay {
+    background:
+        radial-gradient(circle at 20% 8%, rgba(226, 255, 157, 0.08), transparent 28%),
+        linear-gradient(180deg, #170617, #241023);
+    backdrop-filter: none;
+}
+
+body.case-study-preview-mode .case-study-close {
+    display: none;
 }
 
 .case-study-overlay {
@@ -1201,6 +1437,20 @@ body.case-study-open {
     color: var(--color-text);
 }
 
+.case-study-process-image {
+    margin-top: clamp(1.25rem, 3vw, 2rem);
+    overflow: hidden;
+    border: 1px solid rgba(242, 238, 243, 0.1);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.case-study-process-image img {
+    width: 100%;
+    max-height: 460px;
+    object-fit: cover;
+}
+
 .case-study-system-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1213,6 +1463,19 @@ body.case-study-open {
     border: 1px solid rgba(242, 238, 243, 0.1);
     border-radius: 26px;
     background: rgba(255, 255, 255, 0.035);
+}
+
+.case-study-system-visual {
+    grid-column: 1 / -1;
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.case-study-system-visual img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
 }
 
 .case-study-system-grid span {
@@ -2529,6 +2792,26 @@ body.case-study-open {
 
 .mobile-link.btn-primary:hover {
     color: var(--color-bg);
+}
+
+.mobile-auth-item {
+    display: grid;
+    gap: 0.85rem;
+    width: 100%;
+}
+
+.mobile-user-link {
+    color: var(--color-lime) !important;
+}
+
+.mobile-logout-btn {
+    width: min(280px, 100%);
+    margin: 0 auto;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(229, 226, 255, 0.14);
+    border-radius: 18px;
+    background: rgba(229, 226, 255, 0.06);
+    color: var(--color-text-muted);
 }
 
 /* Scroll Lock when Mobile Menu is Active */
@@ -4482,4 +4765,107 @@ body.performance-fallback .case-study-hero-visual img {
         animation: none;
         --capability-border-angle: 45deg;
     }
+}
+
+/* Desktop floating pill navigation */
+@media (min-width: 769px) {
+    .main-header,
+    .main-header.scrolled {
+        background: transparent !important;
+        border-bottom: 0 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .nav-menu {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.34rem;
+        border: 1px solid rgba(226, 255, 157, 0.24);
+        border-radius: 999px;
+        background: rgba(32, 11, 32, 0);
+        box-shadow:
+            inset 0 0 0 1px rgba(229, 226, 255, 0.045),
+            0 18px 50px rgba(10, 2, 12, 0.2),
+            0 0 34px rgba(226, 255, 157, 0.06);
+    }
+
+    .nav-menu::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        z-index: -1;
+        border-radius: inherit;
+        background:
+            linear-gradient(90deg,
+                rgba(226, 255, 157, 0.26),
+                rgba(229, 226, 255, 0.08),
+                rgba(226, 255, 157, 0.18));
+        opacity: 0.52;
+        pointer-events: none;
+    }
+
+    .nav-menu ul {
+        align-items: center;
+        gap: 0.22rem !important;
+    }
+
+    .nav-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0.62rem 1.08rem !important;
+        border-radius: 999px;
+        color: rgba(229, 226, 255, 0.72) !important;
+        line-height: 1;
+        transition:
+            color 0.28s ease,
+            background 0.28s ease,
+            transform 0.28s ease,
+            box-shadow 0.28s ease;
+    }
+
+    .nav-link::after {
+        display: none !important;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+        background: var(--color-lime);
+        color: var(--color-bg) !important;
+        box-shadow: 0 8px 24px rgba(226, 255, 157, 0.22);
+        transform: translateY(-1px);
+    }
+
+    .nav-link:focus-visible {
+        outline: 2px solid rgba(226, 255, 157, 0.5);
+        outline-offset: 3px;
+    }
+}
+
+/* Admin iframe mode: show only the pricing section, not the full landing page. */
+body.pricing-preview-mode {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--color-bg);
+}
+
+body.pricing-preview-mode .main-header,
+body.pricing-preview-mode .mobile-menu-overlay,
+body.pricing-preview-mode .site-footer,
+body.pricing-preview-mode main > section:not(#pricing) {
+    display: none !important;
+}
+
+body.pricing-preview-mode #pricing {
+    display: block !important;
+    min-height: 100vh;
+    padding: clamp(2rem, 5vw, 4rem) 0 !important;
+    border-top: 0;
+}
+
+body.pricing-preview-mode #pricing .container {
+    width: min(1180px, calc(100% - 2rem));
 }
