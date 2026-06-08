@@ -580,11 +580,16 @@ function initHeroVideoBudget({ prefersReducedMotion }) {
 
     const source = video.querySelector('source');
     const saveData = navigator.connection && navigator.connection.saveData;
-    const lowPowerViewport = window.matchMedia('(max-width: 768px), (max-height: 620px)').matches;
+    const lowPowerViewport = window.matchMedia('(max-width: 900px), (pointer: coarse), (max-height: 620px)').matches;
 
     if (prefersReducedMotion || saveData || lowPowerViewport) {
+        if (source) {
+            source.removeAttribute('src');
+        }
+        video.removeAttribute('src');
         video.removeAttribute('autoplay');
         video.pause();
+        video.load();
         video.closest('.hero-video-stage')?.classList.add('is-disabled');
         return;
     }
