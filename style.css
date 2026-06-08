@@ -4466,7 +4466,7 @@ body.lock-scroll {
     z-index: 2 !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px), (pointer: coarse) {
     .hero-video-stage {
         display: none;
     }
