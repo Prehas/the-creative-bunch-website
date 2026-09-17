@@ -2,10 +2,10 @@
 const fallbackProjects = [
     {
         "id": 1,
-        "title": "Merkaz Israel 76 Campaign",
+        "title": "Merkaz Cultural Campaign",
         "category": "graphics",
         "tag": "Event Poster & Campaign Design",
-        "description": "Visual campaign materials for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.",
+        "description": "Visual campaign materials for Merkaz, promoting a community cultural event with bold typography, clean layout, and community-focused imagery.",
         "image": "assets/project_merkaz_thumb.webp"
     },
     {
@@ -61,14 +61,14 @@ const fallbackProjects = [
 const CASE_STUDIES = {
     1: {
         id: 1,
-        title: "Merkaz Israel 76 Campaign",
+        title: "Merkaz Cultural Campaign",
         category: "Event Poster & Campaign Design",
         year: "2024",
         image: "assets/project_merkaz_thumb.webp",
-        statement: "A visual campaign made for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.",
+        statement: "A visual campaign made for Merkaz, promoting a community cultural event with bold typography, clean layout, and community-focused imagery.",
         tags: ["Graphic Design", "Print", "Branding"],
         overview: [
-            { title: "The Challenge", text: "Create a visual identity that celebrates Israel 76 in a modern, approachable way, while staying clear enough for fast event communication." },
+            { title: "The Challenge", text: "Create a visual identity that celebrates community and culture in a modern, approachable way, while staying clear enough for fast event communication." },
             { title: "The Solution", text: "Bold typography, national symbols, and a poster-first system that could move from print into social and community channels." },
             { title: "The Impact", text: "A campaign language that feels proud, legible, and memorable across event posters, digital previews, and public-facing assets." }
         ],
@@ -163,6 +163,7 @@ const CASE_STUDIES = {
         palette: ["#05050B", "#D148FF", "#FFFFFF", "#7A35FF", "#161126"],
         system: ["Hero message: Marketing Designer & 3D Artist at your service.", "Project thumbnails from YOCU, PlayGG, 3D, and graphic design surfaces.", "Clear navigation across Home, Projects, About Me, and Let's Talk."],
         gallery: ["assets/project_creativealex_website_thumb.webp", "assets/creativealex_yocu.webp", "assets/creativealex_playgg.webp", "assets/creativealex_3d.webp", "assets/creativealex_graphic.webp"],
+        websiteUrl: "https://creativealex.eu/",
         finalText: "A bold portfolio website that gives the work an immediate stage and makes the creator's range easy to understand."
     },
     101: {
@@ -210,60 +211,260 @@ const CASE_STUDIES = {
 };
 
 const DEFAULT_PRICING = {
-    eyebrow: 'Pricing',
-    title: 'Choose the creative depth your project needs.',
-    description: 'No fixed public price before we understand the scope. Use these tiers to choose the level of design support, then book a call and we will map the right path.',
-    recommendedId: 'plus',
-    ctaLabel: 'Select',
-    ctaHref: '#book-call',
-    tiers: [
+    "layout": "services",
+    "eyebrow": "Creative services",
+    "title": "Find the right service for your next idea.",
+    "description": "Start with what you need. We’ll shape the scope together and give your idea room to grow.",
+    "recommendedId": "",
+    "ctaLabel": "Let’s talk",
+    "ctaHref": "#book-call",
+    "tiers": [
         {
-            id: 'basic',
-            name: 'Basic',
-            symbol: '$',
-            ctaLabel: 'Select',
-            description: 'For focused visual tasks and small campaigns that need clean execution.',
-            badge: '',
-            features: [
-                { icon: 'fa-solid fa-check', text: 'Graphic design essentials' },
-                { icon: 'fa-solid fa-check', text: 'Posters, flyers, banners' },
-                { icon: 'fa-solid fa-check', text: 'Social media content starter pack' },
-                { icon: 'fa-solid fa-check', text: 'Basic brand cleanup' },
-                { icon: 'fa-solid fa-check', text: 'One focused revision round' }
+            "id": "graphic-design",
+            "name": "Digital & Graphic Design",
+            "symbol": "€49",
+            "icon": "fa-solid fa-bezier-curve",
+            "description": "One strong visual to get your next campaign moving.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One original campaign visual"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Two social media size adaptations"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Typography and colour direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Web-ready PNG and JPG files"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
             ]
         },
         {
-            id: 'plus',
-            name: 'Plus',
-            symbol: '$$',
-            ctaLabel: 'Select',
-            description: 'For brands, campaigns, and launches that need a stronger visual system.',
-            badge: 'Recommended',
-            features: [
-                { icon: 'fa-solid fa-check', text: 'Everything in Basic' },
-                { icon: 'fa-solid fa-check', text: 'Graphic content system' },
-                { icon: 'fa-solid fa-check', text: 'Branding direction' },
-                { icon: 'fa-solid fa-check', text: 'Social media content kit' },
-                { icon: 'fa-solid fa-check', text: 'Web design direction' },
-                { icon: 'fa-solid fa-check', text: 'UX/UI wireframes' },
-                { icon: 'fa-solid fa-check', text: 'Merch branding concept' }
+            "id": "websites",
+            "name": "Full-Code Websites",
+            "symbol": "€249",
+            "icon": "fa-solid fa-code",
+            "description": "A focused one-page website for your next launch.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One responsive landing page"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Up to five content sections"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Contact and booking links"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Basic search-engine metadata"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
             ]
         },
         {
-            id: 'pro',
-            name: 'Pro',
-            symbol: '$$$',
-            ctaLabel: 'Select',
-            description: 'For complete identity, web, and campaign ecosystems with end-to-end execution.',
-            badge: '',
-            features: [
-                { icon: 'fa-solid fa-check', text: 'Everything in Plus' },
-                { icon: 'fa-solid fa-check', text: 'Full brand identity system' },
-                { icon: 'fa-solid fa-check', text: 'UX/UI design system' },
-                { icon: 'fa-solid fa-check', text: 'Web design & web development' },
-                { icon: 'fa-solid fa-check', text: 'Campaign visual system' },
-                { icon: 'fa-solid fa-check', text: 'Illustrations & custom assets' },
-                { icon: 'fa-solid fa-check', text: 'Merch, print, and launch collateral' }
+            "id": "brand-identity",
+            "name": "Brand Identity",
+            "symbol": "€149",
+            "icon": "fa-solid fa-compass-drafting",
+            "description": "A starter identity that gives your idea a recognisable face.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One initial logo direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Colour palette and font pairing"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Primary and monochrome logo"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "SVG and PNG logo exports"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "collaborations",
+            "name": "Institutional Collaborations",
+            "symbol": "€99",
+            "icon": "fa-solid fa-handshake-angle",
+            "description": "A focused visual kit for one community event or initiative.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One event visual direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One poster layout"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One social media adaptation"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Editable master artwork"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "digital-products",
+            "name": "Digital Products",
+            "symbol": "€199",
+            "icon": "fa-solid fa-cubes",
+            "description": "Turn a key product idea into a small, testable screen flow.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One core user flow"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Up to three interface screens"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Clickable concept prototype"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Design handoff notes"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "illustrations",
+            "name": "Illustrations",
+            "symbol": "€69",
+            "icon": "fa-solid fa-pen-nib",
+            "description": "One custom illustration with a personality of its own.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One initial style sketch"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One finished illustration"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Colour and monochrome versions"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Print and web exports"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "product-design",
+            "name": "Product Design",
+            "symbol": "€179",
+            "icon": "fa-solid fa-pen-ruler",
+            "description": "Explore the shape and function of one physical product concept.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One product concept direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Form and function sketches"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One simple 3D concept mockup"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Material and finish suggestions"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "print-design",
+            "name": "Ready-to-print Designs",
+            "symbol": "€39",
+            "icon": "fa-solid fa-print",
+            "description": "One print-ready layout, from a poster to a sticker.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One poster, flyer or sticker layout"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Your printer’s size specifications"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Bleed, trim and safe-area setup"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "CMYK, print-ready PDF export"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
             ]
         }
     ]
@@ -275,21 +476,142 @@ function escapeHtml(value) {
     return div.innerHTML;
 }
 
+const COOKIE_CONSENT_KEY = 'tcb_cookie_consent';
+const COOKIE_NOTICE_VERSION = 1;
+const COOKIE_CONSENT_DURATION = 180 * 24 * 60 * 60 * 1000;
+let cookieConsent = readCookieConsent();
+
+function readCookieConsent() {
+    try {
+        const record = JSON.parse(localStorage.getItem(COOKIE_CONSENT_KEY) || 'null');
+        const age = Date.now() - record?.savedAt;
+        if (record?.version === COOKIE_NOTICE_VERSION && typeof record.analytics === 'boolean' && typeof record.booking === 'boolean' && Number.isFinite(record.savedAt) && age >= 0 && age < COOKIE_CONSENT_DURATION) return record;
+        if (record) localStorage.removeItem(COOKIE_CONSENT_KEY);
+    } catch (_) { /* Without browser storage, optional services start disabled. */ }
+    return null;
+}
+
+function initCookieConsent() {
+    const panel = document.querySelector('#cookie-panel');
+    if (!panel) return;
+    const preferences = panel.querySelector('#cookie-preferences');
+    const customize = panel.querySelector('[data-cookie-customize]');
+    const analytics = panel.querySelector('#cookie-analytics');
+    const booking = panel.querySelector('#cookie-booking');
+    const reopen = document.querySelector('.cookie-reopen');
+    let returnFocus = null;
+    const setDetails = expanded => {
+        preferences.hidden = !expanded;
+        customize.setAttribute('aria-expanded', String(expanded));
+    };
+    const show = (details = false, focus = false) => {
+        analytics.checked = cookieConsent?.analytics === true;
+        booking.checked = cookieConsent?.booking === true;
+        panel.querySelector('[data-cookie-close]').hidden = !cookieConsent;
+        setDetails(details);
+        panel.hidden = false;
+        reopen.hidden = true;
+        if (focus) panel.querySelector('[data-cookie-reject]').focus({ preventScroll: true });
+    };
+    const hide = () => {
+        panel.hidden = true;
+        reopen.hidden = false;
+        if (panel.contains(document.activeElement)) (returnFocus?.isConnected ? returnFocus : reopen).focus({ preventScroll: true });
+    };
+    const save = (allowAnalytics, allowBooking) => {
+        cookieConsent = { version: COOKIE_NOTICE_VERSION, savedAt: Date.now(), analytics: allowAnalytics, booking: allowBooking };
+        try { localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(cookieConsent)); } catch (_) { /* The choice remains effective for this page. */ }
+        hide();
+        document.querySelector('#cookie-status').textContent = 'Cookie preferences saved.';
+        applyCookieConsent();
+    };
+    document.querySelectorAll('[data-cookie-open]').forEach(button => button.addEventListener('click', () => {
+        returnFocus = button;
+        show(true, true);
+    }));
+    panel.querySelector('[data-cookie-accept]').addEventListener('click', () => save(true, true));
+    panel.querySelector('[data-cookie-reject]').addEventListener('click', () => save(false, false));
+    panel.querySelector('[data-cookie-save]').addEventListener('click', () => save(analytics.checked, booking.checked));
+    panel.querySelector('[data-cookie-close]').addEventListener('click', hide);
+    customize.addEventListener('click', () => setDetails(preferences.hidden));
+    panel.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && cookieConsent) hide();
+    });
+    const syncStoredChoice = () => {
+        cookieConsent = readCookieConsent();
+        applyCookieConsent();
+        if (!cookieConsent) show();
+        else if (!panel.hidden) show(!preferences.hidden);
+    };
+    window.addEventListener('storage', event => {
+        if (event.key === COOKIE_CONSENT_KEY || event.key === null) syncStoredChoice();
+    });
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && cookieConsent && Date.now() - cookieConsent.savedAt >= COOKIE_CONSENT_DURATION) syncStoredChoice();
+    });
+    if (cookieConsent) hide();
+    else show(false, true);
+    applyCookieConsent();
+}
+
+function applyCookieConsent() {
+    const analyticsRevoked = window.__tcbVercelAnalyticsLoaded && !cookieConsent?.analytics;
+    const bookingRevoked = window.__tcbCalendlyLoaded && !cookieConsent?.booking;
+    if (analyticsRevoked || bookingRevoked) {
+        // A fresh document removes third-party listeners as well as their elements.
+        document.querySelector('[data-consent-analytics]')?.remove();
+        document.querySelector('[data-consent-booking]')?.remove();
+        document.querySelector('.calendly-inline-widget')?.replaceChildren();
+        window.va = () => {};
+        window.vaq = [];
+        window.location.reload();
+        return;
+    }
+    if (cookieConsent?.analytics) initVercelAnalytics();
+    const widget = document.querySelector('.calendly-inline-widget');
+    const notice = document.querySelector('.booking-consent-note');
+    if (widget && notice) {
+        widget.hidden = !cookieConsent?.booking;
+        notice.hidden = cookieConsent?.booking === true;
+        if (cookieConsent?.booking && !window.__tcbCalendlyLoaded) {
+            window.__tcbCalendlyLoaded = true;
+            const script = document.createElement('script');
+            script.src = 'https://assets.calendly.com/assets/external/widget.js';
+            script.async = true;
+            script.dataset.consentBooking = '';
+            script.addEventListener('error', () => {
+                // Keep the direct booking link available if the provider is unreachable.
+                notice.hidden = false;
+                notice.querySelector('p').textContent = 'The calendar could not load. You can still open Calendly directly.';
+            });
+            document.head.appendChild(script);
+        }
+    }
+}
+
 function initVercelAnalytics() {
-    if (window.__tcbVercelAnalyticsLoaded) return;
+    if (!cookieConsent?.analytics || window.__tcbVercelAnalyticsLoaded) return;
     window.__tcbVercelAnalyticsLoaded = true;
     window.va = window.va || function va() {
         (window.vaq = window.vaq || []).push(arguments);
     };
+    window.va('beforeSend', event => {
+        if (!cookieConsent?.analytics || Date.now() - cookieConsent.savedAt >= COOKIE_CONSENT_DURATION) return null;
+        const url = new URL(event.url, window.location.href);
+        url.search = '';
+        url.hash = '';
+        return { ...event, url: url.href };
+    });
 
     const script = document.createElement('script');
     script.defer = true;
     script.src = '/_vercel/insights/script.js';
+    script.dataset.consentAnalytics = '';
     document.head.appendChild(script);
 }
 
 function trackTcbEvent(name, params = {}) {
-    if (typeof window.va !== 'function') return;
+    if (!cookieConsent?.analytics || typeof window.va !== 'function') return;
     window.va('event', name, params);
 }
 
@@ -382,7 +704,9 @@ function renderProjectThumbnail(project) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initVercelAnalytics();
+    initThemeToggle();
+    initProjectFilterDisclosure();
+    initCookieConsent();
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
 
@@ -714,11 +1038,117 @@ function initBentoCardTracking({ prefersReducedMotion = false, hasFinePointer = 
 }
 
 /* 7. Dynamic Project Portfolio Generation & Filter */
+function normalizePublicContent(value) {
+    if (typeof value === 'string') return value
+        .replace(/Merkaz Israel 76 Campaign/gi, 'Merkaz Cultural Campaign')
+        .replace(/the Israel 76 cultural event/gi, 'a community cultural event')
+        .replace(/celebrates Israel 76/gi, 'celebrates community and culture')
+        .replace(/(?:operating from|based in) Israel/gi, 'operating internationally');
+    if (Array.isArray(value)) return value.map(normalizePublicContent);
+    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, item]) =>
+        [key, /url|image|gallery|pdf|palette/i.test(key) ? item : normalizePublicContent(item)]));
+    return value;
+}
+
+function initThemeToggle() {
+    const button = document.querySelector('.theme-toggle');
+    if (!button) return;
+    const refresh = () => {
+        const light = document.documentElement.dataset.theme === 'light';
+        const label = `Switch to ${light ? 'dark' : 'light'} mode`;
+        button.setAttribute('aria-label', label);
+        button.setAttribute('title', label);
+        button.setAttribute('aria-pressed', String(light));
+        button.querySelector('i').className = light ? 'fa-regular fa-moon' : 'fa-regular fa-sun';
+        button.querySelector('.theme-toggle-label').textContent = light ? 'Dark' : 'Light';
+        const widget = document.querySelector('.calendly-inline-widget');
+        if (widget) {
+            const url = new URL(widget.dataset.url);
+            url.searchParams.set('background_color', light ? 'f5f1f7' : '200b20');
+            url.searchParams.set('text_color', light ? '302035' : 'e5e2ff');
+            url.searchParams.set('primary_color', light ? '466321' : 'e2ff9d');
+            widget.dataset.url = url.href;
+            const frame = widget.querySelector('iframe');
+            if (frame) {
+                const frameUrl = new URL(frame.src);
+                ['background_color', 'text_color', 'primary_color'].forEach(key => frameUrl.searchParams.set(key, url.searchParams.get(key)));
+                if (frame.src !== frameUrl.href) frame.src = frameUrl.href;
+            }
+        }
+    };
+    refresh();
+    button.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem('tcb-theme', next); } catch (_) { /* Theme still works without storage. */ }
+        refresh();
+    });
+}
+
+function initProjectFilterDisclosure() {
+    const control = document.querySelector('.project-filter-control');
+    if (!control) return;
+    const toggle = control.querySelector('.filters-toggle');
+    const panel = control.querySelector('.filter-options');
+    const strip = control.querySelector('.portfolio-filters');
+    const mobile = window.matchMedia('(max-width: 768px)');
+    const setOpen = (open, focusToggle = false) => {
+        toggle.setAttribute('aria-expanded', String(open));
+        control.classList.toggle('is-open', open);
+        panel.inert = !mobile.matches && !open;
+        if (focusToggle && !mobile.matches) toggle.focus({ preventScroll: true });
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    control.addEventListener('keydown', event => {
+        if (event.key === 'Escape') setOpen(false, true);
+    });
+    document.addEventListener('click', event => { if (!control.contains(event.target)) setOpen(false); });
+    control.addEventListener('focusout', event => { if (!control.contains(event.relatedTarget)) setOpen(false); });
+    control.addEventListener('filterselected', () => setOpen(false, panel.contains(document.activeElement)));
+    const sync = () => {
+        setOpen(false);
+        control.querySelector('.filter-swipe-hint').hidden = !mobile.matches || strip.scrollWidth <= strip.clientWidth + 2;
+    };
+    mobile.addEventListener('change', sync);
+    new ResizeObserver(sync).observe(strip);
+    control.addEventListener('filtersbuilt', sync);
+    sync();
+}
+
+function buildProjectFilters(projects) {
+    const panel = document.querySelector('.filter-options');
+    const known = new Map([['graphics', 'Graphics'], ['branding', 'Branding'], ['web', 'Websites']]);
+    const labels = { industrial: 'Industrial Design', 'industrial-design': 'Industrial Design', industrial_design: 'Industrial Design', product: 'Product Design', 'product-design': 'Product Design', product_design: 'Product Design', illustrations: 'Illustrations' };
+    projects.forEach(project => {
+        const category = project.category;
+        if (typeof category !== 'string' || !category || category === 'all' || known.has(category)) return;
+        known.set(category, labels[category] || category.replace(/[_-]/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase()));
+    });
+    panel.replaceChildren(...Array.from(known, ([key, label]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'filter-btn';
+        button.dataset.filter = key;
+        button.setAttribute('aria-pressed', 'false');
+        button.textContent = label;
+        return button;
+    }));
+    panel.closest('.project-filter-control').dispatchEvent(new Event('filtersbuilt'));
+    return document.querySelectorAll('.portfolio-filters .filter-btn');
+}
+
+function updateProjectFilterSelection(filter, label) {
+    const control = document.querySelector('.project-filter-control');
+    control.querySelector('.filter-selection').textContent = filter === 'all' ? '' : label;
+    control.querySelector('.filters-toggle').classList.toggle('has-selection', filter !== 'all');
+    control.querySelector('#project-filter-status').textContent = filter === 'all' ? 'Showing all projects' : `Showing ${label} projects`;
+    control.dispatchEvent(new Event('filterselected'));
+}
+
 function loadProjects() {
     const container = document.getElementById('projects-container');
     const pagination = document.getElementById('projects-pagination');
     const portfolioSection = document.getElementById('portfolio');
-    const filterButtons = document.querySelectorAll('.filter-btn');
     if (!container) return;
 
     const locallyManagedProjects = getLocallyManagedProjects();
@@ -754,7 +1184,7 @@ function loadProjects() {
     loadStaticProjectsFallback();
 
     function loadStaticProjectsFallback() {
-        fetch('projects.json?v=20260526-admin-local-mvp')
+        fetch('projects.json?v=20260910-international')
         .then(response => {
             if (!response.ok) throw new Error('Network error loading JSON');
             return response.json();
@@ -776,7 +1206,8 @@ function loadProjects() {
     }
 
     function renderProjects(projects) {
-        const portfolioProjects = withDemoProjects(projects);
+        const portfolioProjects = withDemoProjects(projects).map(normalizePublicContent);
+        const filterButtons = buildProjectFilters(portfolioProjects);
         const state = {
             filter: 'all',
             page: 1,
@@ -799,6 +1230,7 @@ function loadProjects() {
                 btn.setAttribute('aria-pressed', 'true');
                 
                 state.filter = btn.getAttribute('data-filter');
+                updateProjectFilterSelection(state.filter, btn.textContent.trim());
                 goToPage(1, 'filter', true);
             });
         });
@@ -965,7 +1397,7 @@ function getLocallyManagedCaseStudies() {
 
 function getCaseStudyForProject(projectId) {
     const localCaseStudies = getLocallyManagedCaseStudies();
-    return localCaseStudies[String(projectId)] || contentApiCaseStudies[String(projectId)] || CASE_STUDIES[projectId] || null;
+    return normalizePublicContent(localCaseStudies[String(projectId)] || contentApiCaseStudies[String(projectId)] || CASE_STUDIES[projectId] || null);
 }
 
 function normalizePricingFeature(feature) {
@@ -985,22 +1417,26 @@ function normalizePricingFeature(feature) {
 
 function normalizePricingData(data) {
     const fallback = JSON.parse(JSON.stringify(DEFAULT_PRICING));
-    const incoming = data && typeof data === 'object' ? data : {};
+    let incoming = data && typeof data === 'object' ? data : {};
+    // Old Basic/Plus/Pro snapshots must not replace the new service catalogue.
+    if (Array.isArray(incoming.tiers) && incoming.tiers.some(tier => ['basic', 'plus', 'pro'].includes(tier.id))) incoming = {};
     const tiers = Array.isArray(incoming.tiers) && incoming.tiers.length ? incoming.tiers : fallback.tiers;
 
     return {
+        layout: 'services',
         eyebrow: incoming.eyebrow || fallback.eyebrow,
         title: incoming.title || fallback.title,
         description: incoming.description || fallback.description,
-        recommendedId: incoming.recommendedId || fallback.recommendedId,
+        recommendedId: '',
         ctaLabel: incoming.ctaLabel || fallback.ctaLabel,
         ctaHref: incoming.ctaHref || fallback.ctaHref,
         tiers: tiers.map((tier, index) => {
-            const defaultTier = fallback.tiers[index] || fallback.tiers[0];
+            const defaultTier = fallback.tiers.find(item => item.id === tier.id) || fallback.tiers[index] || fallback.tiers[0];
             return {
                 id: tier.id || defaultTier.id,
                 name: tier.name || defaultTier.name,
                 symbol: tier.symbol || defaultTier.symbol,
+                icon: tier.icon || defaultTier.icon,
                 ctaLabel: tier.ctaLabel || defaultTier.ctaLabel || incoming.ctaLabel || fallback.ctaLabel,
                 description: tier.description || defaultTier.description,
                 badge: tier.badge || '',
@@ -1025,12 +1461,15 @@ function getLocallyManagedPricing() {
     }
 }
 
+let pricingCarouselCleanup = null;
+
 function renderPricingSection(pricingOverride = null) {
     const pricingSection = document.getElementById('pricing');
     if (!pricingSection) return;
 
     const container = pricingSection.querySelector('.container');
     if (!container) return;
+    pricingCarouselCleanup?.();
 
     const pricing = normalizePricingData(pricingOverride || getLocallyManagedPricing());
     const ctaHref = escapeHtml(pricing.ctaHref || '#book-call');
@@ -1038,30 +1477,39 @@ function renderPricingSection(pricingOverride = null) {
     container.innerHTML = `
         <div class="section-header text-center">
             <span class="section-subtitle">${escapeHtml(pricing.eyebrow)}</span>
-            <h2 class="section-title">${escapeHtml(pricing.title)}</h2>
+            <h2 class="section-title" id="service-pricing-title">${escapeHtml(pricing.title)}</h2>
             <p class="section-desc-center">${escapeHtml(pricing.description)}</p>
         </div>
 
-        <div class="pricing-grid has-selected" aria-label="Creative service tiers">
-            ${pricing.tiers.map(tier => {
-                const isSelected = tier.id === pricing.recommendedId;
-                const badge = isSelected ? 'Recommended' : '';
-                return `
-                    <article class="pricing-card card-glow${isSelected ? ' is-selected is-recommended' : ''}" data-pricing-card tabindex="0" aria-label="Select ${escapeHtml(tier.name)} pricing tier">
-                        ${badge ? `<div class="pricing-badge">${escapeHtml(badge)}</div>` : ''}
+        <div class="pricing-carousel" role="region" aria-roledescription="carousel" aria-labelledby="service-pricing-title">
+            <div class="pricing-track" id="service-pricing-track" tabindex="0" aria-label="Service cards. Use left and right arrow keys to browse.">
+            ${pricing.tiers.map((tier, index) => `
+                    ${index % 3 === 0 ? '<div class="pricing-page" role="group" aria-roledescription="slide">' : ''}
+                    <article class="pricing-card" data-pricing-card data-service-id="${escapeHtml(tier.id)}">
                         <div class="pricing-card-top">
-                            <span class="pricing-tier">${escapeHtml(tier.name)}</span>
+                            <span class="service-price-icon" aria-hidden="true"><i class="${escapeHtml(tier.icon)}"></i></span>
+                            <h3 class="pricing-tier">${escapeHtml(tier.name)}</h3>
+                            <span class="service-price-label">Starting from</span>
                             <strong class="pricing-symbol">${escapeHtml(tier.symbol)}</strong>
                             <p>${escapeHtml(tier.description)}</p>
                         </div>
                         <ul class="pricing-features">
-                            ${tier.features.map(feature => `<li><i class="${escapeHtml(feature.icon)}"></i> ${escapeHtml(feature.text)}</li>`).join('')}
+                            ${tier.features.map(feature => `<li><i class="${escapeHtml(feature.icon)}" aria-hidden="true"></i> ${escapeHtml(feature.text)}</li>`).join('')}
                         </ul>
-                        <a href="${ctaHref}" class="pricing-cta">${escapeHtml(tier.ctaLabel || pricing.ctaLabel || 'Select')} <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="${ctaHref}" class="pricing-cta" aria-label="Let’s talk about ${escapeHtml(tier.name)}">${escapeHtml(tier.ctaLabel || pricing.ctaLabel)} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                     </article>
-                `;
-            }).join('')}
+                    ${index % 3 === 2 || index === pricing.tiers.length - 1 ? '</div>' : ''}
+                `).join('')}
+            </div>
+            <div class="pricing-carousel-nav">
+                <button type="button" class="service-carousel-arrow" data-service-prev aria-label="Previous services" aria-controls="service-pricing-track"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+                <div class="service-carousel-dots" aria-label="Service pages"></div>
+                <button type="button" class="service-carousel-arrow" data-service-next aria-label="Next services" aria-controls="service-pricing-track"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            </div>
+            <p class="service-carousel-hint">Swipe or use the arrows to explore all services.</p>
+            <span class="sr-only" data-service-status role="status" aria-live="polite"></span>
         </div>
+        <p class="service-pricing-note">Starting prices cover the scope listed. Your final quote depends on your brief. Printing, hosting and production costs are not included.</p>
     `;
 }
 
@@ -1093,36 +1541,106 @@ function initAdminPreviewModes() {
 }
 
 function initPricingCards() {
-    const pricingGrid = document.querySelector('.pricing-grid');
-    const cards = document.querySelectorAll('[data-pricing-card]');
-    if (!pricingGrid || !cards.length) return;
-
-    const selectCard = (selectedCard) => {
-        pricingGrid.classList.add('has-selected');
-        cards.forEach(card => {
-            const isSelected = card === selectedCard;
-            card.classList.toggle('is-selected', isSelected);
-            card.setAttribute('aria-pressed', String(isSelected));
-        });
-        const tier = selectedCard.querySelector('.pricing-tier')?.textContent?.trim() || 'unknown';
-        trackTcbEvent('pricing_select', { pricing_tier: tier });
+    const carousel = document.querySelector('.pricing-carousel');
+    if (!carousel || carousel.dataset.ready) return;
+    carousel.dataset.ready = 'true';
+    const track = carousel.querySelector('.pricing-track');
+    const cards = Array.from(track.querySelectorAll('[data-pricing-card]'));
+    const dots = carousel.querySelector('.service-carousel-dots');
+    const prev = carousel.querySelector('[data-service-prev]');
+    const next = carousel.querySelector('[data-service-next]');
+    const status = carousel.querySelector('[data-service-status]');
+    const controller = new AbortController();
+    const listener = { signal: controller.signal };
+    let perPage = 0, page = 0, pages = [], dragging = null, lastDragEnd = -Infinity;
+    const sync = () => {
+        page = Math.min(pages.length - 1, Math.max(0, Math.round(track.scrollLeft / Math.max(1, track.clientWidth))));
+        prev.disabled = page <= 0;
+        next.disabled = page >= pages.length - 1;
+        pages.forEach((element, index) => { element.inert = index !== page; });
+        Array.from(dots.children).forEach((dot, index) => dot.setAttribute('aria-current', index === page ? 'true' : 'false'));
+        const message = `Services ${page * perPage + 1}–${Math.min((page + 1) * perPage, cards.length)} of ${cards.length}`;
+        if (status.textContent !== message) status.textContent = message;
     };
-
-    cards.forEach(card => {
-        card.setAttribute('role', 'button');
-        card.setAttribute('aria-pressed', card.classList.contains('is-selected') ? 'true' : 'false');
-
-        card.addEventListener('click', (event) => {
-            if (event.target.closest('a')) return;
-            selectCard(card);
-        });
-
-        card.addEventListener('keydown', (event) => {
-            if (event.key !== 'Enter' && event.key !== ' ') return;
-            event.preventDefault();
-            selectCard(card);
-        });
-    });
+    const goTo = (index, behavior = 'smooth') => {
+        const target = Math.min(pages.length - 1, Math.max(0, index));
+        track.scrollTo({ left: target * track.clientWidth, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : behavior });
+    };
+    const regroup = () => {
+        const count = Number(getComputedStyle(carousel).getPropertyValue('--services-per-page')) || 3;
+        if (count !== perPage) {
+            const firstVisible = page * (perPage || count);
+            perPage = count;
+            pages = [];
+            for (let offset = 0; offset < cards.length; offset += perPage) {
+                const group = document.createElement('div');
+                group.className = 'pricing-page';
+                group.setAttribute('role', 'group');
+                group.setAttribute('aria-roledescription', 'slide');
+                group.setAttribute('aria-label', `Services ${offset + 1}–${Math.min(offset + perPage, cards.length)} of ${cards.length}`);
+                group.append(...cards.slice(offset, offset + perPage));
+                pages.push(group);
+            }
+            track.replaceChildren(...pages);
+            dots.replaceChildren(...pages.map((_, index) => {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.setAttribute('aria-label', `Show service page ${index + 1}`);
+                dot.addEventListener('click', () => goTo(index), listener);
+                return dot;
+            }));
+            page = Math.floor(firstVisible / perPage);
+        }
+        goTo(page, 'instant');
+        sync();
+    };
+    prev.addEventListener('click', () => goTo(page - 1), listener);
+    next.addEventListener('click', () => goTo(page + 1), listener);
+    track.addEventListener('scroll', sync, { ...listener, passive: true });
+    track.addEventListener('keydown', event => {
+        if (event.target !== track) return;
+        const targets = { ArrowRight: page + 1, ArrowLeft: page - 1, Home: 0, End: pages.length - 1 };
+        if (!(event.key in targets)) return;
+        event.preventDefault();
+        goTo(targets[event.key]);
+    }, listener);
+    track.addEventListener('pointerdown', event => {
+        if (event.pointerType !== 'mouse' || event.button !== 0) return;
+        dragging = { x: event.clientX, left: track.scrollLeft, active: false };
+    }, listener);
+    track.addEventListener('dragstart', event => event.preventDefault(), listener);
+    track.addEventListener('pointermove', event => {
+        if (!dragging) return;
+        const distance = event.clientX - dragging.x;
+        if (!dragging.active && Math.abs(distance) < 6) return;
+        if (!dragging.active) {
+            dragging.active = true;
+            track.setPointerCapture(event.pointerId);
+            track.classList.add('is-dragging');
+        }
+        event.preventDefault();
+        track.scrollLeft = dragging.left - distance;
+    }, listener);
+    const endDrag = () => {
+        if (!dragging) return;
+        const active = dragging.active;
+        dragging = null;
+        track.classList.remove('is-dragging');
+        if (active) {
+            lastDragEnd = performance.now();
+            goTo(Math.round(track.scrollLeft / track.clientWidth));
+        }
+    };
+    track.addEventListener('pointerup', endDrag, listener);
+    track.addEventListener('pointercancel', endDrag, listener);
+    track.addEventListener('pointerleave', () => { if (!dragging?.active) dragging = null; }, listener);
+    track.addEventListener('click', event => {
+        if (performance.now() - lastDragEnd < 300) { event.preventDefault(); event.stopPropagation(); }
+    }, { ...listener, capture: true });
+    const observer = new ResizeObserver(regroup);
+    observer.observe(track);
+    pricingCarouselCleanup = () => { observer.disconnect(); controller.abort(); };
+    regroup();
 }
 
 function initProjectCaseStudies(container) {
@@ -1214,13 +1732,30 @@ function getOrCreateCaseStudyOverlay() {
     overlay.setAttribute('aria-labelledby', 'project-case-study-title');
 
     overlay.addEventListener('click', (event) => {
+        const galleryTrigger = event.target.closest('[data-case-gallery-open]');
+        if (galleryTrigger) {
+            openCaseStudyImageLightbox(overlay, galleryTrigger.dataset.image, galleryTrigger.dataset.alt);
+            return;
+        }
+
+        const imageLightbox = event.target.closest('[data-case-image-lightbox]');
+        if (imageLightbox && (event.target === imageLightbox || event.target.closest('[data-case-image-close]'))) {
+            closeCaseStudyImageLightbox(overlay);
+            return;
+        }
+
         if (event.target === overlay || event.target.closest('.case-study-close')) {
             closeProjectCaseStudy();
         }
     });
 
     overlay.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') closeProjectCaseStudy();
+        if (event.key !== 'Escape') return;
+        if (overlay.querySelector('[data-case-image-lightbox]')) {
+            closeCaseStudyImageLightbox(overlay);
+            return;
+        }
+        closeProjectCaseStudy();
     });
 
     document.body.appendChild(overlay);
@@ -1228,6 +1763,7 @@ function getOrCreateCaseStudyOverlay() {
 }
 
 function renderCaseStudyOverlay(overlay, caseStudy) {
+    const finalUrl = getCaseStudyFinalUrl(caseStudy);
     overlay.innerHTML = `
         <div class="case-study-shell">
             <header class="case-study-topbar">
@@ -1337,7 +1873,10 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
                 <div class="case-study-gallery-track" aria-label="${caseStudy.title} gallery preview">
                     ${caseStudy.gallery?.length ? caseStudy.gallery.slice(0, 5).map((image, index) => `
                         <figure>
-                            <img src="${image}" alt="${caseStudy.title} gallery preview ${index + 1}" loading="lazy" decoding="async">
+                            <button class="case-study-gallery-open" type="button" data-case-gallery-open data-image="${escapeHtml(image)}" data-alt="${escapeHtml(`${caseStudy.title} gallery preview ${index + 1}`)}" aria-label="Open ${caseStudy.title} gallery image ${index + 1}">
+                                <img src="${image}" alt="${caseStudy.title} gallery preview ${index + 1}" loading="lazy" decoding="async">
+                                <span>View image <i class="fa-solid fa-up-right-and-down-left-from-center"></i></span>
+                            </button>
                         </figure>
                     `).join('') : `<figure>${renderImagePlaceholder('Gallery images not added yet')}</figure>`}
                 </div>
@@ -1348,6 +1887,7 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
                     <p class="case-study-section-count">06 / 06</p>
                     <h3>Final Result</h3>
                     <p>${caseStudy.finalText}</p>
+                    ${finalUrl ? `<a class="case-study-website-link" href="${escapeHtml(finalUrl)}" target="_blank" rel="noopener">Visit website <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
                 </div>
                 <figure>
                     ${caseStudy.finalImage
@@ -1357,6 +1897,55 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
             </section>
         </div>
     `;
+    bindCaseStudyGalleryTriggers(overlay);
+}
+
+function bindCaseStudyGalleryTriggers(overlay) {
+    overlay.querySelectorAll('[data-case-gallery-open]').forEach(button => {
+        button.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            openCaseStudyImageLightbox(overlay, button.dataset.image, button.dataset.alt);
+        });
+    });
+}
+
+function getCaseStudyFinalUrl(caseStudy) {
+    if (caseStudy.websiteUrl) return caseStudy.websiteUrl;
+    if (caseStudy.liveUrl) return caseStudy.liveUrl;
+    if (caseStudy.finalUrl) return caseStudy.finalUrl;
+
+    const title = String(caseStudy.title || '').toLowerCase();
+    if (title.includes('creative alex')) return 'https://creativealex.eu/';
+
+    return '';
+}
+
+function openCaseStudyImageLightbox(overlay, image, alt = 'Project gallery image') {
+    if (!image) return;
+    closeCaseStudyImageLightbox(overlay);
+
+    const lightbox = document.createElement('div');
+    lightbox.className = 'case-study-image-lightbox';
+    lightbox.setAttribute('data-case-image-lightbox', '');
+    lightbox.innerHTML = `
+        <button class="case-study-image-close" type="button" data-case-image-close aria-label="Close gallery image">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <figure>
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(alt)}" loading="eager" decoding="async">
+        </figure>
+    `;
+    overlay.appendChild(lightbox);
+    window.requestAnimationFrame(() => lightbox.classList.add('is-open'));
+    lightbox.querySelector('[data-case-image-close]')?.focus({ preventScroll: true });
+}
+
+function closeCaseStudyImageLightbox(overlay) {
+    const lightbox = overlay.querySelector('[data-case-image-lightbox]');
+    if (!lightbox) return;
+    lightbox.classList.remove('is-open');
+    window.setTimeout(() => lightbox.remove(), 180);
 }
 
 function renderPdfPreview(caseStudy) {

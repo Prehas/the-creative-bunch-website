@@ -22,10 +22,10 @@ let isRestoringPricingState = false;
 const DEFAULT_PROJECTS = [
     {
         id: 1,
-        title: 'Merkaz Israel 76 Campaign',
+        title: 'Merkaz Cultural Campaign',
         category: 'graphics',
         tag: 'Event Poster & Campaign Design',
-        description: 'Visual campaign materials for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.',
+        description: 'Visual campaign materials for Merkaz, promoting a community cultural event with bold typography, clean layout, and community-focused imagery.',
         image: 'assets/project_merkaz_thumb.webp'
     },
     {
@@ -63,60 +63,260 @@ const DEFAULT_PROJECTS = [
 ];
 
 const DEFAULT_PRICING = {
-    eyebrow: 'Pricing',
-    title: 'Choose the creative depth your project needs.',
-    description: 'No fixed public price before we understand the scope. Use these tiers to choose the level of design support, then book a call and we will map the right path.',
-    recommendedId: 'plus',
-    ctaLabel: 'Select',
-    ctaHref: '#book-call',
-    tiers: [
+    "layout": "services",
+    "eyebrow": "Creative services",
+    "title": "Find the right service for your next idea.",
+    "description": "Start with what you need. We’ll shape the scope together and give your idea room to grow.",
+    "recommendedId": "",
+    "ctaLabel": "Let’s talk",
+    "ctaHref": "#book-call",
+    "tiers": [
         {
-            id: 'basic',
-            name: 'Basic',
-            symbol: '$',
-            ctaLabel: 'Select',
-            description: 'For focused visual tasks and small campaigns that need clean execution.',
-            badge: '',
-            features: [
-                { icon: 'fa-solid fa-check', text: 'Graphic design essentials' },
-                { icon: 'fa-solid fa-check', text: 'Posters, flyers, banners' },
-                { icon: 'fa-solid fa-check', text: 'Social media content starter pack' },
-                { icon: 'fa-solid fa-check', text: 'Basic brand cleanup' },
-                { icon: 'fa-solid fa-check', text: 'One focused revision round' }
+            "id": "graphic-design",
+            "name": "Digital & Graphic Design",
+            "symbol": "€49",
+            "icon": "fa-solid fa-bezier-curve",
+            "description": "One strong visual to get your next campaign moving.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One original campaign visual"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Two social media size adaptations"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Typography and colour direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Web-ready PNG and JPG files"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
             ]
         },
         {
-            id: 'plus',
-            name: 'Plus',
-            symbol: '$$',
-            ctaLabel: 'Select',
-            description: 'For brands, campaigns, and launches that need a stronger visual system.',
-            badge: 'Recommended',
-            features: [
-                { icon: 'fa-solid fa-check', text: 'Everything in Basic' },
-                { icon: 'fa-solid fa-check', text: 'Graphic content system' },
-                { icon: 'fa-solid fa-check', text: 'Branding direction' },
-                { icon: 'fa-solid fa-check', text: 'Social media content kit' },
-                { icon: 'fa-solid fa-check', text: 'Web design direction' },
-                { icon: 'fa-solid fa-check', text: 'UX/UI wireframes' },
-                { icon: 'fa-solid fa-check', text: 'Merch branding concept' }
+            "id": "websites",
+            "name": "Full-Code Websites",
+            "symbol": "€249",
+            "icon": "fa-solid fa-code",
+            "description": "A focused one-page website for your next launch.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One responsive landing page"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Up to five content sections"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Contact and booking links"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Basic search-engine metadata"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
             ]
         },
         {
-            id: 'pro',
-            name: 'Pro',
-            symbol: '$$$',
-            ctaLabel: 'Select',
-            description: 'For complete identity, web, and campaign ecosystems with end-to-end execution.',
-            badge: '',
-            features: [
-                { icon: 'fa-solid fa-check', text: 'Everything in Plus' },
-                { icon: 'fa-solid fa-check', text: 'Full brand identity system' },
-                { icon: 'fa-solid fa-check', text: 'UX/UI design system' },
-                { icon: 'fa-solid fa-check', text: 'Web design & web development' },
-                { icon: 'fa-solid fa-check', text: 'Campaign visual system' },
-                { icon: 'fa-solid fa-check', text: 'Illustrations & custom assets' },
-                { icon: 'fa-solid fa-check', text: 'Merch, print, and launch collateral' }
+            "id": "brand-identity",
+            "name": "Brand Identity",
+            "symbol": "€149",
+            "icon": "fa-solid fa-compass-drafting",
+            "description": "A starter identity that gives your idea a recognisable face.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One initial logo direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Colour palette and font pairing"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Primary and monochrome logo"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "SVG and PNG logo exports"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "collaborations",
+            "name": "Institutional Collaborations",
+            "symbol": "€99",
+            "icon": "fa-solid fa-handshake-angle",
+            "description": "A focused visual kit for one community event or initiative.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One event visual direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One poster layout"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One social media adaptation"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Editable master artwork"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "digital-products",
+            "name": "Digital Products",
+            "symbol": "€199",
+            "icon": "fa-solid fa-cubes",
+            "description": "Turn a key product idea into a small, testable screen flow.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One core user flow"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Up to three interface screens"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Clickable concept prototype"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Design handoff notes"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "illustrations",
+            "name": "Illustrations",
+            "symbol": "€69",
+            "icon": "fa-solid fa-pen-nib",
+            "description": "One custom illustration with a personality of its own.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One initial style sketch"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One finished illustration"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Colour and monochrome versions"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Print and web exports"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "product-design",
+            "name": "Product Design",
+            "symbol": "€179",
+            "icon": "fa-solid fa-pen-ruler",
+            "description": "Explore the shape and function of one physical product concept.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One product concept direction"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Form and function sketches"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One simple 3D concept mockup"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Material and finish suggestions"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
+            ]
+        },
+        {
+            "id": "print-design",
+            "name": "Ready-to-print Designs",
+            "symbol": "€39",
+            "icon": "fa-solid fa-print",
+            "description": "One print-ready layout, from a poster to a sticker.",
+            "ctaLabel": "Let’s talk",
+            "badge": "",
+            "features": [
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One poster, flyer or sticker layout"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Your printer’s size specifications"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "Bleed, trim and safe-area setup"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "CMYK, print-ready PDF export"
+                },
+                {
+                    "icon": "fa-solid fa-check",
+                    "text": "One refinement round"
+                }
             ]
         }
     ]
@@ -371,7 +571,8 @@ function normalizePricingFeature(feature) {
 
 function normalizePricingData(data) {
     const fallback = clonePricingData(DEFAULT_PRICING);
-    const incoming = data && typeof data === 'object' ? data : {};
+    let incoming = data && typeof data === 'object' ? data : {};
+    if (Array.isArray(incoming.tiers) && incoming.tiers.some(tier => ['basic', 'plus', 'pro'].includes(tier.id))) incoming = {};
     const tiers = Array.isArray(incoming.tiers) && incoming.tiers.length
         ? incoming.tiers
         : fallback.tiers;
@@ -380,15 +581,17 @@ function normalizePricingData(data) {
         eyebrow: incoming.eyebrow || fallback.eyebrow,
         title: incoming.title || fallback.title,
         description: incoming.description || fallback.description,
-        recommendedId: incoming.recommendedId || fallback.recommendedId,
+        layout: 'services',
+        recommendedId: '',
         ctaLabel: incoming.ctaLabel || fallback.ctaLabel,
         ctaHref: incoming.ctaHref || fallback.ctaHref,
         tiers: tiers.map((tier, index) => {
-            const defaultTier = fallback.tiers[index] || fallback.tiers[0];
+            const defaultTier = fallback.tiers.find(item => item.id === tier.id) || fallback.tiers[index] || fallback.tiers[0];
             return {
                 id: tier.id || defaultTier.id || `tier-${index + 1}`,
                 name: tier.name || defaultTier.name || `Tier ${index + 1}`,
                 symbol: tier.symbol || defaultTier.symbol || '$',
+                icon: tier.icon || defaultTier.icon,
                 ctaLabel: tier.ctaLabel || defaultTier.ctaLabel || incoming.ctaLabel || fallback.ctaLabel,
                 description: tier.description || defaultTier.description || '',
                 badge: '',
@@ -1861,20 +2064,20 @@ function renderPricingTierEditors(pricing) {
                 <span>${String(index + 1).padStart(2, '0')}</span>
                 <div>
                     <h3>${escapeAdminHtml(tier.name)}</h3>
-                    <p>${escapeAdminHtml(tier.symbol)} tier block</p>
+                    <p>Starting from ${escapeAdminHtml(tier.symbol)}</p>
                 </div>
             </div>
             <input type="hidden" id="pricing-tier-${index}-id" value="${escapeAdminHtml(tier.id)}">
-            <label for="pricing-tier-${index}-name">Tier name</label>
+            <label for="pricing-tier-${index}-name">Service name</label>
             <input id="pricing-tier-${index}-name" type="text" value="${escapeAdminHtml(tier.name)}">
             <div class="form-grid-2">
                 <div>
-                    <label for="pricing-tier-${index}-symbol">Symbol</label>
-                    <input id="pricing-tier-${index}-symbol" type="text" value="${escapeAdminHtml(tier.symbol)}" placeholder="$">
+                    <label for="pricing-tier-${index}-symbol">Starting price</label>
+                    <input id="pricing-tier-${index}-symbol" type="text" value="${escapeAdminHtml(tier.symbol)}" placeholder="€49">
                 </div>
                 <div>
                     <label for="pricing-tier-${index}-cta">Button text</label>
-                    <input id="pricing-tier-${index}-cta" type="text" value="${escapeAdminHtml(tier.ctaLabel || 'Select')}" placeholder="Select">
+                    <input id="pricing-tier-${index}-cta" type="text" value="${escapeAdminHtml(tier.ctaLabel || 'Let’s talk')}" placeholder="Let’s talk">
                 </div>
             </div>
             <label for="pricing-tier-${index}-description">Description</label>
@@ -2028,7 +2231,8 @@ function buildPricingFromForm() {
         id: getFieldValue(`pricing-tier-${index}-id`) || tier.id,
         name: getFieldValue(`pricing-tier-${index}-name`) || tier.name,
         symbol: getFieldValue(`pricing-tier-${index}-symbol`) || tier.symbol,
-        ctaLabel: getFieldValue(`pricing-tier-${index}-cta`) || 'Select',
+        ctaLabel: getFieldValue(`pricing-tier-${index}-cta`) || 'Let’s talk',
+        icon: tier.icon,
         badge: '',
         description: getFieldValue(`pricing-tier-${index}-description`),
         features: Array.from(document.querySelectorAll(`[data-pricing-feature-row="${index}"]`))

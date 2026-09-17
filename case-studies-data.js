@@ -1,14 +1,14 @@
 ﻿window.TCB_DEFAULT_CASE_STUDIES = {
     1: {
         id: 1,
-        title: "Merkaz Israel 76 Campaign",
+        title: "Merkaz Cultural Campaign",
         category: "Event Poster & Campaign Design",
         year: "2024",
         image: "assets/project_merkaz_thumb.webp",
-        statement: "A visual campaign made for Merkaz, promoting the Israel 76 cultural event with bold typography, clean layout, and community-focused imagery.",
+        statement: "A visual campaign made for Merkaz, promoting a community cultural event with bold typography, clean layout, and community-focused imagery.",
         tags: ["Graphic Design", "Print", "Branding"],
         overview: [
-            { title: "The Challenge", text: "Create a visual identity that celebrates Israel 76 in a modern, approachable way, while staying clear enough for fast event communication." },
+            { title: "The Challenge", text: "Create a visual identity that celebrates community and culture in a modern, approachable way, while staying clear enough for fast event communication." },
             { title: "The Solution", text: "Bold typography, national symbols, and a poster-first system that could move from print into social and community channels." },
             { title: "The Impact", text: "A campaign language that feels proud, legible, and memorable across event posters, digital previews, and public-facing assets." }
         ],
@@ -103,6 +103,7 @@
         palette: ["#05050B", "#D148FF", "#FFFFFF", "#7A35FF", "#161126"],
         system: ["Hero message: Marketing Designer & 3D Artist at your service.", "Project thumbnails from YOCU, PlayGG, 3D, and graphic design surfaces.", "Clear navigation across Home, Projects, About Me, and Let's Talk."],
         gallery: ["assets/project_creativealex_website_thumb.webp", "assets/creativealex_yocu.webp", "assets/creativealex_playgg.webp", "assets/creativealex_3d.webp", "assets/creativealex_graphic.webp"],
+        websiteUrl: "https://creativealex.eu/",
         finalText: "A bold portfolio website that gives the work an immediate stage and makes the creator's range easy to understand."
     }
 };
