@@ -477,7 +477,7 @@ function escapeHtml(value) {
 }
 
 const COOKIE_CONSENT_KEY = 'tcb_cookie_consent';
-const COOKIE_NOTICE_VERSION = 1;
+const COOKIE_NOTICE_VERSION = 2;
 const COOKIE_CONSENT_DURATION = 180 * 24 * 60 * 60 * 1000;
 let cookieConsent = readCookieConsent();
 
@@ -497,7 +497,6 @@ function initCookieConsent() {
     const preferences = panel.querySelector('#cookie-preferences');
     const customize = panel.querySelector('[data-cookie-customize]');
     const analytics = panel.querySelector('#cookie-analytics');
-    const booking = panel.querySelector('#cookie-booking');
     const reopen = document.querySelector('.cookie-reopen');
     let returnFocus = null;
     const setDetails = expanded => {
@@ -506,7 +505,7 @@ function initCookieConsent() {
     };
     const show = (details = false, focus = false) => {
         analytics.checked = cookieConsent?.analytics === true;
-        booking.checked = cookieConsent?.booking === true;
+
         panel.querySelector('[data-cookie-close]').hidden = !cookieConsent;
         setDetails(details);
         panel.hidden = false;
@@ -529,9 +528,9 @@ function initCookieConsent() {
         returnFocus = button;
         show(true, true);
     }));
-    panel.querySelector('[data-cookie-accept]').addEventListener('click', () => save(true, true));
+    panel.querySelector('[data-cookie-accept]').addEventListener('click', () => save(true, false));
     panel.querySelector('[data-cookie-reject]').addEventListener('click', () => save(false, false));
-    panel.querySelector('[data-cookie-save]').addEventListener('click', () => save(analytics.checked, booking.checked));
+    panel.querySelector('[data-cookie-save]').addEventListener('click', () => save(analytics.checked, false));
     panel.querySelector('[data-cookie-close]').addEventListener('click', hide);
     customize.addEventListener('click', () => setDetails(preferences.hidden));
     panel.addEventListener('keydown', event => {
@@ -555,38 +554,11 @@ function initCookieConsent() {
 }
 
 function applyCookieConsent() {
-    const analyticsRevoked = window.__tcbVercelAnalyticsLoaded && !cookieConsent?.analytics;
-    const bookingRevoked = window.__tcbCalendlyLoaded && !cookieConsent?.booking;
-    if (analyticsRevoked || bookingRevoked) {
-        // A fresh document removes third-party listeners as well as their elements.
+    if (window.__tcbVercelAnalyticsLoaded && !cookieConsent?.analytics) {
         document.querySelector('[data-consent-analytics]')?.remove();
-        document.querySelector('[data-consent-booking]')?.remove();
-        document.querySelector('.calendly-inline-widget')?.replaceChildren();
-        window.va = () => {};
-        window.vaq = [];
-        window.location.reload();
-        return;
+        window.va = () => {}; window.vaq = []; window.location.reload(); return;
     }
     if (cookieConsent?.analytics) initVercelAnalytics();
-    const widget = document.querySelector('.calendly-inline-widget');
-    const notice = document.querySelector('.booking-consent-note');
-    if (widget && notice) {
-        widget.hidden = !cookieConsent?.booking;
-        notice.hidden = cookieConsent?.booking === true;
-        if (cookieConsent?.booking && !window.__tcbCalendlyLoaded) {
-            window.__tcbCalendlyLoaded = true;
-            const script = document.createElement('script');
-            script.src = 'https://assets.calendly.com/assets/external/widget.js';
-            script.async = true;
-            script.dataset.consentBooking = '';
-            script.addEventListener('error', () => {
-                // Keep the direct booking link available if the provider is unreachable.
-                notice.hidden = false;
-                notice.querySelector('p').textContent = 'The calendar could not load. You can still open Calendly directly.';
-            });
-            document.head.appendChild(script);
-        }
-    }
 }
 
 function initVercelAnalytics() {

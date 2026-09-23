@@ -326,7 +326,7 @@ const DASHBOARD_DATA = {
     metrics: [
         { label: 'Site visitors', value: '4,862', delta: '+18.4%', icon: 'fa-user-group' },
         { label: 'Project opens', value: '1,247', delta: '+32.1%', icon: 'fa-arrow-up-right-from-square' },
-        { label: 'Booked calls', value: '26', delta: '+9.6%', icon: 'fa-calendar-check' },
+        { label: 'Booked calls', value: '—', delta: 'Loading bookings', icon: 'fa-calendar-check' },
         { label: 'Lead value', value: '$$$', delta: 'Plus tier focus', icon: 'fa-wand-magic-sparkles' }
     ],
     countries: [
@@ -797,7 +797,7 @@ function renderMetrics() {
     if (!grid) return;
 
     grid.innerHTML = DASHBOARD_DATA.metrics.map(metric => `
-        <article class="metric-card">
+        <article class="metric-card" ${metric.label === 'Booked calls' ? 'data-booking-metric' : ''}>
             <span class="metric-icon"><i class="fa-solid ${metric.icon}"></i></span>
             <p>${metric.label}</p>
             <strong>${metric.value}</strong>
@@ -887,21 +887,7 @@ function renderCountryList() {
 }
 
 function renderMeetings() {
-    const list = document.getElementById('meeting-list');
-    const panelList = document.getElementById('meetings-panel-list');
-    const markup = DASHBOARD_DATA.meetings.map(meeting => `
-        <article class="meeting-item">
-            <span><i class="fa-regular fa-calendar"></i></span>
-            <div>
-                <strong>${meeting.person}</strong>
-                <p>${meeting.label}</p>
-            </div>
-            <em>${meeting.time}</em>
-        </article>
-    `).join('');
-
-    if (list) list.innerHTML = markup;
-    if (panelList) panelList.innerHTML = markup;
+    if (window.initNativeMeetings) window.initNativeMeetings();
 }
 
 function renderActivity() {

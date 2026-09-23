@@ -1,1 +1,4 @@
-{}
+{
+  "crons": [{ "path": "/api/bookings?action=cleanup", "schedule": "0 3 * * *" }],
+  "functions": { "api/bookings.js": { "maxDuration": 60 } }
+}

@@ -15,7 +15,8 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=20260917-scale-portraits">
+    <link rel="stylesheet" href="style.css?v=20260922-booking-design">
+    <link rel="stylesheet" href="booking.css?v=20260922-booking-design">
 </head>
 <body>
     <!-- Custom Cursor Glow Background -->
@@ -457,35 +458,52 @@
             </div>
         </section>
 
-        <!-- Create Project (Calendly Section) -->
+        <!-- Studio booking -->
         <section id="book-call" class="book-call-section scroll-reveal">
             <div class="container">
-                <div class="call-card card-glow">
-                    <div class="call-layout">
-                        <div class="call-header">
-                            <span class="section-subtitle">Start here</span>
-                            <h2 class="section-title">Let&rsquo;s map the visual system your project needs.</h2>
-                            <p>Choose a time and we will look at the message, the audience, and the fastest design path from first impression to finished launch.</p>
-                        </div>
-                        <div class="call-points" aria-label="What we can discuss">
-                            <span>Brand identity review</span>
-                            <span>Campaign material plan</span>
-                            <span>Website direction</span>
-                            <span>Launch timeline</span>
-                        </div>
-                    </div>
-
-                    <!-- Calendly Inline Widget Container -->
-                    <div class="calendly-widget-wrapper">
-                        <!-- Standard Calendly inline widget, customized styles -->
-                        <div class="calendly-inline-widget" data-url="https://calendly.com/thecreativebunch-agency/30min?background_color=200b20&text_color=e5e2ff&primary_color=e2ff9d" style="min-width:320px;height:700px;" hidden></div>
-                        <div class="booking-consent-note">
-                            <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-                            <h3>A conversation starts here.</h3>
-                            <p>Allow the Calendly booking calendar in your cookie preferences, or open the booking page directly.</p>
-                            <button type="button" class="consent-button" data-cookie-open>Cookie preferences</button>
-                            <a href="https://calendly.com/thecreativebunch-agency/30min" target="_blank" rel="noopener noreferrer">Open Calendly <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
-                        </div>
+                <div class="native-booking" id="native-booking">
+                    <aside class="booking-story" aria-label="About your studio call">
+                        <img class="booking-studio-logo" src="assets/Logo_Site-transparent.png" alt="The Creative Bunch" width="60" height="60">
+                        <span class="booking-studio-name">The Creative Bunch</span>
+                        <span class="booking-step">A GOOD IDEA STARTS HERE</span>
+                        <h2>Let’s talk about<br>your next idea.</h2>
+                        <p>A fresh perspective for your brand, website or next creative project. Tell us what you have in mind.</p>
+                        <ul class="booking-meta"><li><i class="fa-regular fa-clock" aria-hidden="true"></i><span id="booking-duration">30 minutes</span></li><li><i class="fa-solid fa-video" aria-hidden="true"></i><span>Online conversation</span></li><li><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Hungary · Europe/Budapest</span></li></ul>
+                        <div class="booking-story-bottom"><div class="booking-people" aria-hidden="true"><img src="assets/team-upload-2.png" alt=""><img src="assets/team-upload-4.png" alt=""><img src="assets/team-upload-1.png" alt=""><img src="assets/team-upload-3.png" alt=""></div><p>Four minds. One creative bunch.</p><a href="mailto:thecreativebunch.agency@gmail.com">Prefer email? Say hello ↗</a></div>
+                    </aside>
+                    <div class="booking-workspace">
+                        <p class="booking-preview-note" id="booking-preview-note" hidden>Local preview · no emails or video calls created</p>
+                        <form id="booking-form">
+                            <div id="booking-date-step">
+                                <div class="booking-panel-title"><span class="booking-step-number">01</span><h3>Select a date &amp; time</h3></div>
+                                <input id="booking-date" type="hidden">
+                                <div class="booking-month-nav"><button type="button" data-month-prev aria-label="Previous month"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><h4 id="booking-month" aria-live="polite"></h4><button type="button" data-month-next aria-label="Next month"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div>
+                                <div class="booking-weekdays" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+                                <div id="booking-days" class="booking-days" role="group" aria-labelledby="booking-month"></div>
+                                <div class="booking-zone-row"><i class="fa-solid fa-globe" aria-hidden="true"></i><label class="sr-only" for="booking-timezone">Show available times in</label><select id="booking-timezone"></select></div>
+                                <div class="booking-times-heading"><h4>Available times</h4><span id="booking-chosen-day"></span></div>
+                                <div id="booking-slots" class="booking-slots" role="group" aria-label="Available appointment times"></div>
+                                <div class="booking-date-actions"><button type="button" data-booking-refresh class="booking-text-button">Refresh times</button><button type="button" data-booking-continue class="booking-continue" disabled>Continue <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>
+                                <p id="booking-hours" class="booking-hours">Calendar dates use Hungary time.</p>
+                            </div>
+                            <div id="booking-details-step" hidden>
+                                <div class="booking-panel-title"><button type="button" data-booking-back aria-label="Back to calendar"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button><h3>Your details</h3></div>
+                                <p id="booking-selection" class="booking-selection" role="status"></p>
+                                <fieldset id="booking-contact-fields" disabled><legend>A few details before we meet</legend>
+                                <label>Your name<input name="name" autocomplete="name" maxlength="100" required></label>
+                                <label>Email address<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+                                <label>What would you like to work on?<select name="service"><option>Let’s explore an idea</option><option>Digital &amp; Graphic Design</option><option>Full-Code Websites</option><option>Brand Identity</option><option>Institutional Collaborations</option><option>Digital Products</option><option>Illustrations</option><option>Product Design</option><option>Ready-to-print Designs</option></select></label>
+                                <label>A little about your project (optional)<textarea name="notes" rows="3" maxlength="1200"></textarea></label>
+                                <div class="booking-honeypot" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+                                <label class="booking-privacy"><input type="checkbox" name="privacy" required><span>I have read the booking privacy notice and understand that my details are used to arrange this call.</span></label>
+                            </fieldset>
+                                <button type="submit" class="booking-submit" disabled>Reserve my time <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                            </div>
+                        </form>
+                        <div id="booking-result" tabindex="-1" hidden></div>
+                        <p id="booking-status" role="status" aria-live="polite"></p>
+                        <details class="booking-privacy-details"><summary>Booking privacy notice</summary><p>The Creative Bunch uses your name, email, chosen time and project notes to arrange and manage your call. Booking records are stored privately and scheduled for deletion 180 days after the appointment, during the next daily cleanup. When connected, Zoom receives meeting scheduling details and Resend delivers the confirmation email. Please avoid sensitive personal information in your notes. This form does not subscribe you to marketing.</p><p>You can manage your reservation using its private booking link. For access, correction or deletion requests, contact <a href="mailto:thecreativebunch.agency@gmail.com">thecreativebunch.agency@gmail.com</a>. Email and meeting providers may retain their own records under their privacy policies.</p></details>
+                        <noscript><p>Please enable JavaScript to use the calendar, or email the studio.</p></noscript>
                     </div>
                 </div>
             </div>
@@ -539,7 +557,7 @@
             <h2 id="cookie-title">Your visit. Your choice.</h2>
             <button type="button" class="cookie-close" aria-label="Close cookie settings" data-cookie-close hidden><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
         </div>
-        <p id="cookie-intro">We use essential storage to remember your choices. Optional analytics and the Calendly booking calendar stay off until you allow them.</p>
+        <p id="cookie-intro">We use essential storage to remember your choices. Optional analytics stays off until you allow it. Our booking form works without optional cookies.</p>
         <div class="cookie-actions">
             <button type="button" class="consent-button" data-cookie-reject>Reject optional</button>
             <button type="button" class="consent-button" data-cookie-accept>Accept all</button>
@@ -549,15 +567,14 @@
             <div class="cookie-essential"><strong>Essential</strong><span>Always on</span></div>
             <p>Remembers your privacy choices and the theme you select. Admin sign-in and editor storage are used when you access the admin area.</p>
             <label class="cookie-option"><span><strong>Analytics</strong><small>Vercel measures visits and general interactions without tracking cookies. We still ask your permission.</small></span><input type="checkbox" id="cookie-analytics"></label>
-            <label class="cookie-option"><span><strong>External booking</strong><small>Loads Calendly and shares connection data with Calendly. Its calendar may use cookies and has its own cookie choices.</small></span><input type="checkbox" id="cookie-booking"></label>
             <button type="button" class="consent-button cookie-save" data-cookie-save>Save my choices</button>
             <details class="cookie-notice">
                 <summary>Cookie &amp; storage notice</summary>
                 <p>The Creative Bunch uses local browser storage for your consent record (180 days) and chosen theme (until you clear it). Your consent record contains your choices, the date and the notice version. Refusing optional services does not prevent browsing or contacting us.</p>
-                <p>Analytics: Vercel receives page and device information for aggregate statistics. Its visitor hash expires after 24 hours. External booking: Calendly processes connection and booking information under its own notice; cookie names and durations depend on its services and your choices there.</p>
+                <p>Analytics: Vercel receives page and device information for aggregate statistics. Its visitor hash expires after 24 hours. Our booking form processes the details you submit to arrange your call; see the booking privacy notice beside the form.</p>
                 <p>You can change or withdraw permission through Cookie settings at any time. Withdrawal stops future loading; it does not erase information already sent to a provider. You can clear existing provider cookies in your browser.</p>
                 <p>Fonts and icons are delivered by Google Fonts and Cloudflare CDN; those requests expose connection information such as your IP address. Site hosting and the content service also process requests needed to display this website. No advertising integration is configured by this site.</p>
-                <p><a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel analytics privacy</a> · <a href="https://calendly.com/privacy" target="_blank" rel="noopener noreferrer">Calendly privacy</a> · <a href="https://calendly.com/help/calendly-cookie-management-and-banner" target="_blank" rel="noopener noreferrer">Calendly cookie choices</a></p>
+                <p><a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel analytics privacy</a></p>
                 <p>Privacy questions: <a href="mailto:thecreativebunch.agency@gmail.com">thecreativebunch.agency@gmail.com</a>. Notice updated 10 September 2026.</p>
             </details>
         </div>
@@ -568,7 +585,8 @@
     <!-- Custom JS -->
     <script src="analytics-config.js?v=20260603-vercel-content-api"></script>
     <script src="content-api-config.js?v=20260603-vercel-content-api"></script>
-    <script src="main.js?v=20260917-scale-portraits"></script>
+    <script src="main.js?v=20260922-booking-design"></script>
+    <script src="booking.js?v=20260922-booking-design"></script>
 </body>
 </html>
 

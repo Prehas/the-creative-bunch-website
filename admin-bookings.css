@@ -1,0 +1,23 @@
+.booking-admin-layout { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr); gap:1.5rem; align-items:start; }
+.booking-admin-list { display:grid; gap:1rem; }
+.native-meeting, .booking-admin-settings { background:var(--admin-panel); border:1px solid var(--admin-border); border-radius:18px; padding:1.4rem; min-width:0; }
+.native-meeting p { margin:.7rem 0; line-height:1.6; overflow-wrap:anywhere; }
+.meeting-heading { display:flex; justify-content:space-between; align-items:start; gap:1rem; }
+.meeting-heading h3 { font-size:1.1rem; }
+.meeting-actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1rem; }
+.meeting-notes { white-space:pre-wrap; }
+.meeting-delivery { font-size:.8rem; color:var(--admin-muted); }
+.booking-admin-settings h3 { margin-bottom:1rem; }
+.booking-admin-settings label, [data-meeting-reschedule] label { display:block; margin:1rem 0; font-size:.9rem; }
+.booking-admin-settings :is(input:not([type="checkbox"]),select,textarea), [data-meeting-reschedule] :is(input,select), #meeting-filter { width:100%; padding:.7rem; margin-top:.4rem; border:1px solid var(--admin-border); border-radius:8px; font:inherit; background:var(--admin-bg-soft); color:var(--admin-text); color-scheme:dark; }
+#meeting-filter { width:auto; margin:0 0 1rem .6rem; }
+.booking-admin-settings fieldset { border:0; margin:1rem 0; padding:0; display:flex; flex-wrap:wrap; gap:.65rem; }
+.booking-admin-settings fieldset label { display:flex; gap:.35rem; align-items:center; margin:.3rem 0; }
+.booking-admin-settings input[type="checkbox"] { width:18px; height:18px; accent-color:var(--admin-lime); vertical-align:middle; }
+.booking-admin-settings textarea { resize:vertical; }
+#booking-connections { padding:1rem; background:var(--admin-lime-soft); border:1px solid var(--admin-border); border-radius:12px; margin:1rem 0; line-height:1.6; }
+#meetings-status { margin:1rem 0; line-height:1.6; }
+[data-meeting-reschedule] { margin-top:1rem; border-top:1px solid var(--admin-border); }
+[data-meeting-reschedule][hidden] { display:none; }
+.booking-admin-list button:disabled { opacity:.5; }
+@media(max-width:1000px) { .booking-admin-layout { grid-template-columns:1fr; } }

@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check api/bootstrap.js && node --check api/publish.js && node --check api/upload.js && node --check api/auth/login.js && node --check api/auth/logout.js && node --check api/health.js"
+    "check": "node --check api/bootstrap.js && node --check api/publish.js && node --check api/upload.js && node --check api/auth/login.js && node --check api/auth/logout.js && node --check api/health.js && node --check api/bookings.js && node --check api/_lib/booking-core.js && node --check api/_lib/booking-store.js && node --check api/_lib/booking-supabase.js && node --check api/_lib/booking-integrations.js"
   },
   "dependencies": {
     "@vercel/blob": "latest"
   }
 }
+

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Unbounded:wght@400;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260603-vercel-content-api">
+<link rel="stylesheet" href="admin-bookings.css?v=20260917-native-booking">
 </head>
 <body class="admin-page">
     <div class="dashboard-shell">
@@ -86,7 +87,7 @@
                     <article class="analytics-card meetings-card">
                         <div class="card-heading-row compact">
                             <h2>Upcoming meetings</h2>
-                            <span class="soft-pill">Calendly ready</span>
+                            <span class="soft-pill">Studio calendar</span>
                         </div>
                         <div class="meeting-list" id="meeting-list"></div>
                     </article>
@@ -451,15 +452,16 @@
                 </div>
             </section>
 <section class="admin-panel" id="panel-meetings" data-admin-panel-content="meetings">
-                <div class="panel-header-row">
-                    <div>
-                        <span class="admin-kicker">Meetings</span>
-                        <h2>Calendly pipeline preview</h2>
-                        <p>Meeting records are prepared for future Calendly automation and webhook syncing.</p>
-                    </div>
-                </div>
-                <div class="placeholder-grid" id="meetings-panel-list"></div>
-            </section>
+<div class="panel-header-row"><div><span class="admin-kicker">Studio calendar</span><h2>Meetings &amp; availability</h2><p>A shared team calendar. All admin times use Hungary’s time zone.</p></div><button class="admin-secondary-btn" id="refresh-meetings">Refresh bookings</button></div>
+<p id="booking-connections">Checking connections…</p><p id="meetings-status" role="status"></p>
+<div class="booking-admin-layout"><div><label for="meeting-filter">Show</label><select id="meeting-filter"><option value="upcoming">Upcoming</option><option value="all">All bookings</option><option value="cancelled">Cancelled</option></select><div class="booking-admin-list" id="meetings-panel-list"></div></div>
+<form id="booking-settings-form" class="booking-admin-settings"><h3>Availability</h3><p>Europe/Budapest · daylight-saving changes are automatic.</p>
+<label><input type="checkbox" name="enabled"> Accept new bookings</label><fieldset><legend>Working days</legend><label><input name="weekdays" type="checkbox" value="0">Sun</label><label><input name="weekdays" type="checkbox" value="1">Mon</label><label><input name="weekdays" type="checkbox" value="2">Tue</label><label><input name="weekdays" type="checkbox" value="3">Wed</label><label><input name="weekdays" type="checkbox" value="4">Thu</label><label><input name="weekdays" type="checkbox" value="5">Fri</label><label><input name="weekdays" type="checkbox" value="6">Sat</label></fieldset>
+<label>Start time<input name="start" type="time" required></label><label>End time<input name="end" type="time" required></label>
+<label>Meeting duration (minutes)<input name="duration" type="number" min="15" max="120" required></label><label>Buffer after meetings (minutes)<input name="buffer" type="number" min="0" max="60" required></label>
+<label>Minimum notice (hours)<input name="noticeHours" type="number" min="1" max="168" required></label><label>Book ahead (days)<input name="horizonDays" type="number" min="1" max="90" required></label>
+<label>Closed dates, one per line (YYYY-MM-DD)<textarea name="blockedDates" rows="4" placeholder="2026-12-25"></textarea></label>
+<p>Changes affect new reservations. Existing appointments remain booked. Meetings in external calendars are not imported.</p><button class="admin-primary-btn" type="submit" disabled>Save availability</button></form></div></section>
 
             <section class="admin-panel" id="panel-analytics" data-admin-panel-content="analytics">
                 <div class="panel-header-row">
@@ -565,7 +567,8 @@
 
     <script src="content-api-config.js?v=20260603-vercel-content-api"></script>
     <script src="case-studies-data.js?v=20260616-ui-polish"></script>
-    <script src="admin.js?v=20260917-service-carousel"></script>
+    <script src="admin-bookings.js?v=20260917-native-booking"></script>
+    <script src="admin.js?v=20260917-native-booking"></script>
 </body>
 </html>
 
