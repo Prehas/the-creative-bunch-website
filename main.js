@@ -1730,7 +1730,7 @@ function getOrCreateCaseStudyOverlay() {
         closeProjectCaseStudy();
     });
 
-    document.body.appendChild(overlay);
+    document.documentElement.appendChild(overlay);
     return overlay;
 }
 
@@ -1740,16 +1740,16 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
         <div class="case-study-shell">
             <header class="case-study-topbar">
                 <div class="case-study-brand">
-                    <span class="case-study-mark" aria-hidden="true"></span>
+                    <img class="case-study-mark" src="assets/Logo_Site-transparent.png" alt="" width="48" height="48">
                     <span>The Creative Bunch</span>
                 </div>
                 <div class="case-study-progress">01 / 06</div>
                 <button class="case-study-close" type="button" aria-label="Close ${caseStudy.title} case study">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
+                    Close <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m6 6 12 12M18 6 6 18"/></svg>
                 </button>
             </header>
 
+            <div class="case-study-scroll">
             <section class="case-study-hero">
                 <div class="case-study-copy">
                     <p class="case-study-eyebrow">${caseStudy.category}</p>
@@ -1867,6 +1867,7 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
                         : renderImagePlaceholder('Final image not added yet')}
                 </figure>
             </section>
+        </div>
         </div>
     `;
     bindCaseStudyGalleryTriggers(overlay);

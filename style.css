@@ -4493,18 +4493,18 @@ body.lock-scroll {
     }
 }
 
-/* Desktop optical scale: display the site at 90% while browser zoom stays at 100%. */
+/* Desktop optical scale: 10% smaller than the previous 90% presentation. */
 @media (min-width: 1025px) {
     body {
-        zoom: 0.90;
-        width: calc(100% / 0.90);
+        zoom: 0.81;
+        width: calc(100% / 0.81);
     }
 }
 
 @supports not (zoom: 1) {
     @media (min-width: 1025px) {
         html {
-            font-size: 90%;
+            font-size: 81%;
         }
     }
 }
@@ -5448,4 +5448,161 @@ html[data-theme="light"] .pricing-carousel .pricing-card :is(p, .pricing-feature
     .pricing-carousel .pricing-card-top p { min-height: 0; }
     .service-carousel-dots button { width: 24px; }
     .pricing-carousel-nav { gap: 0.5rem; }
+}
+
+/* Compact team grid on phones and tablets; centered mobile service cards. */
+@media (max-width: 1024px) {
+    .team-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        max-width: 720px;
+        margin-inline: auto;
+    }
+    .team-card { min-width: 0; }
+    .team-img-wrapper { aspect-ratio: 1 / 1; }
+    .team-img { object-position: center 30%; }
+}
+@media (max-width: 600px) {
+    .pricing-carousel .pricing-card { text-align: center; }
+    .pricing-carousel .pricing-card-top p {
+        text-align: center;
+        margin-inline: auto;
+    }
+    .pricing-carousel .pricing-features {
+        width: fit-content;
+        max-width: 100%;
+        margin-inline: auto;
+    }
+    .pricing-carousel .pricing-features li {
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr);
+        align-items: center;
+        text-align: left;
+    }
+    .pricing-carousel .pricing-features i {
+        display: inline-grid;
+        margin: 0;
+    }
+    .pricing-carousel .pricing-cta { justify-content: center; }
+    .team-grid { gap: 0.75rem; }
+    .team-card { border-radius: 14px; }
+    .team-info { padding: 0.85rem 0.7rem; overflow-wrap: anywhere; }
+    .team-info h3 { font-size: 1rem; }
+    .team-role { font-size: 0.65rem; letter-spacing: 0.04em; }
+    .team-bio, .team-principle { font-size: 0.8rem; line-height: 1.6; }
+    .team-principle { margin-top: 0.75rem; padding-top: 0.75rem; }
+}
+
+/* Quiet project dialog chrome with an always-accessible close action. */
+.case-study-overlay {
+    transform: none;
+    background: rgba(15, 7, 17, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: opacity 280ms ease, visibility 280ms;
+}
+.case-study-shell { overflow: visible; }
+.case-study-shell::before { display: none; }
+.case-study-topbar,
+html[data-theme="light"] .case-study-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+    padding: 0.75rem 0;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: none;
+}
+.case-study-mark {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    object-fit: contain;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+.case-study-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    width: auto;
+    min-width: 104px;
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    border-radius: 12px;
+    font: 600 0.85rem var(--font-body);
+    background: var(--color-card-bg);
+}
+.case-study-close:hover { transform: none; }
+.case-study-close:active { transform: scale(0.97); }
+.case-study-close:focus-visible { outline: 2px solid var(--color-lime); outline-offset: 4px; }
+@media (max-width: 600px) {
+    .case-study-brand { gap: 0.5rem; max-width: none; letter-spacing: 0.02em; }
+    .case-study-mark { width: 40px; height: 40px; }
+    .case-study-topbar { gap: 0.65rem; }
+    .case-study-close { min-width: 94px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .case-study-overlay, .case-study-close { transition: none; }
+}
+
+/* Centered dialog: its content scrolls independently of the persistent header. */
+.case-study-overlay {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    padding: clamp(12px, 3vw, 40px);
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+.case-study-overlay .case-study-shell {
+    display: flex;
+    flex-direction: column;
+    width: min(1120px, 100%);
+    height: min(880px, calc(100dvh - 80px));
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.24);
+    transform: translateY(12px);
+    transition: transform 280ms cubic-bezier(0.2,0.7,0.3,1);
+}
+.case-study-overlay.is-open .case-study-shell { transform: translateY(0); }
+.case-study-overlay .case-study-topbar {
+    position: relative;
+    flex: 0 0 auto;
+    margin: 0 24px;
+    padding: 16px 0;
+    background: transparent;
+}
+.case-study-scroll {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-text-muted) transparent;
+    scrollbar-gutter: stable;
+    padding: 0 28px 28px;
+}
+.case-study-copy h2 {
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+    .case-study-overlay .case-study-shell { height: calc(100dvh - 24px); border-radius: 18px; }
+    .case-study-overlay .case-study-topbar { margin: 0 14px; padding: 12px 0; }
+    .case-study-scroll { padding: 0 16px 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .case-study-overlay .case-study-shell { transition: none; transform: none; }
 }
