@@ -2672,3 +2672,103 @@ code {
         justify-content: center;
     }
 }
+
+/* Compact application density, scoped away from the public site and login. */
+.admin-page { --admin-heading: 'Plus Jakarta Sans', sans-serif; font-size: 13px; background: #170e19; }
+.admin-page .dashboard-shell { grid-template-columns: 220px minmax(0, 1fr); }
+.admin-page .dashboard-sidebar { padding: 14px 12px; gap: 16px; overflow-y: auto; background: #130b15; }
+.admin-page .dashboard-brand { min-height: 48px; padding: 4px; font-size: 12px; gap: 10px; }
+.admin-page .dashboard-brand img { width: 38px; flex-shrink: 0; }
+.admin-page .dashboard-nav { gap: 4px; }
+.admin-page .dashboard-nav-item, .admin-page .dashboard-nav-group summary { min-height: 38px; padding: 9px 10px; border-radius: 8px; font-size: 13px; font-weight: 600; gap: 10px; }
+.admin-page .dashboard-nav-item i { width: 16px; text-align: center; flex-shrink: 0; }
+.admin-page .sidebar-card { padding: 12px; border-radius: 10px; background: rgba(255,255,255,.025); }
+.admin-page .sidebar-card p { font-size: 12px; }
+.admin-page .dashboard-main { padding: 20px 24px; }
+.admin-page :is(.dashboard-topbar,.panel-header-row,.editor-topbar) { padding: 4px 0; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.admin-page :is(.dashboard-topbar h1,.panel-header-row h2,.editor-topbar h2) { font-size: 24px; line-height: 1.25; letter-spacing: -.025em; }
+.admin-page .admin-kicker { font-size: 10px; letter-spacing: .1em; }
+.admin-page :is(.topbar-actions,.panel-header-actions,.form-actions,.meeting-actions) { flex-wrap: wrap; gap: 8px; }
+.admin-page :is(.admin-primary-btn,.admin-secondary-btn,.chip-btn,.project-admin-actions button) { min-width: 0; min-height: 36px; height: auto; padding: 8px 12px; border-radius: 8px; font-size: 12px; line-height: 1.4; font-weight: 600; letter-spacing: 0; text-transform: none; white-space: normal; overflow-wrap: anywhere; flex-shrink: 0; box-shadow: none; }
+.admin-page button i, .admin-page a i { flex-shrink: 0; }
+.admin-page :is(.view-site-btn,.clear-cache-btn)::before { display: none; }
+.admin-page .date-filter { width: 36px; height: 36px; border-radius: 8px; box-shadow: none; }
+.admin-page .topbar-actions select { min-width: 136px; min-height: 36px; border-radius: 8px; font-size: 12px; }
+.admin-page :is(.metric-card,.analytics-card,.project-editor-card,.project-live-preview,.pricing-tier-editor-card,.settings-card,.native-meeting,.booking-admin-settings) { border-radius: 12px; padding: 16px; box-shadow: none; background: #211625; }
+.admin-page .metric-card { min-height: 128px; }
+.admin-page .metric-card::after { display: none; }
+.admin-page .metric-icon { width: 30px; height: 30px; border-radius: 8px; }
+.admin-page .metric-card p { margin-top: 10px; font-size: 12px; }
+.admin-page .metric-card strong { font-size: 26px; }
+.admin-page .metric-delta { margin-top: 8px; font-size: 11px; }
+.admin-page :is(.card-heading-row h2,.card-heading-row.compact h2,.editor-section-heading h3,.pricing-tier-editor-heading h3,.booking-admin-settings h3) { font-size: 15px; line-height: 1.4; }
+.admin-page .card-heading-row { gap: 10px; flex-wrap: wrap; }
+.admin-page :is(.editor-section-heading,.pricing-tier-editor-heading) { padding: 12px 0; gap: 10px; }
+.admin-page :is(.project-editor-card input,.project-editor-card select,.project-editor-card textarea) { min-width: 0; max-width: 100%; padding: 9px 11px; border-radius: 8px; font-size: 13px; }
+.admin-page :is(.project-editor-card label,.panel-header-row p,.editor-section-heading p) { font-size: 12px; line-height: 1.6; }
+.admin-page :is(.editor-sticky-actions,.editor-sticky-actions.pricing-actions) { flex-wrap: wrap; padding: 10px; gap: 8px; border-radius: 10px; background: #1b111e; box-shadow: none; }
+.admin-page :is(.editor-sticky-actions,.editor-sticky-actions.pricing-actions) button { flex: 0 1 auto; width: auto; min-width: 0; min-height: 36px; padding: 8px 10px; font-size: 12px; line-height: 1.4; white-space: normal; }
+.admin-page .editor-sticky-actions.pricing-actions #refresh-pricing-preview-btn { flex: 0 1 auto; }
+.admin-page .project-admin-item { border-radius: 12px; }
+.admin-page .project-admin-item h3 { font-size: 15px; }
+.admin-page .project-admin-item p { font-size: 12px; }
+.admin-page .project-admin-actions { flex-wrap: wrap; gap: 6px; }
+.admin-page .project-admin-actions button { flex: 1 1 auto; }
+.admin-page :is(.booking-admin-layout,.dashboard-grid) { gap: 16px; }
+.admin-page .native-meeting p { font-size: 13px; }
+.admin-page .booking-admin-settings label { font-size: 12px; }
+.admin-page :is(button,a,input,select,textarea):focus-visible { outline: 2px solid var(--admin-lime); outline-offset: 3px; }
+@media(max-width: 1000px) {
+    .admin-page .dashboard-shell { grid-template-columns: 190px minmax(0,1fr); }
+    .admin-page .dashboard-main { padding: 16px; }
+    .admin-page .dashboard-grid { grid-template-columns: minmax(0,1fr); }
+}
+@media(max-width: 680px) {
+    .admin-page .dashboard-shell { grid-template-columns: minmax(0,1fr); }
+    .admin-page .dashboard-sidebar { position: relative; height: auto; }
+    .admin-page .dashboard-main { padding: 14px; }
+    .admin-page :is(button,.dashboard-nav-item) { min-height: 44px; }
+    .admin-page :is(input,select,textarea) { font-size: 16px; }
+}
+
+/* Keep the header tools together in a compact, predictable row. */
+.admin-page .topbar-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+    max-width: 100%;
+    margin-left: auto;
+}
+.admin-page .topbar-actions .date-filter { display: none; }
+.admin-page .topbar-actions select {
+    width: 128px;
+    min-width: 0;
+    min-height: 34px;
+    height: 34px;
+    padding: 0 28px 0 10px;
+    background-position: calc(100% - 10px) 52%, 0 0;
+    background-size: 10px 7px, 100% 100%;
+    flex: 0 0 128px;
+}
+.admin-page .topbar-actions .admin-secondary-btn {
+    width: auto;
+    min-width: 0;
+    min-height: 34px;
+    height: 34px;
+    padding: 7px 10px;
+    gap: 6px;
+    white-space: nowrap;
+    font-size: 12px;
+    border-radius: 8px;
+}
+@media (min-width: 1001px) {
+    .admin-page .dashboard-topbar { flex-wrap: nowrap; }
+}
+@media (max-width: 680px) {
+    .admin-page .topbar-actions { margin-left: 0; }
+    .admin-page .topbar-actions select { width: 116px; flex-basis: 116px; font-size: 12px; }
+    .admin-page .topbar-actions .admin-secondary-btn { padding-inline: 8px; font-size: 11px; }
+    .admin-page .topbar-actions :is(select,.admin-secondary-btn) { height: 44px; min-height: 44px; }
+}

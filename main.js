@@ -1567,6 +1567,25 @@ function initPricingCards() {
         sync();
     };
     prev.addEventListener('click', () => goTo(page - 1), listener);
+    document.addEventListener('tcb:select-service', event => {
+        const index = cards.findIndex(card => card.dataset.serviceId === event.detail);
+        if (index < 0) return;
+        const selected = cards[index];
+        const targetPage = Math.floor(index / perPage);
+        if (perPage === 3) {
+            const middle = targetPage * perPage + 1;
+            if (middle < cards.length) [cards[index], cards[middle]] = [cards[middle], cards[index]];
+        }
+        page = targetPage;
+        perPage = 0;
+        regroup();
+        goTo(targetPage, 'instant');
+        sync();
+        cards.forEach(card => card.classList.toggle('service-selected', card === selected));
+        selected.setAttribute('tabindex', '-1');
+        selected.focus({ preventScroll: true });
+        selected.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center', inline: 'nearest' });
+    }, listener);
     next.addEventListener('click', () => goTo(page + 1), listener);
     track.addEventListener('scroll', sync, { ...listener, passive: true });
     track.addEventListener('keydown', event => {
@@ -1944,3 +1963,64 @@ function renderPdfPreview(caseStudy) {
         </section>
     `;
 }
+
+// Service shortcuts retain an explicit return destination; social placeholders never navigate.
+function initPageShortcuts() {
+    const ids = ['graphic-design', 'websites', 'brand-identity', 'collaborations', 'digital-products', 'illustrations', 'product-design', 'print-design'];
+    let returnTarget = null;
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'page-return';
+    back.hidden = true;
+    back.innerHTML = '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i><span>Back to top</span>';
+    document.documentElement.append(back);
+    const update = () => {
+        back.hidden = window.scrollY < 350 && !returnTarget;
+        back.querySelector('span').textContent = returnTarget ? 'Back to services' : 'Back to top';
+    };
+    document.querySelectorAll('.capability').forEach((item, index) => {
+        const circle = item.querySelector('.capability-circle');
+        const link = document.createElement('a');
+        link.className = circle.className;
+        link.href = '#pricing';
+        link.setAttribute('aria-label', 'See pricing for ' + item.querySelector('h3').textContent);
+        link.innerHTML = circle.innerHTML;
+        circle.replaceWith(link);
+        link.addEventListener('click', event => {
+            event.preventDefault();
+            returnTarget = link;
+            document.dispatchEvent(new CustomEvent('tcb:select-service', { detail: ids[index] }));
+            update();
+        });
+    });
+    back.addEventListener('click', () => {
+        const target = returnTarget;
+        returnTarget = null;
+        const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+        if (target) {
+            target.focus({ preventScroll: true });
+            target.scrollIntoView({ behavior, block: 'center' });
+        } else window.scrollTo({ top: 0, behavior });
+        update();
+    });
+    window.addEventListener('scroll', update, { passive: true });
+    document.querySelectorAll('.team-info').forEach(info => {
+        const name = info.querySelector('h3').textContent;
+        const row = document.createElement('div');
+        row.className = 'team-profile-links';
+        row.setAttribute('aria-label', name + ' social profiles');
+        for (const [label, icon] of [['LinkedIn', 'fa-brands fa-linkedin-in'], ['Website', 'fa-solid fa-globe']]) {
+            const placeholder = document.createElement('span');
+            placeholder.className = 'team-profile-placeholder';
+            placeholder.setAttribute('role', 'img');
+            placeholder.setAttribute('aria-label', name + ' — ' + label + ' coming soon');
+            placeholder.title = label + ' — coming soon';
+            placeholder.innerHTML = '<i class="' + icon + '" aria-hidden="true"></i>';
+            row.append(placeholder);
+        }
+        info.append(row);
+    });
+    update();
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPageShortcuts, { once: true });
+else initPageShortcuts();

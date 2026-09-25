@@ -5606,3 +5606,36 @@ html[data-theme="light"] .case-study-topbar {
 @media (prefers-reduced-motion: reduce) {
     .case-study-overlay .case-study-shell { transition: none; transform: none; }
 }
+
+/* Light palette supplied by the studio; dark mode retains its existing palette. */
+html[data-theme="light"] {
+    --color-lime: #587b7f;
+    --color-accent-ink: #496b6f;
+    --color-slate: #9d695a;
+    --color-terracotta: #9d695a;
+    --color-on-accent: #fff;
+    --color-border-hover: #587b7f;
+}
+html[data-theme="light"] :is(.nav-cta .project-cta-btn, .btn-primary) { background: #587b7f !important; color: #fff !important; }
+.capability-circle:focus-visible { outline: 3px solid var(--color-accent-ink); outline-offset: 6px; }
+.pricing-carousel .pricing-card.service-selected { border-color: var(--color-accent-ink); }
+.team-profile-links { display: flex; gap: 8px; margin-top: 16px; }
+.team-profile-placeholder { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-accent-ink); background: var(--color-card-bg); }
+.page-return { position: fixed; right: 20px; bottom: 20px; z-index: 1000; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid var(--color-border-hover); border-radius: 999px; background: var(--color-bg); color: var(--color-text); font: 600 12px var(--font-body); cursor: pointer; }
+.page-return[hidden] { display: none; }
+.page-return:hover { background: var(--color-lime); color: var(--color-on-accent); }
+.page-return:focus-visible { outline: 2px solid var(--color-accent-ink); outline-offset: 4px; }
+html:has(.case-study-overlay.is-open) .page-return { display: none; }
+@media(max-width:600px) { .page-return { right: 12px; bottom: 12px; } }
+
+html[data-theme="light"] .nav-cta .project-cta-btn,
+html[data-theme="light"] .nav-cta .project-cta-btn::after {
+    background: #587b7f !important;
+    color: #fff !important;
+    border-color: #587b7f !important;
+    box-shadow: none !important;
+}
+html[data-theme="light"] .nav-cta .project-cta-btn::before { display: none; }
+html[data-theme="light"] .nav-cta .project-cta-btn .project-cta-label { color: #fff; }
+html[data-theme="light"] .nav-cta .project-cta-btn:hover,
+html[data-theme="light"] .nav-cta .project-cta-btn:hover::after { background: #496b6f !important; }
