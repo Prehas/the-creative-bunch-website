@@ -32,6 +32,7 @@ export function createBookingHandler({ store = new SupabaseBookingStore(), secre
                 const supplied = Buffer.from(String(request.headers.authorization || ''));
                 if (!process.env.CRON_SECRET || expected.length !== supplied.length || !timingSafeEqual(expected, supplied)) throw new BookingError(401, 'Unauthorized.');
                 await service.mutate(() => null);
+                if (typeof store.rpc === 'function') await store.rpc('tcb_analytics_cleanup');
                 return response.status(200).json({ ok: true });
             }
             const admin = ['admin', 'settings', 'admin-cancel', 'admin-reschedule', 'retry'].includes(action);

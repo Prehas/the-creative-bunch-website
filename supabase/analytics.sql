@@ -24,3 +24,10 @@ revoke all on function public.tcb_analytics_record(uuid,text,text) from public,a
 revoke all on function public.tcb_analytics_summary(timestamptz,timestamptz) from public,anon,authenticated;
 grant execute on function public.tcb_analytics_record(uuid,text,text) to service_role;
 grant execute on function public.tcb_analytics_summary(timestamptz,timestamptz) to service_role;
+
+create or replace function public.tcb_analytics_cleanup() returns void
+language sql security definer set search_path = public as $$
+  delete from public.tcb_analytics_events where occurred_at < now() - interval '90 days';
+$$;
+revoke all on function public.tcb_analytics_cleanup() from public,anon,authenticated;
+grant execute on function public.tcb_analytics_cleanup() to service_role;

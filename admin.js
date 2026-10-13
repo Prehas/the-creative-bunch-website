@@ -327,6 +327,7 @@ const DASHBOARD_DATA = {metrics:EMPTY_METRICS,countries:[],activities:[],chart:[
 const ANALYTICS_FALLBACK_DATA = {connected:false,source:'Vercel + Supabase',metrics:EMPTY_METRICS,timeline:[],timelineLabels:[],countries:[],sources:[],devices:[],pages:[],events:[],realtime:{activeUsers:null,events:[]},message:'Reporting is unavailable. No estimated values are shown.'};
 
 let analyticsLoaded = false;
+let analyticsRequestVersion = 0;
 const WEBSITE_EDITOR_DESKTOP_QUERY = '(min-width: 901px)';
 
 function getContentApiBase() {
@@ -1043,12 +1044,17 @@ async function loadAnalyticsPanel(force = false) {
     if (analyticsLoaded && !force) return;
     const range = document.getElementById('analytics-date-range')?.value || '30d';
     setAnalyticsStatus(null, 'Loading analytics...');
+    const requestVersion = ++analyticsRequestVersion;
     const data = await fetchAnalyticsData(range);
+    if (requestVersion !== analyticsRequestVersion) return;
     renderAnalyticsPanel(data);
     analyticsLoaded = true;
 }
 
 function initAnalyticsPanel() {
+    window.setInterval(() => {
+        if(document.visibilityState==='visible' && document.querySelector('[data-admin-panel-content="dashboard"].is-active, [data-admin-panel-content="analytics"].is-active')) loadAnalyticsPanel(true);
+    },60000);
     renderAnalyticsPanel(getAnalyticsFallback('30d'));
     loadAnalyticsPanel(true);
     window.addEventListener('tcb:bookings-changed', () => loadAnalyticsPanel(true));
@@ -1061,7 +1067,9 @@ function initAnalyticsPanel() {
         loadAnalyticsPanel(true);
     });
 
-    document.getElementById('analytics-date-range')?.addEventListener('change', () => {
+    document.getElementById('analytics-date-range')?.addEventListener('change', event => {
+        const topRange=document.getElementById('date-range');
+        if(topRange) topRange.value=event.target.value==='7d'?'Last 7 days':'Last 30 days';
         analyticsLoaded = false;
         loadAnalyticsPanel(true);
     });
