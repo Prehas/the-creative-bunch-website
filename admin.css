@@ -2772,3 +2772,23 @@ code {
     .admin-page .topbar-actions .admin-secondary-btn { padding-inline: 8px; font-size: 11px; }
     .admin-page .topbar-actions :is(select,.admin-secondary-btn) { height: 44px; min-height: 44px; }
 }
+.admin-page .project-visibility { display:flex; flex-wrap:wrap; gap:12px; padding:16px; border:1px solid var(--admin-border); border-radius:10px; margin-bottom:16px; }
+.admin-page .project-visibility label { display:grid; gap:6px; text-transform:capitalize; }
+.overview-editor-row { display:grid; gap:10px; border:1px solid var(--admin-border); border-radius:10px; padding:14px; margin-bottom:12px; }
+.overview-editor-row label { display:grid; gap:6px; }
+.overview-editor-row button { justify-self:start; }
+.admin-page .booking-admin-settings button[type="submit"] { display:inline-flex; margin-top:20px; margin-bottom:8px; }
+
+.admin-page .project-visibility select { min-width: 88px; padding-right: 28px; }
+
+/* Inline section visibility and comfortably inset section numbers. */
+.admin-page .editor-section-heading { grid-template-columns: 34px minmax(0,1fr) auto; align-items: center; padding: 16px; gap: 14px; margin-top: 24px; border-radius: 14px; }
+.admin-page .editor-section-heading > span { width: 34px; height: 34px; margin: 0; }
+.admin-page .editor-section-heading > div { min-width: 0; }
+.admin-page .editor-field-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.admin-page .editor-field-heading label { margin: 0; }
+.admin-page .section-visibility-toggle { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 38px; min-width: 38px; height: 38px; padding: 0; border: 1px solid var(--admin-border); border-radius: 10px; background: transparent; color: var(--admin-muted); cursor: pointer; }
+.admin-page .section-visibility-toggle:hover { color: var(--admin-lime); border-color: var(--admin-lime); }
+.admin-page .section-visibility-toggle[aria-pressed="true"] { color: var(--admin-lime); background: rgba(226,255,157,.1); border-style: dashed; }
+.admin-page .is-section-hidden h3::after { content: 'Hidden on website'; display: block; margin-top: 4px; font: 400 11px var(--font-body, sans-serif); color: var(--admin-muted); }
+@media(max-width:680px) { .admin-page .editor-section-heading { padding: 14px; gap: 10px; } .admin-page .section-visibility-toggle { width: 44px; height: 44px; } }

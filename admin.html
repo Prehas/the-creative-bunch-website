@@ -130,6 +130,13 @@
 
                     <div class="project-editor-shell">
                     <form class="project-editor-card project-editor-card-expanded" id="project-form">
+                        <input type="hidden" id="show-overview" value="show">
+                        <input type="hidden" id="show-visual" value="show">
+                        <input type="hidden" id="show-process" value="show">
+                        <input type="hidden" id="show-brand" value="show">
+                        <input type="hidden" id="show-palette" value="show">
+                        <input type="hidden" id="show-gallery" value="show">
+                        <input type="hidden" id="show-pdf" value="show">
                         <input type="hidden" id="project-id">
                         <div class="editor-section-heading">
                             <span>01</span>
@@ -146,11 +153,7 @@
                             </div>
                             <div>
                                 <label for="project-category">Category</label>
-                                <select id="project-category" required>
-                                    <option value="graphics">Graphics</option>
-                                    <option value="branding">Branding</option>
-                                    <option value="web">Website</option>
-                                </select>
+                                <input id="project-category" list="project-category-options" required placeholder="graphics, branding, product-design…"><datalist id="project-category-options"><option value="graphics"><option value="branding"><option value="web"></datalist>
                             </div>
                         </div>
 
@@ -206,35 +209,17 @@
                                 <h3>Overview</h3>
                                 <p>Challenge, solution, impact cards.</p>
                             </div>
+                            <button type="button" class="section-visibility-toggle" data-section-visibility="overview" data-section-label="Overview" aria-label="Hide Overview on website" aria-pressed="false" title="Hide Overview on website"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
                         </div>
 
-                        <div class="form-grid-3">
-                            <div>
-                                <label for="overview-challenge-title">Challenge title</label>
-                                <input id="overview-challenge-title" type="text">
-                                <label for="overview-challenge-text">Challenge text</label>
-                                <textarea id="overview-challenge-text" rows="4"></textarea>
-                            </div>
-                            <div>
-                                <label for="overview-solution-title">Solution title</label>
-                                <input id="overview-solution-title" type="text">
-                                <label for="overview-solution-text">Solution text</label>
-                                <textarea id="overview-solution-text" rows="4"></textarea>
-                            </div>
-                            <div>
-                                <label for="overview-impact-title">Impact title</label>
-                                <input id="overview-impact-title" type="text">
-                                <label for="overview-impact-text">Impact text</label>
-                                <textarea id="overview-impact-text" rows="4"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="editor-section-heading">
+                        <textarea id="overview-cards-json" hidden></textarea><div id="overview-card-editor"></div><button type="button" class="admin-secondary-btn" id="add-overview-card">Add overview card</button>
+<div class="editor-section-heading">
                             <span>04</span>
                             <div>
                                 <h3>Visual direction</h3>
                                 <p>Title, description, and visual image.</p>
                             </div>
+                            <button type="button" class="section-visibility-toggle" data-section-visibility="visual" data-section-label="Visual direction" aria-label="Hide Visual direction on website" aria-pressed="false" title="Hide Visual direction on website"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
                         </div>
 
                         <label for="visual-title">Visual direction title</label>
@@ -258,8 +243,10 @@
                                 <h3>Design process</h3>
                                 <p>Process title, steps, and optional image.</p>
                             </div>
+                            <button type="button" class="section-visibility-toggle" data-section-visibility="process" data-section-label="Design process" aria-label="Hide Design process on website" aria-pressed="false" title="Hide Design process on website"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
                         </div>
 
+                        <label for="section-divider">Section separator</label><select id="section-divider"><option value="line">Line</option><option value="dot">Dot</option><option value="none">None</option></select>
                         <label for="process-title">Process section title</label>
                         <input id="process-title" type="text" placeholder="Design Process">
 
@@ -281,6 +268,7 @@
                                 <h3>Assets & Brand System</h3>
                                 <p>Colors, core system, visual language, use cases.</p>
                             </div>
+                            <button type="button" class="section-visibility-toggle" data-section-visibility="brand" data-section-label="Assets & Brand System" aria-label="Hide Assets & Brand System on website" aria-pressed="false" title="Hide Assets & Brand System on website"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
                         </div>
 
                         <label for="brand-title">Brand system title</label>
@@ -289,7 +277,7 @@
                         <label for="brand-system-core">Core system</label>
                         <textarea id="brand-system-core" rows="3"></textarea>
 
-                        <label for="brand-palette">Palette colors</label>
+                        <div class="editor-field-heading"><label for="brand-palette">Palette colors</label><button type="button" class="section-visibility-toggle" data-section-visibility="palette" data-section-label="Color palette" aria-label="Hide Color palette on website" aria-pressed="false" title="Hide Color palette on website"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></div>
                         <input id="brand-palette" type="text" placeholder="#E2FF9D, #200B20, #E5E2FF">
                         <div class="palette-editor" id="palette-editor" aria-label="Palette color editor"></div>
 
@@ -312,11 +300,12 @@
                             <span>07</span>
                             <div>
                                 <h3>Gallery & final result</h3>
-                                <p>Gallery strip plus final result description and image.</p>
+                                <p>One image or an unlimited gallery, with an optional result description.</p>
                             </div>
+                            <button type="button" class="section-visibility-toggle" data-section-visibility="gallery" data-section-label="Gallery & final result" aria-label="Hide Gallery & final result on website" aria-pressed="false" title="Hide Gallery & final result on website"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
                         </div>
 
-                        <label>Gallery strip images</label>
+                        <label for="gallery-layout">Image layout</label><select id="gallery-layout"><option value="grid">Gallery grid</option><option value="large">Large images</option></select><label>Project images</label>
                         <textarea id="gallery-images" hidden></textarea>
                         <div class="gallery-picker" data-gallery-picker>
                             <div class="gallery-preview-list" data-gallery-preview></div>
@@ -327,16 +316,7 @@
                         <label for="final-text">Final result description</label>
                         <textarea id="final-text" rows="4"></textarea>
 
-                        <label>Final result image</label>
-                        <input id="final-image" type="hidden">
-                        <div class="image-picker" data-image-picker data-target="final-image" role="button" tabindex="0" aria-label="Upload final result image">
-                            <figure><img alt="Final result preview" data-image-preview><span data-image-empty>Choose final image</span></figure>
-                            <button type="button" data-image-trigger>Upload / replace</button>
-                            <button type="button" class="image-remove-btn" data-image-remove aria-label="Remove final result image"><i class="fa-solid fa-xmark"></i></button>
-                            <input type="file" accept="image/*" data-image-file hidden>
-                        </div>
-
-                        <label for="case-pdf">PDF link</label>
+                        <input id="final-image" type="hidden"><div class="editor-field-heading"><label for="case-pdf">PDF link</label><button type="button" class="section-visibility-toggle" data-section-visibility="pdf" data-section-label="PDF document" aria-label="Hide PDF document on website" aria-pressed="false" title="Hide PDF document on website"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></div>
                         <input id="case-pdf" type="text" placeholder="Optional, example: assets/jcc_brochure.pdf">
 
                         <div class="form-actions editor-sticky-actions">

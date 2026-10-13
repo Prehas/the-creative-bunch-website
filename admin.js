@@ -1248,6 +1248,8 @@ function setFieldValue(id, value) {
     refreshImagePicker(id);
     if (id === 'gallery-images') refreshGalleryPicker();
     if (id === 'brand-palette') refreshPaletteEditor();
+    if (id === 'overview-cards-json') renderOverviewCards();
+    if (id.startsWith('show-')) syncSectionVisibilityControls();
 }
 
 function getFieldValue(id) {
@@ -1680,6 +1682,10 @@ async function pushDraftLive(status) {
 function fillProjectForm(project) {
     const caseStudy = getCaseStudyForAdmin(project);
     const overview = Array.isArray(caseStudy.overview) ? caseStudy.overview : [];
+    setFieldValue('overview-cards-json', JSON.stringify(overview));
+    for (const section of ['overview','visual','process','brand','palette','gallery','pdf']) setFieldValue('show-'+section, caseStudy.hiddenSections?.includes(section) ? 'hide' : 'show');
+    setFieldValue('section-divider', caseStudy.divider || 'line');
+    setFieldValue('gallery-layout', caseStudy.galleryLayout || 'grid');
     const system = Array.isArray(caseStudy.system) ? caseStudy.system : [];
 
     setFieldValue('project-id', project.id);
@@ -1710,7 +1716,7 @@ function fillProjectForm(project) {
     setFieldValue('brand-system-language', system[1] || '');
     setFieldValue('brand-system-use', system[2] || '');
     setFieldValue('brand-image', caseStudy.brandImage);
-    setFieldValue('gallery-images', joinGalleryImages(caseStudy.gallery));
+    setFieldValue('gallery-images', joinGalleryImages([...new Set([...(caseStudy.gallery || []), caseStudy.finalImage].filter(Boolean))]));
     setFieldValue('final-text', caseStudy.finalText);
     setFieldValue('final-image', caseStudy.finalImage);
     setFieldValue('case-pdf', caseStudy.pdf);
@@ -1723,7 +1729,10 @@ function fillProjectForm(project) {
 
 function clearProjectForm() {
     document.getElementById('project-form').reset();
+    for (const section of ['overview', 'visual', 'process', 'brand', 'palette', 'gallery', 'pdf']) setFieldValue('show-' + section, 'show');
     setFieldValue('project-id', '');
+    setFieldValue('overview-cards-json', JSON.stringify(['The Challenge', 'The Solution', 'The Impact'].map(title => ({ title, text: '' }))));
+    setFieldValue('project-category', 'graphics');
     const category = document.getElementById('project-category')?.value || 'graphics';
     setFieldValue('project-tag', CATEGORY_DEFAULT_TAGS[category]);
     refreshAllImagePickers();
@@ -1754,11 +1763,10 @@ function buildProjectAndCaseStudyFromForm() {
         image: heroImage,
         statement: getFieldValue('case-statement') || project.description,
         tags: splitList(getFieldValue('case-tags')).length ? splitList(getFieldValue('case-tags')) : [project.category, 'Design'],
-        overview: [
-            { title: getFieldValue('overview-challenge-title') || 'The Challenge', text: getFieldValue('overview-challenge-text') },
-            { title: getFieldValue('overview-solution-title') || 'The Solution', text: getFieldValue('overview-solution-text') },
-            { title: getFieldValue('overview-impact-title') || 'The Impact', text: getFieldValue('overview-impact-text') }
-        ],
+        overview: JSON.parse(getFieldValue('overview-cards-json') || '[]'),
+        hiddenSections: ['overview','visual','process','brand','palette','gallery','pdf'].filter(section => getFieldValue('show-'+section) === 'hide'),
+        divider: getFieldValue('section-divider'),
+        galleryLayout: getFieldValue('gallery-layout'),
         visualTitle: getFieldValue('visual-title') || 'Visual Direction',
         visualText: getFieldValue('visual-text'),
         visualImage: getFieldValue('visual-image'),
@@ -1776,7 +1784,7 @@ function buildProjectAndCaseStudyFromForm() {
         gallery,
         pdf: getFieldValue('case-pdf'),
         finalText: getFieldValue('final-text'),
-        finalImage: getFieldValue('final-image')
+        finalImage: ''
     };
 
     return { project, caseStudy };
@@ -1840,6 +1848,14 @@ function renderProjectAdminList(projects) {
 async function initProjectEditor() {
     const form = document.getElementById('project-form');
     if (!form) return;
+    form.querySelectorAll('[data-section-visibility]').forEach(button => {
+        button.addEventListener('click', () => {
+            const field = document.getElementById('show-' + button.dataset.sectionVisibility);
+            setFieldValue(field.id, field.value === 'hide' ? 'show' : 'hide');
+            field.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+    });
+    syncSectionVisibilityControls();
 
     const status = document.getElementById('project-form-status');
     const saveButton = document.getElementById('save-project-btn');
@@ -2347,3 +2363,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+function renderOverviewCards() {
+    const container = document.getElementById('overview-card-editor');
+    const field = document.getElementById('overview-cards-json');
+    if (!container || !field) return;
+    const cards = JSON.parse(field.value || '[]');
+    container.replaceChildren();
+    cards.forEach((card, index) => {
+        const row = document.createElement('div'); row.className = 'overview-editor-row';
+        for (const key of ['title','text']) {
+            const label = document.createElement('label'); label.textContent = key === 'title' ? 'Card title' : 'Card description';
+            const input = document.createElement(key === 'title' ? 'input' : 'textarea');
+            input.value = card[key] || ''; input.rows = 3;
+            input.addEventListener('input', () => { const current=JSON.parse(field.value || '[]'); current[index][key]=input.value; field.value=JSON.stringify(current); field.dispatchEvent(new Event('input',{bubbles:true})); });
+            label.append(input); row.append(label);
+        }
+        const remove = document.createElement('button'); remove.type='button'; remove.className='admin-secondary-btn'; remove.textContent='Remove card';
+        remove.addEventListener('click',()=>{ const current=JSON.parse(field.value || '[]'); current.splice(index,1); field.value=JSON.stringify(current); renderOverviewCards(); field.dispatchEvent(new Event('input',{bubbles:true})); });
+        row.append(remove); container.append(row);
+    });
+    const add=document.getElementById('add-overview-card');
+    add.onclick=()=>{const current=JSON.parse(field.value || '[]');current.push({title:'',text:''});field.value=JSON.stringify(current);renderOverviewCards();field.dispatchEvent(new Event('input',{bubbles:true}));};
+}
+
+function syncSectionVisibilityControls() {
+    document.querySelectorAll('[data-section-visibility]').forEach(button => {
+        const hidden = getFieldValue('show-' + button.dataset.sectionVisibility) === 'hide';
+        const label = button.dataset.sectionLabel;
+        button.setAttribute('aria-pressed', String(hidden));
+        button.setAttribute('aria-label', `${hidden ? 'Show' : 'Hide'} ${label} on website`);
+        button.title = hidden ? `${label} is hidden on website — click to show` : `Hide ${label} on website`;
+        button.querySelector('i').className = hidden ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+        button.closest('.editor-section-heading, .editor-field-heading')?.classList.toggle('is-section-hidden', hidden);
+    });
+}

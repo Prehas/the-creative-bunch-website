@@ -762,6 +762,22 @@ function initHeaderScroll() {
 }
 
 function initSiteAuthState() {
+    const footerAccess = document.querySelector('.footer-admin-link');
+    const updateFooterAccess = () => {
+        if (!footerAccess) return;
+        let session;
+        try { session = JSON.parse(localStorage.getItem('tcb_admin_session') || 'null'); } catch { session = null; }
+        const signedIn = typeof session?.email === 'string' && session.email.length > 0;
+        footerAccess.classList.toggle('is-logged-in', signedIn);
+        footerAccess.textContent = signedIn ? 'Studio dashboard · Logged in' : 'Studio access';
+        footerAccess.setAttribute('aria-label', signedIn ? `Open studio dashboard — signed in as ${session.email}` : 'Studio admin sign-in');
+        footerAccess.title = signedIn ? `Signed in as ${session.email}` : 'Studio admin sign-in';
+    };
+    updateFooterAccess();
+    window.addEventListener('storage', event => {
+        if (event.key === 'tcb_admin_session' || event.key === null) updateFooterAccess();
+    });
+    window.addEventListener('pageshow', updateFooterAccess);
     const authContainer = document.querySelector('[data-site-auth]');
     const mobileAuthItem = document.querySelector('[data-mobile-auth]');
     const sessionKey = 'tcb_admin_session';
@@ -1765,7 +1781,6 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
                     <img class="case-study-mark" src="assets/Logo_Site-transparent.png" alt="" width="48" height="48">
                     <span>The Creative Bunch</span>
                 </div>
-                <div class="case-study-progress">01 / 06</div>
                 <button class="case-study-close" type="button" aria-label="Close ${caseStudy.title} case study">
                     Close <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m6 6 12 12M18 6 6 18"/></svg>
                 </button>
@@ -1800,7 +1815,6 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
 
             <section class="case-study-split">
                 <div class="case-study-sticky">
-                    <p class="case-study-section-count">02 / 06</p>
                     <h3>${caseStudy.visualTitle}</h3>
                     <p>${caseStudy.visualText}</p>
                 </div>
@@ -1815,7 +1829,6 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
 
             <section class="case-study-process">
                 <div class="case-study-section-heading">
-                    <p>03 / 06</p>
                     <h3>${caseStudy.processTitle || 'Design Process'}</h3>
                 </div>
                 <div class="case-study-timeline">
@@ -1831,7 +1844,6 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
 
             <section class="case-study-brand-system">
                 <div class="case-study-section-heading">
-                    <p>04 / 06</p>
                     <h3>${caseStudy.brandTitle || 'Assets & Brand System'}</h3>
                 </div>
                 <div class="case-study-system-grid">
@@ -1861,11 +1873,10 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
 
             <section class="case-study-gallery">
                 <div class="case-study-section-heading">
-                    <p>05 / 06</p>
                     <h3>Gallery Strip</h3>
                 </div>
                 <div class="case-study-gallery-track" aria-label="${caseStudy.title} gallery preview">
-                    ${caseStudy.gallery?.length ? caseStudy.gallery.slice(0, 5).map((image, index) => `
+                    ${caseStudy.gallery?.length ? caseStudy.gallery.map((image, index) => `
                         <figure>
                             <button class="case-study-gallery-open" type="button" data-case-gallery-open data-image="${escapeHtml(image)}" data-alt="${escapeHtml(`${caseStudy.title} gallery preview ${index + 1}`)}" aria-label="Open ${caseStudy.title} gallery image ${index + 1}">
                                 <img src="${image}" alt="${caseStudy.title} gallery preview ${index + 1}" loading="lazy" decoding="async">
@@ -1878,7 +1889,6 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
 
             <section class="case-study-final">
                 <div>
-                    <p class="case-study-section-count">06 / 06</p>
                     <h3>Final Result</h3>
                     <p>${caseStudy.finalText}</p>
                     ${finalUrl ? `<a class="case-study-website-link" href="${escapeHtml(finalUrl)}" target="_blank" rel="noopener">Visit website <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
@@ -1892,6 +1902,7 @@ function renderCaseStudyOverlay(overlay, caseStudy) {
         </div>
         </div>
     `;
+    configureCaseStudySections(overlay, caseStudy);
     bindCaseStudyGalleryTriggers(overlay);
 }
 
@@ -2023,7 +2034,66 @@ function initPageShortcuts() {
         }
         info.append(row);
     });
+    initTeamReadMore();
     update();
+}
+
+function initTeamReadMore() {
+    document.querySelectorAll('.team-info').forEach((info, index) => {
+        const bio = info.querySelector('.team-bio');
+        const principle = info.querySelector('.team-principle');
+        if (!bio || !principle || info.querySelector('.team-read-more')) return;
+        bio.id = `team-bio-${index}`;
+        principle.id = `team-principle-${index}`;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'team-read-more';
+        button.textContent = 'Read more';
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('aria-controls', `${bio.id} ${principle.id}`);
+        button.setAttribute('aria-label', `Read more about ${info.querySelector('h3').textContent}`);
+        principle.after(button);
+        info.classList.add('team-collapsible');
+        button.addEventListener('click', () => {
+            const expanded = button.getAttribute('aria-expanded') !== 'true';
+            info.classList.toggle('is-expanded', expanded);
+            button.setAttribute('aria-expanded', String(expanded));
+            button.textContent = expanded ? 'Read less' : 'Read more';
+            button.setAttribute('aria-label', `${expanded ? 'Read less' : 'Read more'} about ${info.querySelector('h3').textContent}`);
+        });
+        const update = () => {
+            if (info.classList.contains('is-expanded')) return;
+            const overflow = bio.scrollHeight > bio.clientHeight + 1 || principle.scrollHeight > principle.clientHeight + 1;
+            button.style.visibility = overflow ? 'visible' : 'hidden';
+            button.disabled = !overflow;
+        };
+        new ResizeObserver(update).observe(info);
+        document.fonts.ready.then(update);
+        update();
+    });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPageShortcuts, { once: true });
 else initPageShortcuts();
+
+function configureCaseStudySections(overlay, study) {
+    const hidden = new Set(study.hiddenSections || []);
+    const selectors = {overview:'.case-study-overview',visual:'.case-study-split',process:'.case-study-process',brand:'.case-study-brand-system',gallery:'.case-study-gallery',pdf:'.case-study-pdf'};
+    const gallery = overlay.querySelector('.case-study-gallery');
+    const result = overlay.querySelector('.case-study-final');
+    const track = gallery.querySelector('.case-study-gallery-track');
+    gallery.querySelector('h3').textContent = 'Gallery & result';
+    if (study.finalText) { const p=document.createElement('p');p.textContent=study.finalText;gallery.querySelector('.case-study-section-heading').after(p); }
+    const link=result.querySelector('.case-study-website-link');if(link)gallery.append(link);
+    if(study.finalImage && !(study.gallery || []).includes(study.finalImage)) {
+        if(!(study.gallery || []).length) track.replaceChildren();
+        const figure=document.createElement('figure'),button=document.createElement('button'),img=document.createElement('img');
+        button.type='button';button.className='case-study-gallery-open';button.dataset.caseGalleryOpen='';button.dataset.image=study.finalImage;button.dataset.alt=study.title+' final result';button.setAttribute('aria-label','Open final result image');
+        img.src=study.finalImage;img.alt=study.title+' final result';img.loading='lazy';button.append(img);figure.append(button);track.append(figure);
+    }
+    result.remove();
+    track.classList.add(study.galleryLayout === 'large' || track.children.length === 1 ? 'gallery-large' : 'gallery-grid');
+    if(hidden.has('palette')) overlay.querySelector('.case-study-palette')?.closest('article')?.remove();
+    for(const [key,selector] of Object.entries(selectors)) if(hidden.has(key))overlay.querySelector(selector)?.remove();
+    overlay.querySelectorAll('.case-study-timeline article > span').forEach(e=>e.remove());
+    overlay.querySelector('.case-study-scroll').dataset.divider=['none','dot'].includes(study.divider)?study.divider:'line';
+}
