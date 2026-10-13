@@ -54,7 +54,7 @@
                     <select id="date-range" aria-label="Date range">
                         <option>Last 7 days</option>
                         <option selected>Last 30 days</option>
-                        <option>This quarter</option>
+                        <option disabled>This quarter · unavailable</option>
                     </select>
                     <button type="button" class="admin-secondary-btn clear-cache-btn" id="clear-cache-btn"><i class="fa-solid fa-broom"></i> Clear cache</button>
                     <a href="index.html" class="admin-secondary-btn view-site-btn"><i class="fa-solid fa-globe"></i> View site</a>
@@ -94,7 +94,7 @@
 
                     <article class="analytics-card transactions-card">
                         <div class="card-heading-row compact">
-                            <h2>Recent activity</h2>
+                            <h2>Interaction totals</h2>
                             <button class="chip-btn">Export</button>
                         </div>
                         <div class="activity-table" id="activity-table"></div>
@@ -474,7 +474,7 @@
                         <select id="analytics-date-range" aria-label="Analytics date range">
                             <option value="7d">Last 7 days</option>
                             <option value="30d" selected>Last 30 days</option>
-                            <option value="90d">Last 90 days</option>
+                            <option value="90d" disabled>90 days · unavailable on current plan</option>
                         </select>
                         <button type="button" class="admin-secondary-btn" id="refresh-analytics-btn">
                             <i class="fa-solid fa-rotate"></i> Refresh

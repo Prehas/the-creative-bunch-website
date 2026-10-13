@@ -1029,6 +1029,14 @@ function renderAnalyticsPanel(data) {
     DASHBOARD_DATA.metrics=safeData.metrics; DASHBOARD_DATA.chart=safeData.timeline; DASHBOARD_DATA.countries=safeData.countries;
     DASHBOARD_DATA.activities=(safeData.events || []).map(e=>({event:e.name,source:'Supabase',status:String(e.count)}));
     renderMetrics(); drawVisitorsChart(); renderCountryList(); renderActivity();
+    const projectInsights=document.getElementById('analytics-deep-grid');
+    if (projectInsights) {
+        const projects=getStoredProjects();
+        projectInsights.innerHTML=(safeData.projects || []).map(row=>{
+            const project=projects.find(p=>String(p.id)===String(row.id));
+            return '<article class="insight-card"><span>'+escapeAdminHtml(project?.title || 'Project '+row.id)+'</span><strong>'+escapeAdminHtml(row.count)+'</strong><p>Project opens · selected period</p></article>';
+        }).join('');
+    }
 }
 
 async function loadAnalyticsPanel(force = false) {
