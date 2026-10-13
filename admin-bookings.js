@@ -20,11 +20,6 @@
         }
         const when = start => new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Budapest', dateStyle: 'medium', timeStyle: 'short' }).format(new Date(start));
         function render() {
-            const metric = document.querySelector('[data-booking-metric]');
-            if (metric) {
-                metric.querySelector('strong').textContent = String(records.filter(b => b.status !== 'cancelled').length);
-                metric.querySelector('.metric-delta').textContent = 'Saved bookings · last 180 days';
-            }
             const filter = panel.querySelector('#meeting-filter').value;
             const filtered = records.filter(b => filter === 'all' || filter === 'cancelled' && b.status === 'cancelled' || filter === 'upcoming' && b.status !== 'cancelled' && Date.parse(b.start) > Date.now()).sort((a,b) => a.start.localeCompare(b.start));
             list.innerHTML = filtered.length ? filtered.map(b => `<article class="native-meeting" data-id="${escape(b.id)}">
@@ -52,7 +47,7 @@
                 form.querySelectorAll('[name="weekdays"]').forEach(e => e.checked = settings.weekdays.includes(Number(e.value)));
                 panel.querySelector('#booking-connections').textContent = data.preview ? 'LOCAL PREVIEW · Private local storage. Email and Zoom are not connected; test reservations never send invitations.' : `Private storage: ${data.connections.storage ? 'connected' : 'not connected'} · Zoom: ${data.connections.zoom ? 'configured' : 'not connected'} · Email: ${data.connections.email ? 'configured' : 'not connected'}`;
                 form.querySelector('button[type="submit"]').disabled = false;
-                render(); status.textContent = `${records.length} booking records. Times shown in Europe/Budapest.`;
+                render(); window.dispatchEvent(new Event('tcb:bookings-changed')); status.textContent = `${records.length} booking records. Times shown in Europe/Budapest.`;
             } catch (e) {
                 status.textContent = e.message; document.getElementById('meeting-list').textContent = 'Meetings unavailable. Open Meetings for details.';
                 const metric = document.querySelector('[data-booking-metric]');

@@ -584,7 +584,10 @@ function initVercelAnalytics() {
 
 function trackTcbEvent(name, params = {}) {
     if (!cookieConsent?.analytics || typeof window.va !== 'function') return;
-    window.va('event', name, params);
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || new URLSearchParams(location.search).has('adminPreview')) return;
+    const base = getContentApiBase();
+    if (base) fetch(base + '/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: crypto.randomUUID(), name, projectId: String(params.project_id || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0,80), consent: true }), keepalive: true }).catch(() => {});
 }
 
 let contentApiCaseStudies = {};

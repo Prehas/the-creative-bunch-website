@@ -322,83 +322,9 @@ const DEFAULT_PRICING = {
     ]
 };
 
-const DASHBOARD_DATA = {
-    metrics: [
-        { label: 'Site visitors', value: '4,862', delta: '+18.4%', icon: 'fa-user-group' },
-        { label: 'Project opens', value: '1,247', delta: '+32.1%', icon: 'fa-arrow-up-right-from-square' },
-        { label: 'Booked calls', value: '—', delta: 'Loading bookings', icon: 'fa-calendar-check' },
-        { label: 'Lead value', value: '$$$', delta: 'Plus tier focus', icon: 'fa-wand-magic-sparkles' }
-    ],
-    countries: [
-        { name: 'Romania', value: 82 },
-        { name: 'Israel', value: 64 },
-        { name: 'United Kingdom', value: 48 },
-        { name: 'United States', value: 31 }
-    ],
-    meetings: [
-        { person: 'David Cohen', label: 'Brand identity call', time: 'Today, 15:30' },
-        { person: 'Maya Studio', label: 'Website discovery', time: 'Tomorrow, 11:00' },
-        { person: 'JCC Follow-up', label: 'Campaign review', time: 'Friday, 09:45' }
-    ],
-    activities: [
-        { event: 'Merkaz case study opened', source: 'Portfolio', status: 'Hot' },
-        { event: 'Create project clicked', source: 'Hero CTA', status: 'Lead' },
-        { event: 'Pricing Plus selected', source: 'Pricing', status: 'Qualified' },
-        { event: 'Creative Alex viewed', source: 'Selected Work', status: 'Warm' }
-    ],
-    chart: [24, 34, 29, 48, 52, 47, 61, 74, 68, 86, 81, 92]
-};
-
-const ANALYTICS_FALLBACK_DATA = {
-    connected: false,
-    source: 'Vercel Web Analytics',
-    updatedAt: new Date().toISOString(),
-    metrics: [
-        { label: 'Active users', value: '4,862', delta: '+18.4%', icon: 'fa-user-group' },
-        { label: 'Project opens', value: '1,247', delta: '+32.1%', icon: 'fa-arrow-up-right-from-square' },
-        { label: 'CTA clicks', value: '316', delta: '+12.8%', icon: 'fa-bullseye' },
-        { label: 'Engagement', value: '02:48', delta: '+9.6%', icon: 'fa-chart-simple' }
-    ],
-    timelineLabels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12'],
-    timeline: [34, 41, 38, 52, 58, 64, 61, 72, 78, 83, 88, 94],
-    realtime: {
-        activeUsers: 7,
-        events: [
-            { name: 'case_study_open', count: 4 },
-            { name: 'create_project_click', count: 2 },
-            { name: 'pricing_select', count: 1 }
-        ]
-    },
-    countries: [
-        { name: 'Romania', value: 82, users: 2486 },
-        { name: 'Israel', value: 64, users: 1192 },
-        { name: 'United Kingdom', value: 48, users: 748 },
-        { name: 'United States', value: 31, users: 436 }
-    ],
-    sources: [
-        { name: 'Organic Search', value: 58, sessions: 1848 },
-        { name: 'Direct', value: 31, sessions: 986 },
-        { name: 'Social', value: 22, sessions: 612 },
-        { name: 'Referral', value: 14, sessions: 348 }
-    ],
-    devices: [
-        { name: 'Mobile', value: 68, users: 3124, icon: 'fa-mobile-screen' },
-        { name: 'Desktop', value: 27, users: 1189, icon: 'fa-desktop' },
-        { name: 'Tablet', value: 5, users: 224, icon: 'fa-tablet-screen-button' }
-    ],
-    pages: [
-        { title: 'Home', path: '/', views: 4218, detail: 'Main landing page' },
-        { title: 'Selected Work', path: '/#portfolio', views: 1892, detail: 'Project browsing' },
-        { title: 'Pricing', path: '/#pricing', views: 1046, detail: 'Tier comparison' },
-        { title: 'Create project', path: '/#book-call', views: 642, detail: 'Lead intent' }
-    ],
-    events: [
-        { name: 'project_card_open', count: 1247, detail: 'Selected Work card opened' },
-        { name: 'case_study_open', count: 812, detail: 'Fullscreen case study' },
-        { name: 'pricing_select', count: 316, detail: 'Pricing card selected' },
-        { name: 'create_project_click', count: 204, detail: 'Calendly CTA clicked' }
-    ]
-};
+const EMPTY_METRICS = ['Site visitors','Project opens','Booked calls','Book a call clicks'].map(label => ({label,value:'—',delta:'Loading measured data',icon:'fa-chart-line'}));
+const DASHBOARD_DATA = {metrics:EMPTY_METRICS,countries:[],activities:[],chart:[]};
+const ANALYTICS_FALLBACK_DATA = {connected:false,source:'Vercel + Supabase',metrics:EMPTY_METRICS,timeline:[],timelineLabels:[],countries:[],sources:[],devices:[],pages:[],events:[],realtime:{activeUsers:null,events:[]},message:'Reporting is unavailable. No estimated values are shown.'};
 
 let analyticsLoaded = false;
 const WEBSITE_EDITOR_DESKTOP_QUERY = '(min-width: 901px)';
@@ -815,6 +741,7 @@ function drawVisitorsChart() {
     const height = canvas.height;
     const padding = 38;
     const values = DASHBOARD_DATA.chart;
+    if (!values.length) { ctx.clearRect(0,0,width,height); ctx.fillStyle='#aaa'; ctx.fillText('No measured traffic data available',38,80); return; }
     const max = Math.max(...values) + 8;
     const min = Math.min(...values) - 8;
 
@@ -906,7 +833,7 @@ function renderActivity() {
 function getAnalyticsFallback(range = '30d') {
     const data = JSON.parse(JSON.stringify(ANALYTICS_FALLBACK_DATA));
     data.range = range;
-    data.updatedAt = new Date().toISOString();
+    data.updatedAt = null;
     return data;
 }
 
@@ -924,23 +851,8 @@ function setAnalyticsStatus(data, message) {
 }
 
 async function fetchAnalyticsData(range = '30d') {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 4200);
-
-    try {
-        const response = await fetch(`/api/analytics/summary?range=${encodeURIComponent(range)}`, {
-            signal: controller.signal,
-            cache: 'no-store'
-        });
-        if (!response.ok) throw new Error(`Analytics endpoint returned ${response.status}`);
-        const data = await response.json();
-        return data && typeof data === 'object' ? data : getAnalyticsFallback(range);
-    } catch (error) {
-        console.warn('Analytics API unavailable. Using Vercel analytics fallback.', error);
-        return getAnalyticsFallback(range);
-    } finally {
-        window.clearTimeout(timeout);
-    }
+    try { return await contentApiRequest('/api/analytics?range='+encodeURIComponent(range)); }
+    catch { return {...getAnalyticsFallback(range),message:'Reporting could not load. Check the connection and try again.'}; }
 }
 
 function drawAnalyticsTrafficChart(values = [], labels = []) {
@@ -951,7 +863,8 @@ function drawAnalyticsTrafficChart(values = [], labels = []) {
     const width = canvas.width;
     const height = canvas.height;
     const padding = 42;
-    const safeValues = values.length ? values : ANALYTICS_FALLBACK_DATA.timeline;
+    const safeValues = values;
+    if (!safeValues.length) { ctx.clearRect(0,0,width,height); ctx.fillStyle='#aaa'; ctx.fillText('No measured traffic data available',42,80); return; }
     const max = Math.max(...safeValues, 1) + 8;
     const min = Math.max(0, Math.min(...safeValues) - 8);
 
@@ -1069,12 +982,12 @@ function renderAnalyticsTable(id, rows = [], primaryKey = 'title', secondaryKey 
 function renderRealtimeAnalytics(realtime = {}) {
     const active = document.getElementById('analytics-realtime-users');
     const events = document.getElementById('analytics-realtime-events');
-    if (active) active.textContent = realtime.activeUsers ?? 0;
+    if (active) active.textContent = realtime.activeUsers ?? '—';
     if (!events) return;
 
     const rows = Array.isArray(realtime.events) && realtime.events.length
         ? realtime.events
-        : [{ name: 'waiting_for_live_events', count: 0 }];
+        : [];
 
     events.innerHTML = rows.map(event => `
         <div class="realtime-event-pill">
@@ -1101,8 +1014,7 @@ function renderAnalyticsPanel(data) {
     };
     const updatedAt = document.getElementById('analytics-updated-at');
     if (updatedAt) {
-        const date = safeData.updatedAt ? new Date(safeData.updatedAt) : new Date();
-        updatedAt.textContent = `Updated ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        updatedAt.textContent = safeData.updatedAt ? `Updated ${new Date(safeData.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'No report loaded';
     }
 
     renderAnalyticsMetrics(safeData.metrics || []);
@@ -1113,9 +1025,10 @@ function renderAnalyticsPanel(data) {
     renderAnalyticsList('analytics-devices', safeData.devices || [], 'value', 'name', 'users');
     renderAnalyticsTable('analytics-pages', safeData.pages || [], 'title', 'path', 'views');
     renderAnalyticsTable('analytics-events', safeData.events || [], 'name', 'detail', 'count');
-    setAnalyticsStatus(safeData, safeData.connected
-        ? 'Vercel Web Analytics tracking is active for the production site.'
-        : (safeData.message || 'Vercel Web Analytics tracking is ready.'));
+    setAnalyticsStatus(safeData, safeData.message || 'Measured analytics');
+    DASHBOARD_DATA.metrics=safeData.metrics; DASHBOARD_DATA.chart=safeData.timeline; DASHBOARD_DATA.countries=safeData.countries;
+    DASHBOARD_DATA.activities=(safeData.events || []).map(e=>({event:e.name,source:'Supabase',status:String(e.count)}));
+    renderMetrics(); drawVisitorsChart(); renderCountryList(); renderActivity();
 }
 
 async function loadAnalyticsPanel(force = false) {
@@ -1129,6 +1042,11 @@ async function loadAnalyticsPanel(force = false) {
 
 function initAnalyticsPanel() {
     renderAnalyticsPanel(getAnalyticsFallback('30d'));
+    loadAnalyticsPanel(true);
+    window.addEventListener('tcb:bookings-changed', () => loadAnalyticsPanel(true));
+    document.getElementById('date-range')?.addEventListener('change', event => {
+        document.getElementById('analytics-date-range').value={'Last 7 days':'7d','Last 30 days':'30d','This quarter':'90d'}[event.target.selectedOptions[0].textContent] || '30d'; loadAnalyticsPanel(true);
+    });
 
     document.getElementById('refresh-analytics-btn')?.addEventListener('click', () => {
         analyticsLoaded = false;
@@ -1142,29 +1060,8 @@ function initAnalyticsPanel() {
 }
 
 function renderSecondaryPanels() {
-    const analytics = document.getElementById('analytics-deep-grid');
-    const sales = document.getElementById('sales-board');
-
-    if (analytics) {
-        analytics.innerHTML = [
-            ['Project clicks', '1,247', 'Merkaz leads this week'],
-            ['CTA conversion', '10.7%', 'Hero and pricing are strongest'],
-            ['Mobile sessions', '68%', 'Keep admin edits image-light'],
-            ['Avg. engagement', '02:48', 'Case studies drive depth']
-        ].map(item => `<article class="insight-card"><span>${item[0]}</span><strong>${item[1]}</strong><p>${item[2]}</p></article>`).join('');
-    }
-
-    if (sales) {
-        sales.innerHTML = ['New lead', 'Discovery call', 'Proposal', 'Won'].map((stage, index) => `
-            <article class="sales-column">
-                <h3>${stage}</h3>
-                <div class="sales-ticket">
-                    <strong>${['Brand refresh', 'Website rebuild', 'Social kit', 'Campaign system'][index]}</strong>
-                    <p>${['Basic', 'Plus', 'Plus', 'Pro'][index]} tier</p>
-                </div>
-            </article>
-        `).join('');
-    }
+    document.getElementById('analytics-deep-grid')?.replaceChildren();
+    const sales=document.getElementById('sales-board'); if(sales) sales.textContent='No sales records are connected. Booking data is available in Meetings.';
 }
 
 const CATEGORY_DEFAULT_TAGS = {

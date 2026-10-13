@@ -1,8 +1,9 @@
+import { createHash } from 'node:crypto';
 const ZOOM_API = 'https://api.zoom.us/v2';
 export function integrationStatus(env = process.env) {
     return {
         zoom: Boolean(env.ZOOM_ACCOUNT_ID && env.ZOOM_CLIENT_ID && env.ZOOM_CLIENT_SECRET && env.ZOOM_HOST_ID),
-        email: Boolean(env.RESEND_API_KEY && env.BOOKING_EMAIL_FROM && env.BOOKING_NOTIFY_EMAIL),
+        email: Boolean((env.BOOKING_EMAIL_PROVIDER === 'brevo' ? env.BREVO_API_KEY : env.RESEND_API_KEY) && env.BOOKING_EMAIL_FROM && env.BOOKING_NOTIFY_EMAIL),
         storage: Boolean(env.BOOKING_SUPABASE_URL && env.BOOKING_SUPABASE_SECRET_KEY)
     };
 }
@@ -52,7 +53,8 @@ export function createIntegrations(env = process.env) {
             patch.integration = 'ready'; patch.integrationMessage = '';
         }
         if (!status.email) return { ...patch, delivery: 'not-configured', integrationMessage: 'Email service is not connected. The Zoom meeting is saved.' };
-        if (/resend\.dev>?$/i.test(env.BOOKING_EMAIL_FROM.trim()) && booking.email.toLowerCase() !== env.BOOKING_NOTIFY_EMAIL.toLowerCase()) {
+        const brevo = env.BOOKING_EMAIL_PROVIDER === 'brevo';
+        if (!brevo && /resend\.dev>?$/i.test(env.BOOKING_EMAIL_FROM.trim()) && booking.email.toLowerCase() !== env.BOOKING_NOTIFY_EMAIL.toLowerCase()) {
             return { ...patch, delivery: 'not-configured', integrationMessage: 'Email is in studio-only test mode until a sending domain is verified.' };
         }
         if (booking.delivery === 'sent') return patch;
@@ -64,15 +66,31 @@ export function createIntegrations(env = process.env) {
         const text = `Your meeting with The Creative Bunch is ${label}.\n\n${when} (${booking.timezone})\n${booking.status !== 'cancelled' ? `Join: ${patch.joinUrl || booking.joinUrl}\nManage booking: ${manage}\n` : ''}\nBooking reference: ${booking.id}\n`;
         // A stored first attempt bounds safe retries to the provider's 24-hour deduplication window.
         const attemptAt = booking.emailAttemptAt || new Date().toISOString();
-        if (booking.emailAttemptAt && Date.now() - Date.parse(booking.emailAttemptAt) >= 23 * 3600000) return { ...patch, delivery: 'review', integrationMessage: 'Email delivery is uncertain and the retry window expired. Check Resend before sending again.' };
+        const retryWindow = brevo ? 10 * 60000 : 23 * 3600000;
+        if (booking.emailAttemptAt && Date.now() - Date.parse(booking.emailAttemptAt) >= retryWindow) return { ...patch, delivery: 'review', integrationMessage: 'Email delivery is uncertain and the retry window expired. Check the email provider before sending again.' };
         try {
+            if (brevo) {
+                const sender = env.BOOKING_EMAIL_FROM.match(/^(.*?)\s*<([^>]+)>$/);
+                const hash = createHash('sha256').update(`tcb-booking-${key}`).digest('hex');
+                const idempotencyKey = `${hash.slice(0,8)}-${hash.slice(8,12)}-4${hash.slice(13,16)}-a${hash.slice(17,20)}-${hash.slice(20,32)}`;
+                const result = await fetch('https://api.brevo.com/v3/smtp/email', {
+                    method: 'POST', headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json', Accept: 'application/json' },
+                    body: JSON.stringify({ sender: { name: sender?.[1].trim() || 'The Creative Bunch', email: sender?.[2] || env.BOOKING_EMAIL_FROM.trim() },
+                        to: [{ email: booking.email }], ...(booking.email.toLowerCase() !== env.BOOKING_NOTIFY_EMAIL.toLowerCase() ? { bcc: [{ email: env.BOOKING_NOTIFY_EMAIL }] } : {}),
+                        replyTo: { email: env.BOOKING_NOTIFY_EMAIL }, subject: `Your studio call is ${label}`, textContent: text, headers: { idempotencyKey } }),
+                    signal: AbortSignal.timeout(10000)
+                });
+                const data = await result.json().catch(() => ({}));
+                if (result.ok && data.messageId) return { ...patch, emailAttemptAt: attemptAt, delivery: 'sent', integrationMessage: '' };
+                return { ...patch, emailAttemptAt: attemptAt, delivery: result.status >= 500 || result.ok ? 'review' : 'failed', integrationMessage: `Brevo returned ${result.status}. Check email logs before retrying.` };
+            }
             const result = await fetch('https://api.resend.com/emails', {
                 method: 'POST', headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': `tcb-booking-${key}` },
                 body: JSON.stringify({ from: env.BOOKING_EMAIL_FROM, to: [booking.email], bcc: [env.BOOKING_NOTIFY_EMAIL],
                     reply_to: env.BOOKING_NOTIFY_EMAIL, subject: `Your studio call is ${label}`, text }), signal: AbortSignal.timeout(10000)
             });
             return { ...patch, emailAttemptAt: attemptAt, delivery: result.ok ? 'sent' : 'failed', integrationMessage: result.ok ? '' : `Email returned ${result.status}. Check the sender and retry.` };
-        } catch { return { ...patch, emailAttemptAt: attemptAt, delivery: 'failed', integrationMessage: 'Email delivery is not confirmed. Retry after checking the email service.' }; }
+        } catch { return { ...patch, emailAttemptAt: attemptAt, delivery: brevo ? 'review' : 'failed', integrationMessage: 'Email delivery is not confirmed. Retry after checking the email service.' }; }
     };
 }
 
