@@ -1035,7 +1035,7 @@ function renderAnalyticsPanel(data) {
         const projects=getStoredProjects();
         projectInsights.innerHTML=(safeData.projects || []).map(row=>{
             const project=projects.find(p=>String(p.id)===String(row.id));
-            return '<article class="insight-card"><span>'+escapeAdminHtml(project?.title || 'Project '+row.id)+'</span><strong>'+escapeAdminHtml(row.count)+'</strong><p>Project opens · selected period</p></article>';
+            return '<article class="insight-card"><span>'+escapeAdminHtml(String(project?.title || 'Project '+row.id).replace(/Merkaz Israel 76 Campaign/gi,'Merkaz Cultural Campaign'))+'</span><strong>'+escapeAdminHtml(row.count)+'</strong><p>Project opens · selected period</p></article>';
         }).join('');
     }
 }
