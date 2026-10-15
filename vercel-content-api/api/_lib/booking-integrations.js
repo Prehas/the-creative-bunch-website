@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { renderBookingEmail } from './booking-email.js';
 const ZOOM_API = 'https://api.zoom.us/v2';
 export function integrationStatus(env = process.env) {
     return {
@@ -59,11 +60,10 @@ export function createIntegrations(env = process.env) {
         }
         if (booking.delivery === 'sent') return patch;
         const key = `${booking.id}-${booking.revision}`;
-        const label = booking.status === 'cancelled' ? 'cancelled' : booking.action === 'reschedule' ? 'rescheduled' : 'confirmed';
-        const when = new Intl.DateTimeFormat('en-GB', { timeZone: booking.timezone, dateStyle: 'full', timeStyle: 'short' }).format(new Date(booking.start));
         const base = (env.BOOKING_SITE_URL || 'https://the-creative-bunch-website.vercel.app').replace(/\/$/, '');
         const manage = `${base}/#booking=${booking.id}.${manageToken}`;
-        const text = `Your meeting with The Creative Bunch is ${label}.\n\n${when} (${booking.timezone})\n${booking.status !== 'cancelled' ? `Join: ${patch.joinUrl || booking.joinUrl}\nManage booking: ${manage}\n` : ''}\nBooking reference: ${booking.id}\n`;
+        const email = renderBookingEmail({ booking, manageUrl: manage, joinUrl: patch.joinUrl || booking.joinUrl,
+            siteUrl: base, replyEmail: env.BOOKING_NOTIFY_EMAIL });
         // A stored first attempt bounds safe retries to the provider's 24-hour deduplication window.
         const attemptAt = booking.emailAttemptAt || new Date().toISOString();
         const retryWindow = brevo ? 10 * 60000 : 23 * 3600000;
@@ -77,7 +77,7 @@ export function createIntegrations(env = process.env) {
                     method: 'POST', headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json', Accept: 'application/json' },
                     body: JSON.stringify({ sender: { name: sender?.[1].trim() || 'The Creative Bunch', email: sender?.[2] || env.BOOKING_EMAIL_FROM.trim() },
                         to: [{ email: booking.email }], ...(booking.email.toLowerCase() !== env.BOOKING_NOTIFY_EMAIL.toLowerCase() ? { bcc: [{ email: env.BOOKING_NOTIFY_EMAIL }] } : {}),
-                        replyTo: { email: env.BOOKING_NOTIFY_EMAIL }, subject: `Your studio call is ${label}`, textContent: text, headers: { idempotencyKey } }),
+                        replyTo: { email: env.BOOKING_NOTIFY_EMAIL }, subject: email.subject, textContent: email.text, htmlContent: email.html, headers: { idempotencyKey } }),
                     signal: AbortSignal.timeout(10000)
                 });
                 const data = await result.json().catch(() => ({}));
@@ -87,7 +87,7 @@ export function createIntegrations(env = process.env) {
             const result = await fetch('https://api.resend.com/emails', {
                 method: 'POST', headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': `tcb-booking-${key}` },
                 body: JSON.stringify({ from: env.BOOKING_EMAIL_FROM, to: [booking.email], bcc: [env.BOOKING_NOTIFY_EMAIL],
-                    reply_to: env.BOOKING_NOTIFY_EMAIL, subject: `Your studio call is ${label}`, text }), signal: AbortSignal.timeout(10000)
+                    reply_to: env.BOOKING_NOTIFY_EMAIL, subject: email.subject, text: email.text, html: email.html }), signal: AbortSignal.timeout(10000)
             });
             return { ...patch, emailAttemptAt: attemptAt, delivery: result.ok ? 'sent' : 'failed', integrationMessage: result.ok ? '' : `Email returned ${result.status}. Check the sender and retry.` };
         } catch { return { ...patch, emailAttemptAt: attemptAt, delivery: brevo ? 'review' : 'failed', integrationMessage: 'Email delivery is not confirmed. Retry after checking the email service.' }; }
