@@ -34,7 +34,7 @@ export async function buildAnalyticsSummary({range='30d',env=process.env,store=n
 export default async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');res.setHeader('Vary','Origin');
   if(handleOptions(req,res))return;
-  if(!requireAuth(req,res))return;
+  if(!await requireAuth(req,res))return;
   if(req.method!=='GET')return res.status(405).json({message:'Method not allowed.'});
   const range=new URL(req.url,'https://internal.invalid').searchParams.get('range') || '30d';
   if(!['7d','30d','90d'].includes(range))return res.status(400).json({message:'Invalid reporting period.'});

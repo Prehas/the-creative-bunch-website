@@ -13,7 +13,7 @@ export default async function handler(request, response) {
     }
 
     if (request.method === 'POST') {
-        if (!requireAuth(request, response)) return;
+        if (!await requireAuth(request, response)) return;
         const body = await readJsonBody(request);
         return sendJson(response, 200, await writeSnapshot(body.stage || 'draft', body));
     }

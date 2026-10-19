@@ -2193,7 +2193,7 @@ code {
     gap: 0.8rem;
 }
 
-.settings-card div {
+.settings-card dl > div {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
@@ -2778,6 +2778,27 @@ code {
 .overview-editor-row label { display:grid; gap:6px; }
 .overview-editor-row button { justify-self:start; }
 .admin-page .booking-admin-settings button[type="submit"] { display:inline-flex; margin-top:20px; margin-bottom:8px; }
+
+.admin-page .admin-users { margin-top: 20px; }
+.admin-users-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.admin-users-heading h3 { margin: 0 0 6px; font-size: 15px; }
+.admin-users-heading p, .admin-users-hint { color: var(--admin-muted); font-size: 12px; line-height: 1.6; }
+.admin-users-heading p { max-width: 62ch; }
+.admin-invite-form { display: flex; align-items: end; gap: 12px; margin: 24px 0 8px; max-width: 660px; }
+.admin-invite-form > div { flex: 1; min-width: 0; }
+.admin-invite-form label { display: block; font-size: 12px; margin-bottom: 7px; }
+.admin-invite-form input { width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid var(--admin-border); border-radius: 8px; background: var(--admin-bg-soft); color: var(--admin-text); font: inherit; font-size: 13px; }
+.admin-page .admin-users :is(.admin-primary-btn,.admin-secondary-btn) { min-height: 38px; padding: 9px 13px; width: auto; flex-shrink: 0; font-size: 12px; line-height: 1.5; white-space: normal; }
+.admin-users #admin-users-status { min-height: 20px; margin: 12px 0; font-size: 12px; }
+.admin-users #admin-users-list > .admin-user-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 0; border-top: 1px solid var(--admin-border); }
+.admin-user-info { display: grid; gap: 5px; min-width: 0; }
+.admin-user-info strong { font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.admin-user-info span { font-size: 12px; color: var(--admin-muted); }
+.admin-users button:disabled { opacity: .55; cursor: wait; }
+@media (max-width: 600px) {
+    .admin-invite-form { flex-direction: column; align-items: stretch; }
+    .admin-users #admin-users-list > .admin-user-row { align-items: flex-start; flex-direction: column; gap: 12px; }
+}
 
 .admin-page .project-visibility select { min-width: 88px; padding-right: 28px; }
 

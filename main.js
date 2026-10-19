@@ -2034,43 +2034,36 @@ function initPageShortcuts() {
         }
         info.append(row);
     });
-    initTeamReadMore();
+    initTeamAlignment();
     update();
 }
 
-function initTeamReadMore() {
-    document.querySelectorAll('.team-info').forEach((info, index) => {
-        const bio = info.querySelector('.team-bio');
-        const principle = info.querySelector('.team-principle');
-        if (!bio || !principle || info.querySelector('.team-read-more')) return;
-        bio.id = `team-bio-${index}`;
-        principle.id = `team-principle-${index}`;
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'team-read-more';
-        button.textContent = 'Read more';
-        button.setAttribute('aria-expanded', 'false');
-        button.setAttribute('aria-controls', `${bio.id} ${principle.id}`);
-        button.setAttribute('aria-label', `Read more about ${info.querySelector('h3').textContent}`);
-        principle.after(button);
-        info.classList.add('team-collapsible');
-        button.addEventListener('click', () => {
-            const expanded = button.getAttribute('aria-expanded') !== 'true';
-            info.classList.toggle('is-expanded', expanded);
-            button.setAttribute('aria-expanded', String(expanded));
-            button.textContent = expanded ? 'Read less' : 'Read more';
-            button.setAttribute('aria-label', `${expanded ? 'Read less' : 'Read more'} about ${info.querySelector('h3').textContent}`);
-        });
-        const update = () => {
-            if (info.classList.contains('is-expanded')) return;
-            const overflow = bio.scrollHeight > bio.clientHeight + 1 || principle.scrollHeight > principle.clientHeight + 1;
-            button.style.visibility = overflow ? 'visible' : 'hidden';
-            button.disabled = !overflow;
-        };
-        new ResizeObserver(update).observe(info);
-        document.fonts.ready.then(update);
-        update();
-    });
+function initTeamAlignment() {
+    const grid = document.querySelector('.team-grid');
+    if (!grid) return;
+    const cards = [...grid.querySelectorAll('.team-card')];
+    const align = () => {
+        const rows = new Map();
+        for (const card of cards) {
+            for (const selector of ['.team-role', '.team-bio', '.team-principle']) card.querySelector(selector)?.style.removeProperty('min-height');
+            const top = Math.round(card.offsetTop);
+            if (!rows.has(top)) rows.set(top, []);
+            rows.get(top).push(card);
+        }
+        // Share the space each row actually needs; no text is truncated.
+        for (const row of rows.values()) for (const selector of ['.team-role', '.team-bio', '.team-principle']) {
+            const elements = row.map(card => card.querySelector(selector)).filter(Boolean);
+            const height = Math.max(...elements.map(element => element.offsetHeight));
+            elements.forEach(element => { element.style.minHeight = `${height}px`; });
+        }
+    };
+    let width = 0;
+    new ResizeObserver(entries => {
+        const next = entries[0].contentRect.width;
+        if (next !== width) { width = next; align(); }
+    }).observe(grid);
+    document.fonts.ready.then(align);
+    align();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPageShortcuts, { once: true });
 else initPageShortcuts();
@@ -2094,6 +2087,5 @@ function configureCaseStudySections(overlay, study) {
     track.classList.add(study.galleryLayout === 'large' || track.children.length === 1 ? 'gallery-large' : 'gallery-grid');
     if(hidden.has('palette')) overlay.querySelector('.case-study-palette')?.closest('article')?.remove();
     for(const [key,selector] of Object.entries(selectors)) if(hidden.has(key))overlay.querySelector(selector)?.remove();
-    overlay.querySelectorAll('.case-study-timeline article > span').forEach(e=>e.remove());
     overlay.querySelector('.case-study-scroll').dataset.divider=['none','dot'].includes(study.divider)?study.divider:'line';
 }

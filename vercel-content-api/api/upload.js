@@ -24,7 +24,7 @@ export default async function handler(request, response) {
     applyCors(request, response);
     if (handleOptions(request, response)) return;
     if (request.method !== 'POST') return sendJson(response, 405, { ok: false, message: 'Method not allowed' });
-    if (!requireAuth(request, response)) return;
+    if (!await requireAuth(request, response)) return;
 
     const body = await readJsonBody(request);
     const { buffer, contentType } = dataUrlToBuffer(body.dataUrl);

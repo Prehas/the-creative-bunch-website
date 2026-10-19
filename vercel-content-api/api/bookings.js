@@ -36,7 +36,7 @@ export function createBookingHandler({ store = new SupabaseBookingStore(), secre
                 return response.status(200).json({ ok: true });
             }
             const admin = ['admin', 'settings', 'admin-cancel', 'admin-reschedule', 'retry'].includes(action);
-            if (admin && !authorizeAdmin(request, response)) return;
+            if (admin && !await authorizeAdmin(request, response)) return;
             if (request.method === 'POST' && request.headers.origin && !allowedOrigins.includes(request.headers.origin)) throw new BookingError(403, 'This origin is not allowed.');
             if (!admin) {
                 const ip = request.headers['x-vercel-forwarded-for'] || request.socket?.remoteAddress || 'unknown';

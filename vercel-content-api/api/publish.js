@@ -7,7 +7,7 @@ export default async function handler(request, response) {
     response.setHeader('Cache-Control', 'no-store, max-age=0');
     if (handleOptions(request, response)) return;
     if (request.method !== 'POST') return sendJson(response, 405, { ok: false, message: 'Method not allowed' });
-    if (!requireAuth(request, response)) return;
+    if (!await requireAuth(request, response)) return;
 
     const body = await readJsonBody(request);
     const draft = await readSnapshot('draft');

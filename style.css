@@ -5703,15 +5703,10 @@ html[data-theme="light"] .team-card:nth-child(even) { background: #f8e8dc; }
 .case-study-scroll[data-divider="dot"] > section + section::before { content:'•'; display:block; color:var(--color-accent-ink); font-size:24px; grid-column:1 / -1; }
 @media(max-width:600px) { .case-study-gallery-track.gallery-grid { grid-template-columns:minmax(0,1fr); } }
 
-/* Equal resting team cards; expanding one keeps its neighbours compact. */
-.team-grid { align-items: start; }
-.team-collapsible .team-role { line-height: 1.5; min-height: 3em; }
-.team-collapsible .team-bio { line-height: 1.6; height: 6.4em; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
-.team-collapsible .team-principle { box-sizing: content-box; line-height: 1.6; height: 4.8em; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; border-color: var(--color-border); }
-.team-collapsible.is-expanded :is(.team-bio, .team-principle) { height: auto; overflow: visible; display: block; -webkit-line-clamp: unset; }
-.team-read-more { align-self: flex-start; min-height: 36px; margin-top: 8px; padding: 4px 0; border: 0; background: transparent; color: var(--color-lime); font: 600 12px var(--font-body); cursor: pointer; text-decoration: underline; text-underline-offset: 4px; }
-.team-read-more:hover { text-decoration-thickness: 2px; }
-.team-read-more:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 2px; }
-html[data-theme="light"] .team-read-more { color: var(--color-accent-ink); }
+/* Full biographies, with dividers and links aligned within each grid row. */
+.team-grid { align-items: stretch; }
+.team-info .team-role { line-height: 1.5; }
+.team-info :is(.team-bio, .team-principle) { box-sizing: border-box; line-height: 1.6; height: auto; overflow: visible; }
+.team-info .team-principle { border-color: var(--color-border); }
 .footer-admin-link.is-logged-in { opacity: 1; }
 .footer-admin-link.is-logged-in::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: var(--color-accent-ink, #587b7f); vertical-align: middle; }

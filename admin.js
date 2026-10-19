@@ -2279,6 +2279,57 @@ function initSettings() {
     if (authMode) authMode.textContent = 'Vercel Content API auth';
     if (source) source.textContent = 'Vercel Content API draft/public';
     if (pricingSource) pricingSource.textContent = 'Vercel Content API pricing draft/public';
+    initAdminUsers();
+}
+
+function initAdminUsers() {
+    const form = document.getElementById('admin-invite-form');
+    const list = document.getElementById('admin-users-list');
+    const status = document.getElementById('admin-users-status');
+    const refresh = document.getElementById('refresh-admin-users');
+    if (!form || !list) return;
+    let busy = false;
+    const load = async () => {
+        list.setAttribute('aria-busy', 'true');
+        refresh.disabled = true;
+        try {
+            const data = await contentApiRequest('/api/auth/users');
+            list.replaceChildren();
+            for (const user of data.users || []) {
+                const row = document.createElement('div'); row.className = 'admin-user-row';
+                const info = document.createElement('div'); info.className = 'admin-user-info';
+                const name = document.createElement('strong'); name.textContent = user.email;
+                const detail = document.createElement('span');
+                detail.textContent = `${user.status === 'invited' ? 'Invitation pending' : 'Active admin'}${user.email === getSessionEmail() ? ' · You' : ''}`;
+                info.append(name, detail);
+                const action = document.createElement('button'); action.type = 'button'; action.className = 'admin-secondary-btn';
+                action.textContent = user.status === 'invited' ? 'Resend invitation' : 'Request password change';
+                action.setAttribute('aria-label', `${action.textContent} for ${user.email}`);
+                action.addEventListener('click', () => send('reset', user.email));
+                row.append(info, action); list.append(row);
+            }
+            if (!list.children.length) list.textContent = 'No studio users were returned. Refresh to try again.';
+        } catch (error) {
+            setStatus(status, error.message, 'error');
+            if (!list.querySelector('.admin-user-row')) list.textContent = 'Users could not be loaded. Use Refresh to try again.';
+        } finally { list.setAttribute('aria-busy', 'false'); refresh.disabled = busy; }
+    };
+    const send = async (action, email) => {
+        if (busy) return;
+        busy = true;
+        const controls = [...form.querySelectorAll('input,button'), ...list.querySelectorAll('button'), refresh];
+        controls.forEach(control => { control.disabled = true; });
+        setStatus(status, action === 'invite' ? 'Sending invitation…' : 'Sending password link…', '');
+        try {
+            const data = await contentApiRequest('/api/auth/users', { method: 'POST', body: JSON.stringify({ action, email }) });
+            setStatus(status, `${data.message} Recipient: ${email}`, 'success');
+            if (action === 'invite') form.reset();
+        } catch (error) { setStatus(status, error.message, 'error'); }
+        finally { busy = false; controls.forEach(control => { control.disabled = false; }); await load(); }
+    };
+    form.addEventListener('submit', event => { event.preventDefault(); send('invite', form.elements.email.value.trim().toLowerCase()); });
+    refresh.addEventListener('click', () => { if (!busy) load(); });
+    document.querySelector('[data-admin-panel="settings"]')?.addEventListener('click', () => { if (!busy) load(); });
 }
 
 async function clearAdminCache() {
