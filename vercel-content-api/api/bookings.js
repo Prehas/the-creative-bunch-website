@@ -60,7 +60,7 @@ export function createBookingHandler({ store = new SupabaseBookingStore(), secre
             else if (action === 'retry') {
                 const b = (await service.read()).bookings.find(b => b.id === body.id);
                 if (!b) throw new BookingError(404, 'Booking not found.');
-                await service.fulfill(body.id); result = { ok: true };
+                await service.fulfill(body.id, true); result = { ok: true };
             } else if (['manage', 'cancel', 'reschedule', 'admin-cancel', 'admin-reschedule'].includes(action)) {
                 if (!admin) service.authorize(body.id, body.manageToken);
                 if (action === 'manage') {

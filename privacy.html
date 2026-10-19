@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Booking &amp; Calendar Privacy | The Creative Bunch</title>
+    <meta name="description" content="How The Creative Bunch uses booking information and Google Calendar to arrange studio calls.">
+    <link rel="canonical" href="https://www.thecreativebunch.eu/privacy.html">
+    <style>
+        *{box-sizing:border-box}body{margin:0;background:#f0ede9;color:#200b20;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.7}
+        header{background:#200b20;color:#e5e2ff;padding:28px 24px}header a{display:flex;align-items:center;gap:14px;width:min(100%,780px);margin:auto;text-decoration:none;color:inherit;font-weight:700;font-size:14px;letter-spacing:.5px}header img{width:40px;height:40px}
+        main{max-width:828px;margin:0 auto;padding:48px 24px 56px}h1{font-size:clamp(30px,6vw,44px);line-height:1.15;letter-spacing:-1px;margin:0 0 16px}h2{font-size:23px;line-height:1.3;margin:36px 0 12px}p{margin:0 0 16px}li{margin-bottom:9px}a{color:#496b6f;text-underline-offset:3px;overflow-wrap:anywhere}a:focus-visible{outline:3px solid #587b7f;outline-offset:4px}.updated{font-size:14px;color:#635864}footer{border-top:1px solid #d9d1d5;padding-top:24px;margin-top:36px;font-size:14px}ul{padding-left:22px}
+    </style>
+</head>
+<body>
+    <header><a href="/"><img src="assets/Logo_Site-transparent.png" width="40" height="40" alt="">THE CREATIVE BUNCH</a></header>
+    <main>
+        <h1>Booking &amp; calendar privacy</h1>
+        <p class="updated">Last updated: 19 October 2026</p>
+        <p>This notice explains how The Creative Bunch uses information to arrange studio calls and connect the studio’s Google Calendar. For questions, contact <a href="mailto:agency@thecreativebunch.eu">agency@thecreativebunch.eu</a>.</p>
+
+        <h2>Information used for your call</h2>
+        <p>The booking form collects your name, email, selected service, appointment time, time zone and any project notes you choose to provide. The system also keeps a booking reference, status and operational records needed to confirm, reschedule or cancel your appointment. Please avoid sensitive personal information in project notes.</p>
+        <p>This information is used to arrange your call, create its Zoom meeting, send booking emails and manage changes. Booking a call does not subscribe you to marketing emails.</p>
+
+        <h2>Services involved</h2>
+        <ul>
+            <li><strong>Vercel</strong> hosts the website and the backend that processes booking requests.</li>
+            <li><strong>Supabase</strong> stores private booking records. They are accessible through the authenticated studio backend, not through the public portfolio.</li>
+            <li><strong>Zoom</strong> receives meeting scheduling information to create, update and cancel your online meeting. Client communications contain the guest join link, not Zoom’s privileged host link.</li>
+            <li><strong>Brevo</strong> processes your email address and message content to send booking confirmations, rescheduling and cancellation messages. A copy goes to the studio’s notification inbox. Resend is supported as an alternative email provider when configured.</li>
+            <li><strong>Google Calendar</strong>, when the studio authorizes this integration, receives your name, email, selected service, appointment time and Zoom guest link to organize the studio’s calendar. Project notes are not copied to Google Calendar.</li>
+        </ul>
+        <p>These providers may process or retain their own records under their privacy policies: <a href="https://vercel.com/legal/privacy-policy">Vercel</a>, <a href="https://supabase.com/privacy">Supabase</a>, <a href="https://www.zoom.com/en/trust/privacy/privacy-statement/">Zoom</a>, <a href="https://www.brevo.com/legal/privacypolicy/">Brevo</a>, <a href="https://resend.com/legal/privacy-policy">Resend</a> and <a href="https://policies.google.com/privacy">Google</a>.</p>
+
+        <h2>Studio Google Calendar access</h2>
+        <p>The studio’s account owner authorizes access through Google OAuth. Google’s requested permission allows viewing, creating, changing and deleting events on calendars that account owns. The application uses this permission only to manage its own private studio booking events on the configured calendar. It checks its own booking metadata before changing an existing event.</p>
+        <p>The application creates a calendar event for a booking, updates that event after a reschedule and removes it after cancellation. It does not read unrelated appointments to calculate website availability, copy the rest of the calendar, access Gmail messages or add clients as Google event attendees.</p>
+        <p>Google authorization credentials are kept as server-only configuration in the backend. The studio’s Google Calendar data is used only for this booking integration, not for advertising or training AI models. You can revoke the application’s access through <a href="https://myaccount.google.com/connections">your Google Account connections</a>. Revoking access stops automatic synchronization; it does not itself delete previously created events.</p>
+
+        <h2>Your optional calendar copy</h2>
+        <p>Booking emails offer an “Add to Google Calendar” link and an attached calendar file. Using these options shares the event details, including the Zoom guest link, with the calendar application you choose. You control that calendar copy. If the booking changes, update or remove an older entry; if you cancel, remove any copy you saved.</p>
+        <p>Changing an event directly in Google Calendar does not change your website booking or Zoom meeting. Use the private management link in your booking email to reschedule or cancel.</p>
+
+        <h2>Retention and access</h2>
+        <p>Private website booking records are scheduled for deletion 180 days after the appointment, during the next daily cleanup. Emails and calendar events saved in an inbox or calendar may remain there until deleted by its owner or under that provider’s retention settings. A completed studio calendar event may remain in the studio’s calendar history; cancellation removes the synchronized event when Google access is available.</p>
+        <p>The studio’s authorized administrators can view and manage booking records. Keep your private management link confidential. To request access, correction or deletion of your booking information, contact <a href="mailto:agency@thecreativebunch.eu">agency@thecreativebunch.eu</a>.</p>
+
+        <h2>Website analytics</h2>
+        <p>The main website offers cookie settings for optional analytics. With permission, Vercel measures website visits and Supabase stores limited interaction counts, such as project opens and booking-link clicks. These interaction records contain an action, project ID and time, not booking names, emails or private management links, and are kept for up to 90 days. This privacy page does not load an analytics script.</p>
+
+        <footer><a href="/">Back to the studio</a> &nbsp;·&nbsp; <a href="/#book-call">Book a call</a></footer>
+    </main>
+</body>
+</html>

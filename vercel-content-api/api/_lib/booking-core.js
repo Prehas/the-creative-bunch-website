@@ -140,6 +140,7 @@ export class BookingService {
                 Object.assign(b, slot, { buffer: state.settings.buffer });
             } else throw new BookingError(400, 'Unknown booking action.');
             b.action = action; b.revision++; b.delivery = 'pending'; b.integration = 'pending';
+            if (b.calendarSync) b.calendarSync = 'pending';
             delete b.emailAttemptAt;
             b.updatedAt = new Date(this.now()).toISOString(); return b;
         });
@@ -147,12 +148,13 @@ export class BookingService {
         return this.publicBooking((await this.read()).bookings.find(b => b.id === id));
     }
     async settings(input) { return this.mutate(state => { state.settings = validateSettings(input); return state.settings; }); }
-    async fulfill(id) {
+    async fulfill(id, force = false) {
         if (!this.integrations) return;
         const jobId = randomUUID();
         const b = await this.mutate(state => {
             const b = state.bookings.find(b => b.id === id);
-            if (!b || b.job || (b.delivery === 'sent' && b.integration === 'ready')) return null;
+            const calendarNeedsRetry = b?.calendarSync === 'failed' || b?.calendarSync === 'pending';
+            if (!b || b.job || (!force && b.delivery === 'sent' && b.integration === 'ready' && !calendarNeedsRetry)) return null;
             b.job = { id: jobId, startedAt: new Date(this.now()).toISOString() }; return b;
         });
         if (!b) return;

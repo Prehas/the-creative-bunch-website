@@ -1,11 +1,13 @@
 import { createHash } from 'node:crypto';
 import { renderBookingEmail } from './booking-email.js';
+import { googleCalendarConfigured, syncGoogleCalendar } from './booking-google-calendar.js';
 const ZOOM_API = 'https://api.zoom.us/v2';
 export function integrationStatus(env = process.env) {
     return {
         zoom: Boolean(env.ZOOM_ACCOUNT_ID && env.ZOOM_CLIENT_ID && env.ZOOM_CLIENT_SECRET && env.ZOOM_HOST_ID),
         email: Boolean((env.BOOKING_EMAIL_PROVIDER === 'brevo' ? env.BREVO_API_KEY : env.RESEND_API_KEY) && env.BOOKING_EMAIL_FROM && env.BOOKING_NOTIFY_EMAIL),
-        storage: Boolean(env.BOOKING_SUPABASE_URL && env.BOOKING_SUPABASE_SECRET_KEY)
+        storage: Boolean(env.BOOKING_SUPABASE_URL && env.BOOKING_SUPABASE_SECRET_KEY),
+        googleCalendar: googleCalendarConfigured(env)
     };
 }
 async function zoomToken(env) {
@@ -53,6 +55,7 @@ export function createIntegrations(env = process.env) {
             }
             patch.integration = 'ready'; patch.integrationMessage = '';
         }
+        Object.assign(patch, await syncGoogleCalendar({ ...booking, ...patch }, env));
         if (!status.email) return { ...patch, delivery: 'not-configured', integrationMessage: 'Email service is not connected. The Zoom meeting is saved.' };
         const brevo = env.BOOKING_EMAIL_PROVIDER === 'brevo';
         if (!brevo && /resend\.dev>?$/i.test(env.BOOKING_EMAIL_FROM.trim()) && booking.email.toLowerCase() !== env.BOOKING_NOTIFY_EMAIL.toLowerCase()) {
@@ -77,7 +80,8 @@ export function createIntegrations(env = process.env) {
                     method: 'POST', headers: { 'api-key': env.BREVO_API_KEY, 'Content-Type': 'application/json', Accept: 'application/json' },
                     body: JSON.stringify({ sender: { name: sender?.[1].trim() || 'The Creative Bunch', email: sender?.[2] || env.BOOKING_EMAIL_FROM.trim() },
                         to: [{ email: booking.email }], ...(booking.email.toLowerCase() !== env.BOOKING_NOTIFY_EMAIL.toLowerCase() ? { bcc: [{ email: env.BOOKING_NOTIFY_EMAIL }] } : {}),
-                        replyTo: { email: env.BOOKING_NOTIFY_EMAIL }, subject: email.subject, textContent: email.text, htmlContent: email.html, headers: { idempotencyKey } }),
+                        replyTo: { email: env.BOOKING_NOTIFY_EMAIL }, subject: email.subject, textContent: email.text, htmlContent: email.html,
+                        attachment: [{ name: email.calendar.filename, content: Buffer.from(email.calendar.content).toString('base64') }], headers: { idempotencyKey } }),
                     signal: AbortSignal.timeout(10000)
                 });
                 const data = await result.json().catch(() => ({}));
@@ -87,7 +91,8 @@ export function createIntegrations(env = process.env) {
             const result = await fetch('https://api.resend.com/emails', {
                 method: 'POST', headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json', 'Idempotency-Key': `tcb-booking-${key}` },
                 body: JSON.stringify({ from: env.BOOKING_EMAIL_FROM, to: [booking.email], bcc: [env.BOOKING_NOTIFY_EMAIL],
-                    reply_to: env.BOOKING_NOTIFY_EMAIL, subject: email.subject, text: email.text, html: email.html }), signal: AbortSignal.timeout(10000)
+                    reply_to: env.BOOKING_NOTIFY_EMAIL, subject: email.subject, text: email.text, html: email.html,
+                    attachments: [{ filename: email.calendar.filename, content: Buffer.from(email.calendar.content).toString('base64') }] }), signal: AbortSignal.timeout(10000)
             });
             return { ...patch, emailAttemptAt: attemptAt, delivery: result.ok ? 'sent' : 'failed', integrationMessage: result.ok ? '' : `Email returned ${result.status}. Check the sender and retry.` };
         } catch { return { ...patch, emailAttemptAt: attemptAt, delivery: brevo ? 'review' : 'failed', integrationMessage: 'Email delivery is not confirmed. Retry after checking the email service.' }; }

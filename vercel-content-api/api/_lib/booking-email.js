@@ -1,3 +1,4 @@
+import { bookingCalendar } from './booking-calendar.js';
 const STUDIO_SITE = 'https://www.thecreativebunch.eu';
 
 function escapeHtml(value) {
@@ -56,8 +57,14 @@ export function renderBookingEmail({ booking, manageUrl, joinUrl, siteUrl = STUD
     const primaryLabel = cancelled ? 'Book another time' : zoom ? 'Join Zoom meeting' : 'View booking';
     const intro = copy.intro;
     const subject = `Your studio call is ${state} | The Creative Bunch`;
+    const calendar = bookingCalendar({ booking, joinUrl: zoom });
+    const calendarNote = cancelled ? 'If you saved this call in your calendar, please remove that entry.' : state === 'rescheduled'
+        ? 'Already saved the previous time? Update or remove that entry before adding this new time.'
+        : 'Prefer another calendar app? Open the attached .ics file. Your saved calendar copy is managed by you.';
     const text = [greeting, '', intro, '', copy.detail, date, `${time} (${timezone}, ${offset})`, `${duration} minutes · Zoom`,
         ...(cancelled ? [] : [zoom ? `Join: ${zoom}` : '', manage ? `Manage booking: ${manage}` : '']),
+        ...(!cancelled ? [`Add to Google Calendar: ${calendar.googleUrl}`] : []),
+        calendarNote,
         '', copy.note, ...(cancelled ? [`Book another time: ${site}/#book-call`] : []),
         '', `Questions? Reply to this email or contact ${contact}.`, '', 'The Creative Bunch', site, `Booking reference: ${booking.id}`
     ].filter(line => line !== undefined).join('\n');
@@ -106,6 +113,8 @@ body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}table,td
 <tr><td bgcolor="#fffdfa" class="email-pad" style="padding:26px 40px 0;background-color:#fffdfa;">
 ${primaryUrl ? `<table role="presentation" width="100%"><tr><td align="center" bgcolor="#200b20" style="background-color:#200b20;border-radius:9px;mso-padding-alt:17px 24px;"><a class="email-button" href="${esc(primaryUrl)}" style="display:block;padding:17px 24px;border:1px solid #200b20;border-radius:9px;font-size:16px;line-height:22px;font-weight:700;text-decoration:none;color:#e2ff9d;background-color:#200b20;">${primaryLabel} &nbsp;↗</a></td></tr></table>` : ''}
 ${!cancelled && manage ? `<p style="margin:17px 0 0;text-align:center;font-size:14px;line-height:22px;"><a href="${esc(manage)}" style="color:#496b6f;text-decoration:underline;">Reschedule or cancel your call</a></p>` : ''}
+${!cancelled ? `<p style="margin:20px 0 0;text-align:center;font-size:14px;line-height:22px;"><a href="${esc(calendar.googleUrl)}" style="display:inline-block;padding:11px 18px;border:1px solid #c8d2cc;border-radius:8px;color:#496b6f;text-decoration:none;font-weight:700;">Add to Google Calendar</a></p>` : ''}
+<p style="margin:12px 0 0;font-size:12px;line-height:20px;color:#635864;${cancelled ? '' : 'text-align:center;'}">${esc(calendarNote)}</p>
 <p style="margin:24px 0 0;font-size:14px;line-height:23px;color:#635864;">${esc(copy.note)}</p>
 ${!cancelled && zoom ? `<p style="margin:16px 0 0;font-size:12px;line-height:20px;color:#635864;overflow-wrap:anywhere;word-break:break-all;">If the button doesn’t open, copy this Zoom link:<br><a href="${esc(zoom)}" style="color:#496b6f;text-decoration:underline;">${esc(zoom)}</a></p>` : ''}
 </td></tr>
@@ -123,5 +132,5 @@ ${!cancelled && zoom ? `<p style="margin:16px 0 0;font-size:12px;line-height:20p
 <!--[if mso]></td></tr></table><![endif]-->
 </td></tr></table>
 </body></html>`;
-    return { state, subject, text, html };
+    return { state, subject, text, html, calendar };
 }

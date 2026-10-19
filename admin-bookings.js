@@ -8,7 +8,7 @@
         const status = panel.querySelector('#meetings-status');
         const form = panel.querySelector('#booking-settings-form');
         const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        let records = [], settings, saving = false;
+        let records = [], settings, saving = false, googleCalendarConnected = false;
         async function api(action, body) {
             const base = String(window.TCB_CONTENT_API_CONFIG?.baseUrl || '').replace(/\/$/, '');
             const token = localStorage.getItem('tcb_content_api_token');
@@ -27,11 +27,12 @@
                 <p><strong>${escape(when(b.start))}</strong> · Hungary time · ${Math.round((Date.parse(b.end)-Date.parse(b.start))/60000)} min</p>
                 <p><a href="mailto:${escape(b.email)}">${escape(b.email)}</a> · ${escape(b.service)}</p>
                 ${b.notes ? `<p class="meeting-notes">${escape(b.notes)}</p>` : ''}
-                <p class="meeting-delivery">Zoom: ${escape(b.integration)} · Email: ${escape(b.delivery)}${b.job ? ' · Processing (if stuck, ask the developer to inspect this task)' : ''}</p>
+                <p class="meeting-delivery">Zoom: ${escape(b.integration)} · Email: ${escape(b.delivery)} · Google Calendar: ${escape(googleCalendarConnected ? b.calendarSync === 'ready' && b.calendarRevision === b.revision ? 'synced' : b.calendarSync === 'failed' ? 'needs retry' : 'not synced' : 'not connected')}${b.job ? ' · Processing (if stuck, ask the developer to inspect this task)' : ''}</p>
                 ${b.integrationMessage ? `<p>${escape(b.integrationMessage)}</p>` : ''}
+                ${b.calendarMessage ? `<p>${escape(b.calendarMessage)}</p>` : ''}
                 <div class="meeting-actions">${b.joinUrl && b.status !== 'cancelled' ? `<a href="${escape(b.joinUrl)}" target="_blank" rel="noopener noreferrer" class="admin-secondary-btn">Join Zoom ↗</a>` : ''}
                 ${b.status !== 'cancelled' && Date.parse(b.start) > Date.now() ? '<button type="button" data-meeting-action="reschedule" class="admin-secondary-btn">Reschedule</button><button type="button" data-meeting-action="cancel" class="admin-secondary-btn">Cancel</button>' : ''}
-                ${b.delivery !== 'sent' || b.integration !== 'ready' ? '<button type="button" data-meeting-action="retry" class="admin-secondary-btn">Retry integrations</button>' : ''}</div>
+                ${b.delivery !== 'sent' || b.integration !== 'ready' || googleCalendarConnected && (b.calendarSync !== 'ready' || b.calendarRevision !== b.revision) ? '<button type="button" data-meeting-action="retry" class="admin-secondary-btn">Retry integrations</button>' : ''}</div>
                 <div data-meeting-reschedule hidden><label>New studio date<input type="date" data-new-date></label><label>Available time (Hungary)<select data-new-slot><option value="">Choose a date first</option></select></label><button type="button" data-meeting-action="confirm-reschedule" class="admin-primary-btn">Confirm new time</button></div>
                 </article>`).join('') : '<p class="meeting-empty">No bookings in this view.</p>';
             const upcoming = records.filter(b => b.status !== 'cancelled' && Date.parse(b.start) > Date.now()).sort((a,b)=>a.start.localeCompare(b.start)).slice(0,3);
@@ -41,11 +42,12 @@
             status.textContent = 'Loading bookings…';
             try {
                 const data = await api('admin'); records = data.bookings; settings = data.settings;
+                googleCalendarConnected = Boolean(data.connections?.googleCalendar);
                 for (const key of ['start', 'end', 'duration', 'buffer', 'noticeHours', 'horizonDays']) form.elements[key].value = settings[key];
                 form.elements.enabled.checked = settings.enabled;
                 form.elements.blockedDates.value = settings.blockedDates.join('\n');
                 form.querySelectorAll('[name="weekdays"]').forEach(e => e.checked = settings.weekdays.includes(Number(e.value)));
-                panel.querySelector('#booking-connections').textContent = data.preview ? 'LOCAL PREVIEW · Private local storage. Email and Zoom are not connected; test reservations never send invitations.' : `Private storage: ${data.connections.storage ? 'connected' : 'not connected'} · Zoom: ${data.connections.zoom ? 'configured' : 'not connected'} · Email: ${data.connections.email ? 'configured' : 'not connected'}`;
+                panel.querySelector('#booking-connections').textContent = data.preview ? 'LOCAL PREVIEW · Private local storage. Email, Zoom and Google Calendar are not connected; test reservations never send invitations.' : `Private storage: ${data.connections.storage ? 'connected' : 'not connected'} · Zoom: ${data.connections.zoom ? 'configured' : 'not connected'} · Email: ${data.connections.email ? 'configured' : 'not connected'} · Google Calendar: ${googleCalendarConnected ? 'configured' : 'not connected'}`;
                 form.querySelector('button[type="submit"]').disabled = false;
                 render(); window.dispatchEvent(new Event('tcb:bookings-changed')); status.textContent = `${records.length} booking records. Times shown in Europe/Budapest.`;
             } catch (e) {
