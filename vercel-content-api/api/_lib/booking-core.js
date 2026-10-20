@@ -69,8 +69,9 @@ export function validateGuest(input) {
     return guest;
 }
 export class BookingService {
-    constructor(store, { secret, now = () => Date.now(), integrations = null, preview = false } = {}) {
+    constructor(store, { secret, now = () => Date.now(), integrations = null, preview = false, calendarAvailability = null } = {}) {
         this.store = store; this.secret = secret; this.now = now; this.integrations = integrations; this.preview = preview;
+        this.calendarAvailability = calendarAvailability;
     }
     async read() { return await this.store.read() || { version: 0, settings: structuredClone(DEFAULT_BOOKING_SETTINGS), bookings: [] }; }
     async mutate(fn) {
@@ -99,12 +100,19 @@ export class BookingService {
     }
     async availability(date, excludeId = '') {
         const state = await this.read();
-        return { settings: state.settings, slots: availableSlots(state, date, this.now(), excludeId), preview: this.preview };
+        const candidates = availableSlots(state, date, this.now(), excludeId);
+        const slots = this.calendarAvailability ? await this.calendarAvailability({slots:candidates,buffer:state.settings.buffer,
+            excludeBooking:state.bookings.find(booking => booking.id === excludeId) || null}) : candidates;
+        return { settings: state.settings, slots, preview: this.preview };
     }
     async book(input) {
         const guest = validateGuest(input);
         if (!/^[a-zA-Z0-9-]{20,80}$/.test(input.requestId || '')) throw new BookingError(400, 'Reload the booking form and try again.');
         this.token('configuration-check');
+        const before = await this.read();
+        // An idempotent retry must still return its existing booking, even though
+        // the corresponding Google event now occupies the originally chosen time.
+        if (!before.bookings.some(booking => booking.requestId === input.requestId)) await this.checkCalendarSlot(before, input.start);
         const booking = await this.mutate(state => {
             const existing = state.bookings.find(b => b.requestId === input.requestId);
             if (existing) {
@@ -125,6 +133,12 @@ export class BookingService {
         return this.publicBooking((await this.read()).bookings.find(b => b.id === booking.id));
     }
     async change(id, action, start) {
+        if (action === 'reschedule') {
+            const before = await this.read();
+            const booking = before.bookings.find(item => item.id === id);
+            if (!booking) throw new BookingError(404, 'Booking not found.');
+            await this.checkCalendarSlot(before, start, booking);
+        }
         await this.mutate(state => {
             const b = state.bookings.find(b => b.id === id);
             if (!b) throw new BookingError(404, 'Booking not found.');
@@ -148,6 +162,14 @@ export class BookingService {
         return this.publicBooking((await this.read()).bookings.find(b => b.id === id));
     }
     async settings(input) { return this.mutate(state => { state.settings = validateSettings(input); return state.settings; }); }
+    async checkCalendarSlot(state, start, excludeBooking = null) {
+        const date = Number.isFinite(Date.parse(start)) ? localDate(new Date(start), state.settings.timezone) : '';
+        const slot = availableSlots(state, date, this.now(), excludeBooking?.id).find(item => item.start === start);
+        if (!slot) throw new BookingError(409, 'That time is no longer available. Please choose another slot.');
+        if (this.calendarAvailability && !(await this.calendarAvailability({slots:[slot],buffer:state.settings.buffer,excludeBooking})).length) {
+            throw new BookingError(409, 'That time is now busy in the studio calendar. Please choose another slot.');
+        }
+    }
     async fulfill(id, force = false) {
         if (!this.integrations) return;
         const jobId = randomUUID();

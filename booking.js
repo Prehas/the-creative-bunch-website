@@ -93,6 +93,7 @@
         slots.replaceChildren();
         for (const slot of items) {
             const button = document.createElement('button'); button.type = 'button'; button.className = 'booking-slot';
+            button.dataset.start = slot.start;
             button.textContent = new Intl.DateTimeFormat('en-GB', { timeZone: zone.value, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(slot.start));
             button.setAttribute('aria-label', describe(slot.start, slot.end)); button.setAttribute('aria-pressed', 'false');
             button.addEventListener('click', () => {
@@ -102,14 +103,15 @@
             }); slots.append(button);
         }
     }
-    async function load() {
+    async function load({ background = false } = {}) {
         const version = ++requestVersion;
         if (!date.value) return;
-        status.textContent = 'Checking available times…'; slots.setAttribute('aria-busy', 'true');
-        renderSlots([]);
+        if (!background) { status.textContent = 'Checking available times…'; renderSlots([]); }
+        slots.setAttribute('aria-busy', 'true');
         try {
-            const data = await api('availability', null, '&date=' + encodeURIComponent(date.value));
+            const data = management ? await api('booking-availability', {...management,date:date.value}) : await api('availability', null, '&date=' + encodeURIComponent(date.value));
             if (version !== requestVersion) return;
+            if (background && busy) return;
             settings = data.settings;
             date.max = new Date(Date.parse(date.min) + settings.horizonDays * 86400000).toISOString().slice(0, 10);
             root.querySelector('#booking-duration').textContent = `${settings.duration} minutes`;
@@ -123,10 +125,23 @@
                     if (candidate <= date.max) { date.value = candidate; month = candidate.slice(0,7); renderCalendar(); return load(); }
                 }
             }
+            if (background && JSON.stringify([...slots.querySelectorAll('button')].map(button => button.dataset.start)) === JSON.stringify(data.slots.map(slot => slot.start))) {
+                status.textContent = data.slots.length ? `${data.slots.length} available times.` : 'No times available on this date. Please choose another day.';
+                return;
+            }
+            const selection = chosen, previousRequestId = requestId;
             renderCalendar();
             renderSlots(data.slots);
+            const retained = background && data.slots.find(slot => slot.start === selection);
+            if (retained) {
+                chosen = selection; requestId = previousRequestId;
+                slots.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.start === chosen)));
+                summary.textContent = describe(retained.start, retained.end); continueButton.disabled = false; submit.disabled = false;
+            } else if (background && selection) {
+                showDateStep(); status.textContent = 'That time just became unavailable. Please choose another time.'; return;
+            }
             status.textContent = data.slots.length ? `${data.slots.length} available times.` : 'No times available on this date. Please choose another day.';
-        } catch (error) { if (version === requestVersion) { status.textContent = error.message; renderCalendar(); } }
+        } catch (error) { if (version === requestVersion && !(background && busy)) { renderSlots([]); if (background) showDateStep(); status.textContent = error.message; renderCalendar(); } }
         finally { if (version === requestVersion) slots.removeAttribute('aria-busy'); }
     }
     function showResult(data) {
@@ -189,5 +204,8 @@
         return true;
     }
     window.addEventListener('hashchange', openManagement);
+    const refreshVisible = () => { if (settings && date.value && !busy && !form.hidden && document.visibilityState === 'visible' && !slots.hasAttribute('aria-busy')) load({background:true}); };
+    window.setInterval(refreshVisible, 60000);
+    document.addEventListener('visibilitychange', refreshVisible);
     openManagement().then(managed => { if (!managed) load(); });
 })();

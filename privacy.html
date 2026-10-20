@@ -16,7 +16,7 @@
     <header><a href="/"><img src="assets/Logo_Site-transparent.png" width="40" height="40" alt="">THE CREATIVE BUNCH</a></header>
     <main>
         <h1>Booking &amp; calendar privacy</h1>
-        <p class="updated">Last updated: 19 October 2026</p>
+        <p class="updated">Last updated: 20 October 2026</p>
         <p>This notice explains how The Creative Bunch uses information to arrange studio calls and connect the studio’s Google Calendar. For questions, contact <a href="mailto:agency@thecreativebunch.eu">agency@thecreativebunch.eu</a>.</p>
 
         <h2>Information used for your call</h2>
@@ -34,8 +34,9 @@
         <p>These providers may process or retain their own records under their privacy policies: <a href="https://vercel.com/legal/privacy-policy">Vercel</a>, <a href="https://supabase.com/privacy">Supabase</a>, <a href="https://www.zoom.com/en/trust/privacy/privacy-statement/">Zoom</a>, <a href="https://www.brevo.com/legal/privacypolicy/">Brevo</a>, <a href="https://resend.com/legal/privacy-policy">Resend</a> and <a href="https://policies.google.com/privacy">Google</a>.</p>
 
         <h2>Studio Google Calendar access</h2>
-        <p>The studio’s account owner authorizes access through Google OAuth. Google’s requested permission allows viewing, creating, changing and deleting events on calendars that account owns. The application uses this permission only to manage its own private studio booking events on the configured calendar. It checks its own booking metadata before changing an existing event.</p>
-        <p>The application creates a calendar event for a booking, updates that event after a reschedule and removes it after cancellation. It does not read unrelated appointments to calculate website availability, copy the rest of the calendar, access Gmail messages or add clients as Google event attendees.</p>
+        <p>The studio’s account owner authorizes access through Google OAuth. Google’s requested permission allows viewing, creating, changing and deleting events on calendars that account owns. The application manages its own private studio booking events and checks occupied intervals on the configured studio calendar. It verifies its own booking metadata before changing an existing event and does not modify unrelated appointments.</p>
+        <p>To avoid overlapping calls, the backend reads event times, busy/free status, the studio account’s declined-invitation status and identifiers needed to distinguish a booking’s own event. Recurring and all-day busy events are included. It does not request unrelated event titles, descriptions, locations or attendee email addresses. These availability checks are processed temporarily; unrelated calendar events are not copied into the booking database or shown to visitors.</p>
+        <p>The application creates a calendar event for a booking, updates that event after a reschedule and removes it after cancellation. It does not access Gmail messages or add clients as Google event attendees.</p>
         <p>Google authorization credentials are kept as server-only configuration in the backend. The studio’s Google Calendar data is used only for this booking integration, not for advertising or training AI models. You can revoke the application’s access through <a href="https://myaccount.google.com/connections">your Google Account connections</a>. Revoking access stops automatic synchronization; it does not itself delete previously created events.</p>
 
         <h2>Your optional calendar copy</h2>

@@ -5,6 +5,7 @@ import { BookingError } from './_lib/booking-store.js';
 import { SupabaseBookingStore } from './_lib/booking-supabase.js';
 import { BookingService } from './_lib/booking-core.js';
 import { createIntegrations, integrationStatus } from './_lib/booking-integrations.js';
+import { createCalendarAvailability } from './_lib/booking-calendar-availability.js';
 
 async function boundedBody(request) {
     if (request.body) {
@@ -17,8 +18,9 @@ async function boundedBody(request) {
     return JSON.parse(Buffer.concat(parts).toString() || '{}');
 }
 export function createBookingHandler({ store = new SupabaseBookingStore(), secret = process.env.BOOKING_SECRET,
-    integrations = createIntegrations(), preview = false, authorizeAdmin = requireAuth, allowedOrigins = getAllowedOrigins() } = {}) {
-    const service = new BookingService(store, { secret, integrations, preview });
+    integrations = createIntegrations(), preview = false, authorizeAdmin = requireAuth, allowedOrigins = getAllowedOrigins(),
+    calendarAvailability = preview ? null : createCalendarAvailability() } = {}) {
+    const service = new BookingService(store, { secret, integrations, preview, calendarAvailability });
     return async function handler(request, response) {
         applyCors(request, response); response.setHeader('Cache-Control', 'no-store');
         response.setHeader('Vary', 'Origin');
@@ -35,13 +37,14 @@ export function createBookingHandler({ store = new SupabaseBookingStore(), secre
                 if (typeof store.rpc === 'function') await store.rpc('tcb_analytics_cleanup');
                 return response.status(200).json({ ok: true });
             }
-            const admin = ['admin', 'settings', 'admin-cancel', 'admin-reschedule', 'retry'].includes(action);
+            const admin = ['admin', 'settings', 'admin-cancel', 'admin-reschedule', 'admin-availability', 'retry'].includes(action);
             if (admin && !await authorizeAdmin(request, response)) return;
             if (request.method === 'POST' && request.headers.origin && !allowedOrigins.includes(request.headers.origin)) throw new BookingError(403, 'This origin is not allowed.');
             if (!admin) {
                 const ip = request.headers['x-vercel-forwarded-for'] || request.socket?.remoteAddress || 'unknown';
                 const hash = createHash('sha256').update(String(ip)).digest('hex').slice(0, 24);
-                if (!await store.rateLimit(`${request.method}:${hash}`, request.method === 'GET' ? 150 : 12, 600)) throw new BookingError(429, 'Too many requests. Please try again in a few minutes.');
+                const readOnly = request.method === 'GET' || action === 'booking-availability';
+                if (!await store.rateLimit(`${readOnly ? 'GET' : 'POST'}:${hash}`, readOnly ? 150 : 12, 600)) throw new BookingError(429, 'Too many requests. Please try again in a few minutes.');
             }
             if (request.method === 'GET') {
                 if (action === 'availability') return response.status(200).json(await service.availability(url.searchParams.get('date')));
@@ -54,6 +57,12 @@ export function createBookingHandler({ store = new SupabaseBookingStore(), secre
             }
             const body = await boundedBody(request);
             if (!body || Array.isArray(body) || typeof body !== 'object') throw new BookingError(400, 'Invalid request.');
+            if (['booking-availability', 'admin-availability'].includes(action)) {
+                if (!admin) service.authorize(body.id, body.manageToken);
+                const booking = (await service.read()).bookings.find(item => item.id === body.id);
+                if (!booking || booking.status === 'cancelled') throw new BookingError(404, 'Active booking not found.');
+                return response.status(200).json(await service.availability(body.date, booking.id));
+            }
             let result;
             if (action === 'book') result = await service.book(body);
             else if (action === 'settings') result = await service.settings(body);

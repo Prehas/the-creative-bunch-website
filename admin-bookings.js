@@ -76,9 +76,7 @@
             const selectedDate = event.target.value;
             select.innerHTML = '<option value="">Loading…</option>';
             try {
-                const base = String(window.TCB_CONTENT_API_CONFIG?.baseUrl || '').replace(/\/$/, '');
-                const response = await fetch(`${base}/api/bookings?date=${encodeURIComponent(selectedDate)}`);
-                const data = await response.json(); if (!response.ok) throw new Error(data.message || 'Times could not load.');
+                const data = await api('admin-availability', {id:row.dataset.id,date:selectedDate});
                 if (event.target.value !== selectedDate) return;
                 select.innerHTML = data.slots.length ? data.slots.map(s=>`<option value="${escape(s.start)}">${escape(when(s.start))}</option>`).join('') : '<option value="">No times available</option>';
             } catch (e) { status.textContent = e.message; select.innerHTML = '<option value="">Try another date</option>'; }
