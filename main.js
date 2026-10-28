@@ -1,5 +1,13 @@
 // Project Data Fallback (in case of CORS issues running locally on file://)
 const fallbackProjects = [
+{
+    "id": 11,
+    "title": "Kashrut România",
+    "category": "web",
+    "tag": "Product Discovery & Web Application",
+    "description": "A Romanian-language product discovery app that brings search, barcode scanning, product references and clear verification states into one approachable interface.",
+    "image": "assets/project_kashrut_phone_cover.svg"
+},
     {
         "id": 1,
         "title": "Merkaz Cultural Campaign",
@@ -59,6 +67,65 @@ const fallbackProjects = [
 ];
 
 const CASE_STUDIES = {
+    11: {
+    "id": 11,
+    "title": "Kashrut România",
+    "category": "Product Discovery & Web Application",
+    "year": "2026",
+    "image": "assets/project_kashrut_phone_cover.svg",
+    "statement": "Everyday product discovery, with the information that matters close at hand. A clear, approachable interface for exploring kosher product references, checking conditions and finding a way to ask questions.",
+    "tags": [
+        "Web Application",
+        "UI/UX",
+        "Product Design"
+    ],
+    "overview": [
+        {
+            "title": "The Challenge",
+            "text": "Make a detailed product reference catalogue easy to explore while keeping product variants, source information and verification conditions visible and understandable."
+        },
+        {
+            "title": "The Solution",
+            "text": "A welcoming discovery page, category filters and searchable product cards lead into focused detail views. Distinct status labels explain the difference between a reference, a conditional entry and a published approval."
+        },
+        {
+            "title": "The Experience",
+            "text": "A consistent journey from browsing to checking a specific product, with direct entry points for scanning, saved products and questions. Product photography adds familiarity without replacing the supporting information."
+        }
+    ],
+    "visualTitle": "Clarity for everyday choices",
+    "visualText": "Fresh green accents, soft neutral surfaces and generous spacing make a dense catalogue feel approachable. Familiar product photography anchors the interface, while clear labels and a steady navigation system help people find their next step.",
+    "visualImage": "assets/project_kashrut_phone_catalog.svg",
+    "processTitle": "Design Process",
+    "process": [
+        "Structure",
+        "Discovery",
+        "Product views",
+        "Status system",
+        "Navigation",
+        "Refinement"
+    ],
+    "palette": [
+        "#227D42",
+        "#66C88A",
+        "#F3F8F3",
+        "#26332B",
+        "#F8F0DE"
+    ],
+    "system": [
+        "Search and category filters keep the catalogue easy to navigate.",
+        "Product images sit alongside source, variant and condition details.",
+        "Status labels communicate distinctions without relying on colour alone."
+    ],
+    "galleryLayout": "large",
+    "gallery": [
+        "assets/project_kashrut_phone_home.svg",
+        "assets/project_kashrut_phone_catalog.svg",
+        "assets/project_kashrut_phone_product.svg",
+        "assets/project_kashrut_phone_filters.svg"
+    ],
+    "finalText": "A cohesive product discovery application built around legibility, familiar navigation and informed choices. The gallery follows the experience from the welcome screen through the catalogue, product details and verification filters."
+},
     1: {
         id: 1,
         title: "Merkaz Cultural Campaign",

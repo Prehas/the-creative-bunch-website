@@ -20,6 +20,14 @@ let pricingHistoryTimer = null;
 let isRestoringPricingState = false;
 
 const DEFAULT_PROJECTS = [
+{
+    "id": 11,
+    "title": "Kashrut România",
+    "category": "web",
+    "tag": "Product Discovery & Web Application",
+    "description": "A Romanian-language product discovery app that brings search, barcode scanning, product references and clear verification states into one approachable interface.",
+    "image": "assets/project_kashrut_phone_cover.svg"
+},
     {
         id: 1,
         title: 'Merkaz Cultural Campaign',
